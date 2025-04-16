@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "Jiazhen Xie",
-  description: "Personal website and portfolio of Jiazhen Xie",
+  description:
+    "To share my software engineering experience and tech leadership",
   url: "https://jiazhenxie.com",
   links: {
-    github: "https://github.com/jiazhenxie",
-    linkedin: "https://linkedin.com/in/jiazhenxie",
-    twitter: "https://twitter.com/jiazhenxie",
+    github: "https://github.com/jiazhen",
+    linkedin: "https://www.linkedin.com/in/jiazhen-xie/",
   },
 } as const;

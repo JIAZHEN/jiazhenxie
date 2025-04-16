@@ -7,7 +7,12 @@ import { siteConfig } from "../config/site";
 export default function Home() {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const texts = ["Software Engineer", "Web Developer", "Tech Enthusiast"];
+  const texts = [
+    "Software Engineering Manager",
+    "Tech Leader",
+    "Team Builder",
+    "Problem Solver",
+  ];
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
   useEffect(() => {
@@ -54,8 +59,8 @@ export default function Home() {
             transition={{ delay: 0.5 }}
             className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200"
           >
-            I build modern web applications with a focus on user experience and
-            clean code.
+            I lead engineering teams to build scalable solutions and solve
+            complex technical challenges.
           </motion.p>
 
           <motion.div
@@ -65,7 +70,7 @@ export default function Home() {
             className="flex justify-center space-x-4"
           >
             <a
-              href="/about"
+              href="/blog"
               className="inline-flex items-center px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors"
             >
               Learn More
