@@ -5,6 +5,8 @@ interface FrontMatterAttributes {
   date: string;
   description: string;
   tags: string[];
+  image: string;
+  draft: boolean;
 }
 
 export interface BlogPost {
@@ -13,16 +15,18 @@ export interface BlogPost {
   date: string;
   description: string;
   tags: string[];
+  image: string;
+  draft: boolean;
   content: string;
 }
 
 // Use Vite's import.meta.glob to import all markdown files
-const blogFiles = import.meta.glob("../content/blog/*.md", {
+const blogFiles = import.meta.glob("../content/posts/*.md", {
   as: "raw",
   eager: true,
 });
 
-export function getBlogPosts(): BlogPost[] {
+export function getBlogPosts(includeDrafts: boolean = false): BlogPost[] {
   const posts: BlogPost[] = [];
 
   // Process each blog file
@@ -30,6 +34,11 @@ export function getBlogPosts(): BlogPost[] {
     const fileContents = blogFiles[path] as string;
     const { attributes, body } =
       frontMatter<FrontMatterAttributes>(fileContents);
+
+    // Skip draft posts unless includeDrafts is true
+    if (attributes.draft && !includeDrafts) {
+      continue;
+    }
 
     // Extract slug from filename
     const slug = path.split("/").pop()?.replace(/\.md$/, "") || "";
@@ -40,6 +49,8 @@ export function getBlogPosts(): BlogPost[] {
       date: attributes.date,
       description: attributes.description,
       tags: attributes.tags || [],
+      image: attributes.image || "/images/blog-placeholder.jpg",
+      draft: attributes.draft || false,
       content: body,
     });
   }
@@ -52,6 +63,6 @@ export function getBlogPosts(): BlogPost[] {
 
 export function getBlogPost(slug: string): BlogPost | null {
   // Find the post with the matching slug
-  const posts = getBlogPosts();
+  const posts = getBlogPosts(true); // Include drafts when getting a specific post
   return posts.find((post) => post.slug === slug) || null;
 }
