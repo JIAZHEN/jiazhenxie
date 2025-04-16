@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://jiazhen.github.io/jiazhenxie/",
+  "homepage": "https://jiazhenxie.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
