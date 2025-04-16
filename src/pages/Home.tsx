@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
 import VantaBackground from "../components/VantaBackground";
+import { siteConfig } from "../config/site";
 
 export default function Home() {
   const [currentText, setCurrentText] = useState("");
@@ -37,7 +38,7 @@ export default function Home() {
           className="text-center z-10"
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
-            Hi, I'm <span className="text-primary-500">Your Name</span>
+            Hi, I'm <span className="text-primary-500">{siteConfig.name}</span>
           </h1>
 
           <div className="h-12 mb-8">
