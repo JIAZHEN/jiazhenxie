@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
+import BlogPost from "./pages/BlogPost";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
         </motion.main>
       </div>
