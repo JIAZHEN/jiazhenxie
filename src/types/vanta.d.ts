@@ -52,9 +52,14 @@ declare module "vanta/dist/vanta.net.min" {
 }
 
 declare module "vanta/dist/vanta.fog.min" {
-  interface VantaFogConfig {
+  export interface VantaEffect {
+    destroy(): void;
+    setOptions(options: Partial<VantaFogConfig>): void;
+  }
+
+  export interface VantaFogConfig {
     el: HTMLElement;
-    THREE: typeof THREE;
+    THREE: any;
     mouseControls?: boolean;
     touchControls?: boolean;
     gyroControls?: boolean;
@@ -65,13 +70,8 @@ declare module "vanta/dist/vanta.fog.min" {
     lowlightColor?: number;
     baseColor?: number;
     blurFactor?: number;
-    speed?: number;
     zoom?: number;
-  }
-
-  export interface VantaEffect {
-    destroy: () => void;
-    setOptions: (options: Partial<VantaFogConfig>) => void;
+    speed?: number;
   }
 
   function FOG(config: VantaFogConfig): VantaEffect;

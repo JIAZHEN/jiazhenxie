@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
-import FOG from "vanta/dist/vanta.fog.min";
+import FOG, { VantaEffect } from "vanta/dist/vanta.fog.min";
 import * as THREE from "three";
-import type { VantaEffect } from "../types/vanta";
 
 interface VantaBackgroundProps {
   children: React.ReactNode;
