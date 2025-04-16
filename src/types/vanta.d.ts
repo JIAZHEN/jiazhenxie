@@ -18,6 +18,7 @@ declare module "vanta/dist/vanta.clouds.min" {
 
   export interface VantaEffect {
     destroy: () => void;
+    setOptions: (options: Partial<VantaCloudsConfig>) => void;
   }
 
   function CLOUDS(config: VantaCloudsConfig): VantaEffect;
@@ -48,4 +49,31 @@ declare module "vanta/dist/vanta.net.min" {
 
   function NET(config: VantaNetConfig): VantaEffect;
   export default NET;
+}
+
+declare module "vanta/dist/vanta.fog.min" {
+  interface VantaFogConfig {
+    el: HTMLElement;
+    THREE: typeof THREE;
+    mouseControls?: boolean;
+    touchControls?: boolean;
+    gyroControls?: boolean;
+    minHeight?: number;
+    minWidth?: number;
+    highlightColor?: number;
+    midtoneColor?: number;
+    lowlightColor?: number;
+    baseColor?: number;
+    blurFactor?: number;
+    speed?: number;
+    zoom?: number;
+  }
+
+  export interface VantaEffect {
+    destroy: () => void;
+    setOptions: (options: Partial<VantaFogConfig>) => void;
+  }
+
+  function FOG(config: VantaFogConfig): VantaEffect;
+  export default FOG;
 }
