@@ -1,7 +1,5 @@
 ---
-title: >-
-  Building the Engineering Capacity Planner - Solving the Resource Planning
-  Puzzle
+title: Building the Engineering Capacity Planner - Solving the Resource Planning Puzzle
 description: Capacity planning for EventMachine applications
 date: 2024-09-04T00:00:00.000Z
 tags:
@@ -16,6 +14,7 @@ draft: false
 In my career as a software engineering manager, I've experienced the art of resource planning firsthand. And trust me, it’s as much an art as it is a science. Managing people’s time effectively is like trying to hit a moving target—factors like public holidays, employee absences, personal holiday allowances, and unexpected sick days constantly shift the balance. Not to mention, some team members (like myself at times) juggle between leadership responsibilities and individual contribution, making it even more challenging to get an accurate read on capacity.
 
 ## So, What is Resource Planning, and Why Do We Need It?
+
 Hold on. Let’s not get ahead of ourselves. First, what exactly is resource planning, and why is it such a big deal? According to the formal definition from the [Project Management Institute](https://www.pmi.org/learning/library/resource-planning-project-management-10567),
 
 > Resource planning is a process of determining the resources required to complete the project. It is a critical part of project management that involves estimating the resources needed to complete the project. Resource planning helps to ensure that the project is completed on time and within budget. It also helps to identify any potential risks that may arise during the project.
@@ -24,8 +23,8 @@ Sounds very textbook, doesn’t it?
 
 In my experience, the definition boils down to this: As a manager, whether in engineering or any other domain, you need to know your team’s capacity. Without this knowledge, you risk either overcommitting and burning out your team or underutilising them, which leads to missed deadlines and opportunities. It’s like packing for a trip—you don’t want to overstuff your suitcase, but you also don’t want to leave out essentials. Balance is key!
 
-
 ## The Resource Planning Problem: It's Not as Simple as Counting Heads
+
 You might think resource planning is straightforward—just count how many people you have, and you’re done, right? Not quite. There are layers to this challenge, especially in an engineering setting. Here’s why:
 
 1. **Bank Holidays**: Depending on your region, these can vary widely, and not accounting for them can give you an inflated sense of available workdays.
@@ -36,6 +35,7 @@ You might think resource planning is straightforward—just count how many peopl
 All these factors make resource planning a bit like solving a Rubik’s cube—twist one side, and everything else shifts.
 
 ## The Solution: Enter the Engineering Capacity Planner
+
 Frustrated by the guessing game that resource planning can sometimes feel like, I built a tool that takes the headache out of the process: the Engineering Capacity Planner. This tool is designed specifically to help engineering managers (and honestly, anyone who leads a team) calculate their team’s true capacity over a given period.
 
 Here’s how the tool tackles the problem:
@@ -48,6 +48,7 @@ Here’s how the tool tackles the problem:
 You can find this nifty tool here: [Engineering Capacity Planner](https://github.com/JIAZHEN/em-capacity-app)
 
 ## The Bottom Line: How Much Can My Team Really Achieve?
+
 ![image info](./../../images/em-capacity-planning_img1.png)
 
 After putting all this into practice, you can finally answer that elusive question: “How much work can my team realistically achieve in a given time frame?”

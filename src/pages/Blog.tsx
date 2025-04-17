@@ -1,30 +1,31 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { FiArrowRight, FiX } from "react-icons/fi";
-import { blogPosts } from "../lib/blog-posts";
-import type { BlogPost } from "../types/blog";
+import { getAllPosts, type BlogPost } from "../lib/content";
 
 const POSTS_PER_PAGE = 5;
 
 export default function Blog() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [visiblePosts, setVisiblePosts] = useState<BlogPost[]>([]);
   const [page, setPage] = useState(1);
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  // Filter posts based on selected tag
-  const filteredPosts = selectedTag
-    ? blogPosts.filter((post: BlogPost) => post.tags.includes(selectedTag))
-    : blogPosts;
+  // Get all posts and filter based on selected tag
+  const allPosts = useMemo(() => getAllPosts(), []);
+  const filteredPosts = useMemo(() => {
+    return selectedTag
+      ? allPosts.filter((post: BlogPost) => post.tags.includes(selectedTag))
+      : allPosts;
+  }, [allPosts, selectedTag]);
 
-  // Load more posts when page changes
-  useEffect(() => {
+  // Calculate visible posts
+  const visiblePosts = useMemo(() => {
     const startIndex = 0;
     const endIndex = page * POSTS_PER_PAGE;
-    setVisiblePosts(filteredPosts.slice(startIndex, endIndex));
-  }, [page, filteredPosts]);
+    return filteredPosts.slice(startIndex, endIndex);
+  }, [filteredPosts, page]);
 
   // Reset to first page when tag changes
   const handleTagClick = (tag: string) => {
