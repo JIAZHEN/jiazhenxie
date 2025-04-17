@@ -89,7 +89,7 @@ export default function Home() {
 
             <div className="mt-8 flex gap-4">
               <a
-                href="https://github.com/jiazhenxie"
+                href={siteConfig.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
@@ -97,7 +97,7 @@ export default function Home() {
                 <FiGithub className="w-6 h-6" />
               </a>
               <a
-                href="https://linkedin.com/in/jiazhenxie"
+                href={siteConfig.links.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
@@ -105,7 +105,7 @@ export default function Home() {
                 <FiLinkedin className="w-6 h-6" />
               </a>
               <a
-                href="mailto:jiazhenxie@gmail.com"
+                href={`mailto:${siteConfig.links.email}`}
                 className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
               >
                 <FiMail className="w-6 h-6" />

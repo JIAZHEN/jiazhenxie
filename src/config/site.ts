@@ -6,5 +6,6 @@ export const siteConfig = {
   links: {
     github: "https://github.com/jiazhen",
     linkedin: "https://www.linkedin.com/in/jiazhen-xie/",
+    email: "jiazhenxie515@gmail.com",
   },
 } as const;
