@@ -16,6 +16,7 @@
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
     "@types/node": "^22.14.1",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.7.3",
     "front-matter": "^4.0.2",
     "react": "^19.0.0",
