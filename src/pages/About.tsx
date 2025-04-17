@@ -1,21 +1,62 @@
 import { motion } from "framer-motion";
-import { FiCode, FiDatabase, FiCpu } from "react-icons/fi";
+import {
+  FiDatabase,
+  FiCpu,
+  FiUsers,
+  FiTarget,
+  FiBriefcase,
+} from "react-icons/fi";
 
 const skills = [
   {
-    category: "Frontend",
-    icon: <FiCode />,
-    items: ["React", "TypeScript", "Tailwind CSS", "Next.js"],
-  },
-  {
     category: "Backend",
     icon: <FiDatabase />,
-    items: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
+    items: [
+      "Distributed Systems",
+      "Microservices",
+      "Event-Driven Architecture",
+      "High-Performance Systems",
+    ],
   },
   {
     category: "DevOps",
     icon: <FiCpu />,
-    items: ["Docker", "AWS", "CI/CD", "GitHub Actions"],
+    items: [
+      "Cloud Architecture",
+      "Infrastructure as Code",
+      "CI/CD Pipelines",
+      "Monitoring & Observability",
+    ],
+  },
+  {
+    category: "Leadership & Management",
+    icon: <FiUsers />,
+    items: [
+      "Engineering Leadership",
+      "People Management",
+      "Performance Management",
+      "Flow Engineering",
+    ],
+  },
+  {
+    category: "Product & Strategy",
+    icon: <FiTarget />,
+    items: [
+      "Product Vision",
+      "Technical Strategy",
+      "Cross-functional Leadership",
+      "Stakeholder Management",
+    ],
+  },
+  {
+    category: "Business Domains",
+    icon: <FiBriefcase />,
+    items: [
+      "High-Tech Retail",
+      "SaaS Platforms",
+      "Subscription Services",
+      "Social Media",
+    ],
   },
 ];
 
@@ -31,8 +72,8 @@ const About = () => {
         <h1 className="text-4xl font-bold mb-6">About Me</h1>
         <div className="prose dark:prose-invert max-w-none">
           <p className="text-lg mb-4">
-            I’m an engineering leader with over 14 years of experience building
-            and scaling high-performing teams. I’ve led complex,
+            I'm an engineering leader with over 14 years of experience building
+            and scaling high-performing teams. I've led complex,
             cross-functional projects to success and improved delivery
             efficiency by up to 50%. My leadership style is grounded in clarity,
             empathy, and data—I strive to foster a culture of ownership,
@@ -41,7 +82,7 @@ const About = () => {
           <p className="text-lg">
             I bring a strong technical foundation—enough to operate at a
             Principal Engineer level—paired with the strategic mindset needed
-            for senior leadership. I’m fluent in both Western and Chinese
+            for senior leadership. I'm fluent in both Western and Chinese
             business and engineering cultures, which helps me lead inclusively,
             navigate global collaboration, and bring diverse perspectives to the
             table. I care deeply about creating impact, building trust, and

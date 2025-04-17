@@ -94,9 +94,11 @@ export default function Blog() {
               className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
             >
               <div className="p-6">
-                <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
-                  {post.title}
-                </h2>
+                <Link to={`/blog/${post.slug}`} className="block">
+                  <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors">
+                    {post.title}
+                  </h2>
+                </Link>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                   {format(new Date(post.date), "MMMM d, yyyy")}
                 </p>
