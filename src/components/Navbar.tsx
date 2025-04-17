@@ -33,17 +33,17 @@ const Navbar = () => {
               >
                 Blog
               </Link>
-              <Link
+              {/* <Link
                 to="/projects"
                 className="hover:text-primary-500 transition-colors"
               >
                 Projects
-              </Link>
+              </Link> */}
             </div>
 
             <div className="flex items-center space-x-4">
               <a
-                href="https://github.com/yourusername"
+                href="https://github.com/jiazhen"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary-500 transition-colors"
@@ -51,7 +51,7 @@ const Navbar = () => {
                 <FiGithub size={20} />
               </a>
               <a
-                href="https://linkedin.com/in/yourusername"
+                href="https://www.linkedin.com/in/jiazhen-xie"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary-500 transition-colors"

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FiCode, FiDatabase, FiCpu, FiGitBranch } from "react-icons/fi";
+import { FiCode, FiDatabase, FiCpu } from "react-icons/fi";
 
 const skills = [
   {
@@ -17,11 +17,6 @@ const skills = [
     icon: <FiCpu />,
     items: ["Docker", "AWS", "CI/CD", "GitHub Actions"],
   },
-  {
-    category: "Tools",
-    icon: <FiGitBranch />,
-    items: ["Git", "VS Code", "Figma", "Postman"],
-  },
 ];
 
 const About = () => {
@@ -36,15 +31,21 @@ const About = () => {
         <h1 className="text-4xl font-bold mb-6">About Me</h1>
         <div className="prose dark:prose-invert max-w-none">
           <p className="text-lg mb-4">
-            I'm a passionate software engineer with a focus on building modern
-            web applications. With a strong foundation in both frontend and
-            backend development, I strive to create efficient, scalable, and
-            user-friendly solutions.
+            I’m an engineering leader with over 14 years of experience building
+            and scaling high-performing teams. I’ve led complex,
+            cross-functional projects to success and improved delivery
+            efficiency by up to 50%. My leadership style is grounded in clarity,
+            empathy, and data—I strive to foster a culture of ownership,
+            continuous improvement, and high trust.
           </p>
           <p className="text-lg">
-            When I'm not coding, you can find me exploring new technologies,
-            contributing to open-source projects, or sharing my knowledge
-            through blog posts and tutorials.
+            I bring a strong technical foundation—enough to operate at a
+            Principal Engineer level—paired with the strategic mindset needed
+            for senior leadership. I’m fluent in both Western and Chinese
+            business and engineering cultures, which helps me lead inclusively,
+            navigate global collaboration, and bring diverse perspectives to the
+            table. I care deeply about creating impact, building trust, and
+            inspiring the people I work with.
           </p>
         </div>
       </motion.div>
