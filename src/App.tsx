@@ -6,10 +6,12 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
+import PageTracker from "./components/PageTracker";
 
 function App() {
   return (
     <Router>
+      <PageTracker />
       <div className="min-h-screen bg-background text-foreground">
         <Navbar />
         <motion.main
