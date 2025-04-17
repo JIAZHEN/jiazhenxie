@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { BlogPost, getBlogPost } from "../lib/markdown";
 import { formatDate } from "../lib/utils";
+import SEO from "../components/SEO";
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,29 +29,42 @@ export default function BlogPostPage() {
   }
 
   return (
-    <article className="container mx-auto px-4 py-8 max-w-4xl">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-          <time dateTime={post.date}>{formatDate(post.date)}</time>
-          <div className="flex gap-2">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-xs"
-              >
-                {tag}
-              </span>
-            ))}
+    <>
+      <SEO
+        title={post.title}
+        description={post.description || post.content.substring(0, 160)}
+        type="article"
+        publishedTime={post.date}
+        tags={post.tags}
+        image={post.image}
+      />
+      <article className="container mx-auto px-4 py-8 max-w-4xl mt-16">
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <div className="flex gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="prose dark:prose-invert max-w-none">
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-          {post.content}
-        </ReactMarkdown>
-      </div>
-    </article>
+        <div className="prose dark:prose-invert max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+          >
+            {post.content}
+          </ReactMarkdown>
+        </div>
+      </article>
+    </>
   );
 }
