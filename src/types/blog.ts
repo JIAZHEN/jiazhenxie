@@ -9,6 +9,8 @@ export interface BlogPostFrontmatter {
 
 export interface BlogPost {
   slug: string;
-  frontmatter: BlogPostFrontmatter;
-  content: string;
+  title: string;
+  date: string;
+  description: string;
+  tags: string[];
 }

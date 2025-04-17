@@ -15,7 +15,7 @@ export default function Blog() {
     : blogPosts;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -46,24 +46,6 @@ export default function Blog() {
               className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
             >
               <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.map((tag: string) => (
-                    <button
-                      key={tag}
-                      onClick={() =>
-                        setSelectedTag(selectedTag === tag ? null : tag)
-                      }
-                      className={`text-sm px-3 py-1 rounded-full ${
-                        selectedTag === tag
-                          ? "bg-primary-500 text-white hover:bg-primary-600"
-                          : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      #{tag}
-                    </button>
-                  ))}
-                </div>
-
                 <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
                   {post.title}
                 </h2>
@@ -73,6 +55,23 @@ export default function Blog() {
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
                   {post.description}
                 </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {post.tags.map((tag: string) => (
+                    <button
+                      key={tag}
+                      onClick={() =>
+                        setSelectedTag(selectedTag === tag ? null : tag)
+                      }
+                      className={`text-sm px-2 py-1 rounded ${
+                        selectedTag === tag
+                          ? "bg-primary-500 text-white hover:bg-primary-600"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      #{tag}
+                    </button>
+                  ))}
+                </div>
                 <Link
                   to={`/blog/${post.slug}`}
                   className="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300"
