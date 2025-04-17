@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -6,13 +6,56 @@ import { FiArrowRight, FiX } from "react-icons/fi";
 import { blogPosts } from "../lib/blog-posts";
 import type { BlogPost } from "../types/blog";
 
+const POSTS_PER_PAGE = 5;
+
 export default function Blog() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [visiblePosts, setVisiblePosts] = useState<BlogPost[]>([]);
+  const [page, setPage] = useState(1);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   // Filter posts based on selected tag
   const filteredPosts = selectedTag
     ? blogPosts.filter((post: BlogPost) => post.tags.includes(selectedTag))
     : blogPosts;
+
+  // Load more posts when page changes
+  useEffect(() => {
+    const startIndex = 0;
+    const endIndex = page * POSTS_PER_PAGE;
+    setVisiblePosts(filteredPosts.slice(startIndex, endIndex));
+  }, [page, filteredPosts]);
+
+  // Reset to first page when tag changes
+  const handleTagClick = (tag: string) => {
+    setSelectedTag(selectedTag === tag ? null : tag);
+    setPage(1);
+  };
+
+  // Setup intersection observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          visiblePosts.length < filteredPosts.length
+        ) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [visiblePosts.length, filteredPosts.length]);
 
   return (
     <div className="container mx-auto px-4 py-8 mt-16">
@@ -37,7 +80,7 @@ export default function Blog() {
         </div>
 
         <div className="grid gap-8">
-          {filteredPosts.map((post: BlogPost) => (
+          {visiblePosts.map((post: BlogPost) => (
             <motion.article
               key={post.slug}
               initial={{ opacity: 0 }}
@@ -59,9 +102,7 @@ export default function Blog() {
                   {post.tags.map((tag: string) => (
                     <button
                       key={tag}
-                      onClick={() =>
-                        setSelectedTag(selectedTag === tag ? null : tag)
-                      }
+                      onClick={() => handleTagClick(tag)}
                       className={`text-sm px-2 py-1 rounded ${
                         selectedTag === tag
                           ? "bg-primary-500 text-white hover:bg-primary-600"
@@ -83,6 +124,16 @@ export default function Blog() {
             </motion.article>
           ))}
         </div>
+
+        {/* Infinite scroll trigger */}
+        {visiblePosts.length < filteredPosts.length && (
+          <div
+            ref={observerTarget}
+            className="h-20 flex items-center justify-center"
+          >
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+          </div>
+        )}
       </motion.div>
     </div>
   );
