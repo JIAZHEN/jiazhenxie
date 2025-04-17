@@ -6,23 +6,26 @@ tags:
   - ruby
   - rails
   - tutorial
-image: >-
-  https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png
+image: https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png
 draft: false
 ---
 
-Today I'm going to summarise how to initialise a RoR. Many thanks to 
+Today I'm going to summarise how to initialise a RoR. Many thanks to
+
 > Ruby on Rails Tutorial Learn Web Development with Rails by Michael Hartl
 
 Here we are using `ruby 2.0` and `rails 4.0.0`
 
 ## Create RoR app
+
 Firstly we create a new app
+
 ```
 rails new sample_app --skip-test-unit
 ```
 
 ## Working with git
+
 We would use github to manager our code. Create a new repository in github without README. Then do
 
 ```
@@ -31,9 +34,10 @@ git add .
 git commit -m "Initial commit"
 git remote add origin git@github.com:USERNAME/APP_NAME.git
 git push -u origin master
-``` 
+```
 
 ## Update Gemfile
+
 ```
 source 'https://rubygems.org'
 ruby '2.0.0'
@@ -78,6 +82,7 @@ end
 ```
 
 ## Update secret token
+
 Edit `config/initializers/secret_token.rb`
 
 ```
@@ -100,21 +105,24 @@ SampleApp::Application.config.secret_key_base = secure_token
 ```
 
 ## Config the app
+
 Edit `config/application.rb`
 
 ```
 config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
-config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
-  "#{html_tag}".html_safe 
+config.action_view.field_error_proc = Proc.new { |html_tag, instance|
+  "#{html_tag}".html_safe
 }
 ```
 
 ## Initialise Rspec
+
 ```
 rails generate rspec:install
 ```
 
 ## Deploy to heroku
+
 ```
 heroku create
 rake assets:precompile

@@ -13,7 +13,11 @@ export default function Blog() {
   const observerTarget = useRef<HTMLDivElement>(null);
 
   // Get all posts and filter based on selected tag
-  const allPosts = useMemo(() => getAllPosts(), []);
+  const allPosts = useMemo(() => {
+    const posts = getAllPosts();
+    return posts;
+  }, []);
+
   const filteredPosts = useMemo(() => {
     return selectedTag
       ? allPosts.filter((post: BlogPost) => post.tags.includes(selectedTag))
