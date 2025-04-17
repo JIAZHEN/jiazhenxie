@@ -1,9 +1,13 @@
 ---
 title: How to make automation more stable
-description: Implicit wait and explicit wait
-date: 2014-05-13
-tags: ["uncategorized"]
-image: "https://www.zibtek.com/blog/content/images/2020/03/image-14.png"
+description: Strategies for creating more stable and reliable test automation
+date: 2014-05-13T00:00:00.000Z
+tags:
+  - testing
+  - automation
+  - qa
+  - best-practices
+image: 'https://www.zibtek.com/blog/content/images/2020/03/image-14.png'
 draft: false
 ---
 

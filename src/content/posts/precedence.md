@@ -1,9 +1,13 @@
 ---
 title: Precedence
-description: An interesting issue which is hard to debug
-date: 2013-10-27
-tags: ["uncategorized"]
-image: "https://media.geeksforgeeks.org/wp-content/uploads/20190708163349/Operators-Precedence.jpg"
+description: Understanding operator precedence in Ruby
+date: 2013-10-27T00:00:00.000Z
+tags:
+  - ruby
+  - programming
+  - advanced
+image: >-
+  https://media.geeksforgeeks.org/wp-content/uploads/20190708163349/Operators-Precedence.jpg
 draft: false
 ---
 

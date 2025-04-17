@@ -1,9 +1,13 @@
 ---
 title: Facebook 新发布的 Yarn JS 包管理器的 5 大功能
-description: Facebook发布了一个新的 Javascript 软件包管理器，名为 Yarn，并声称它比 npm 更快，更可靠，更安全。接下来，本文将介绍Yarn的五大功能。
-date: 2016-11-15
-tags: ["uncategorized"]
-image: "https://miro.medium.com/v2/resize:fit:1200/1*BCPTI5sT2C9JH76__X2WUg.png"
+description: Integrating Facebook JavaScript SDK in web applications
+date: 2016-11-15T00:00:00.000Z
+tags:
+  - web
+  - javascript
+  - facebook
+  - integration
+image: 'https://miro.medium.com/v2/resize:fit:1200/1*BCPTI5sT2C9JH76__X2WUg.png'
 draft: false
 ---
 

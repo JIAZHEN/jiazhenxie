@@ -1,9 +1,13 @@
 ---
 title: A step to a journey of thousands of miles
-description: To record every single issue that I encountered and resolved.
-date: 2016-10-05
-tags: ["uncategorized"]
-image: "https://media.istockphoto.com/id/1250921835/photo/ladder-to-success-concept-human-stick-figure-taking-first-step-on-a-red-staircase.jpg?s=612x612&w=0&k=20&c=CD3tlas__5zLST7aLd_jup_IoMWOu5gMMH7Ja5lhGCM="
+description: Reflections on the journey of learning and growth
+date: 2016-10-05T00:00:00.000Z
+tags:
+  - personal
+  - learning
+  - experience
+image: >-
+  https://media.istockphoto.com/id/1250921835/photo/ladder-to-success-concept-human-stick-figure-taking-first-step-on-a-red-staircase.jpg?s=612x612&w=0&k=20&c=CD3tlas__5zLST7aLd_jup_IoMWOu5gMMH7Ja5lhGCM=
 draft: false
 ---
 

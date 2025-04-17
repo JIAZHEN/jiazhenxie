@@ -1,9 +1,14 @@
 ---
-title: "How I achieved 83% accuracy in auto-labelling on production"
-description: "We would like to predict the correct garment features from the garment title and description, by using Machine Learning. Furthermore, it's important to actually make the model production ready."
-date: 2018-01-04
-tags: ["uncategorized"]
-image: "https://itsupplychain.com/wp-content/uploads/2022/03/AdobeStock_170135489.jpg-900-x-636.jpg"
+title: How I achieved 83% accuracy in auto-labelling on production
+description: Achieving high accuracy in automated production labeling
+date: 2018-01-04T00:00:00.000Z
+tags:
+  - machine-learning
+  - automation
+  - ai
+  - experience
+image: >-
+  https://itsupplychain.com/wp-content/uploads/2022/03/AdobeStock_170135489.jpg-900-x-636.jpg
 draft: false
 ---
 

@@ -1,9 +1,13 @@
 ---
 title: To initialise a Ruby on Rails app
-description: Kick start off the rails app
-date: 2013-11-17
-tags: ["uncategorized"]
-image: "https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png"
+description: Step-by-step guide to setting up a new Ruby on Rails application
+date: 2013-11-17T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - tutorial
+image: >-
+  https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png
 draft: false
 ---
 

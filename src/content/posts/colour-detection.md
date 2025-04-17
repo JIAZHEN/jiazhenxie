@@ -1,9 +1,12 @@
 ---
 title: Colour Detection
-description: Colour Detection by using Python. Tackle the difficulties of removing background and finding the similar colour
-date: 2018-05-03
-tags: ["uncategorized"]
-image: "https://i.ytimg.com/vi/05PYXwBw3Z0/maxresdefault.jpg"
+description: Implementing color detection in computer vision applications
+date: 2018-05-03T00:00:00.000Z
+tags:
+  - machine-learning
+  - computer-vision
+  - automation
+image: 'https://i.ytimg.com/vi/05PYXwBw3Z0/maxresdefault.jpg'
 draft: false
 ---
 

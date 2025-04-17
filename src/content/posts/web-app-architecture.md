@@ -1,9 +1,15 @@
 ---
 title: 《大型网站技术架构》总结
-description: 最近阅读了《大型网站技术架构——核心原理与案例分析》以了解大型网站的架构以及网站是如何演化，为公司发展做技术储备。
-date: 2016-12-22
-tags: ["uncategorized"]
-image: "https://brianway.github.io/img/blog/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1_%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1.png"
+description: >-
+  A comprehensive guide to modern web application architecture patterns and best
+  practices
+date: 2016-12-22T00:00:00.000Z
+tags:
+  - web
+  - architecture
+  - design
+image: >-
+  https://brianway.github.io/img/blog/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1_%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1.png
 draft: false
 ---
 

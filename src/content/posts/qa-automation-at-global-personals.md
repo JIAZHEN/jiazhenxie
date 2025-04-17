@@ -1,9 +1,14 @@
 ---
 title: QA Automation at Global Personals (Venntro Media Group)
-description: A summary to why and how we improve the automation
-date: 2014-06-08
-tags: ["uncategorized"]
-image: "https://media.licdn.com/dms/image/C4D0BAQFX5kOYM92d-A/company-logo_200_200/0/1594215316549?e=2147483647&v=beta&t=lH5uMUO_KEuQS3zkniYYdc96gHXxVyn4hxrwGqjGpSI"
+description: Implementing QA automation at Global Personals
+date: 2014-06-08T00:00:00.000Z
+tags:
+  - testing
+  - qa
+  - automation
+  - experience
+image: >-
+  https://media.licdn.com/dms/image/C4D0BAQFX5kOYM92d-A/company-logo_200_200/0/1594215316549?e=2147483647&v=beta&t=lH5uMUO_KEuQS3zkniYYdc96gHXxVyn4hxrwGqjGpSI
 draft: false
 ---
 

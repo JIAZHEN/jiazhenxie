@@ -1,8 +1,10 @@
 ---
 title: First post
-description: "Yeah, the first blog post of mine"
-date: 2013-10-12
-tags: ["uncategorized"]
+description: Welcome to my blog about software development and learning
+date: 2013-10-12T00:00:00.000Z
+tags:
+  - personal
+  - introduction
 image: /assets/images/posts/1-chalkboard.jpg
 draft: false
 ---

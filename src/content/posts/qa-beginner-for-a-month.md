@@ -1,9 +1,13 @@
 ---
 title: QA beginner for a month
-description: Test automation is awesome
-date: 2013-10-13
-tags: ["uncategorized"]
-image: "https://elmosoftware.co.uk/wp-content/uploads/sites/3/2019/12/Quality-Assurance.png"
+description: A month-long journey into quality assurance testing
+date: 2013-10-13T00:00:00.000Z
+tags:
+  - testing
+  - qa
+  - experience
+image: >-
+  https://elmosoftware.co.uk/wp-content/uploads/sites/3/2019/12/Quality-Assurance.png
 draft: false
 ---
 

@@ -1,9 +1,14 @@
 ---
 title: Automation Test with Rspec and Capybara
-description: Early stage of refactoring
-date: 2013-10-14
-tags: ["uncategorized"]
-image: "https://blog.testproject.io/wp-content/uploads/2021/01/Test-your-Ruby-waters-with-Capybara.jpg"
+description: Automated testing with RSpec and Capybara
+date: 2013-10-14T00:00:00.000Z
+tags:
+  - testing
+  - automation
+  - rspec
+  - capybara
+image: >-
+  https://blog.testproject.io/wp-content/uploads/2021/01/Test-your-Ruby-waters-with-Capybara.jpg
 draft: false
 ---
 

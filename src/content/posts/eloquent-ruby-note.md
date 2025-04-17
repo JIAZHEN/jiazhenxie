@@ -1,9 +1,13 @@
 ---
 title: Eloquent Ruby Note
-description: Notes from learning the book
-date: 2014-03-23
-tags: ["uncategorized"]
-image: "https://gumtreeau-res.cloudinary.com/image/private/t_$_58/gumtree/db4d7c02-5bb2-4295-a284-3a3eee70dbf5.jpg"
+description: Notes and insights from Eloquent Ruby book
+date: 2014-03-23T00:00:00.000Z
+tags:
+  - ruby
+  - programming
+  - learning
+image: >-
+  https://gumtreeau-res.cloudinary.com/image/private/t_$_58/gumtree/db4d7c02-5bb2-4295-a284-3a3eee70dbf5.jpg
 draft: false
 ---
 

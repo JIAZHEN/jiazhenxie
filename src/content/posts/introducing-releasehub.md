@@ -1,9 +1,13 @@
 ---
 title: Introducing ReleaseHub
-description: Deliver codes faster and easier
-date: 2016-03-01
-tags: ["uncategorized"]
-image: "https://opengraph.githubassets.com/89e51ae86d2d21b8569c88442d0e5f98a13c35851fea55b6d0c96c0343bc8aff/JIAZHEN/releasehub"
+description: Introduction to ReleaseHub - a deployment management tool
+date: 2016-03-01T00:00:00.000Z
+tags:
+  - devops
+  - deployment
+  - tools
+image: >-
+  https://opengraph.githubassets.com/89e51ae86d2d21b8569c88442d0e5f98a13c35851fea55b6d0c96c0343bc8aff/JIAZHEN/releasehub
 draft: false
 ---
 

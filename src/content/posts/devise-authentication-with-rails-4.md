@@ -1,9 +1,13 @@
 ---
 title: Devise (authentication) with Rails 4
-description: Notes for the use of devise
-date: 2014-04-21
-tags: ["uncategorized"]
-image: "https://miro.medium.com/v2/resize:fit:300/1*dsK3Tnu8MZZcFKEKgz0QCg.png"
+description: Implementing authentication with Devise in Rails 4
+date: 2014-04-21T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - authentication
+  - security
+image: 'https://miro.medium.com/v2/resize:fit:300/1*dsK3Tnu8MZZcFKEKgz0QCg.png'
 draft: false
 ---
 

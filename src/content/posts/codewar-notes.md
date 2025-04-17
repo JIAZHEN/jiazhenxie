@@ -1,9 +1,12 @@
 ---
 title: Codewar Notes
-description: Best solutions from codewar
-date: 2013-12-07
-tags: ["uncategorized"]
-image: "https://www.codewars.com/packs/assets/og-image.7f5134fb.png"
+description: Notes and solutions from CodeWars programming challenges
+date: 2013-12-07T00:00:00.000Z
+tags:
+  - programming
+  - learning
+  - algorithms
+image: 'https://www.codewars.com/packs/assets/og-image.7f5134fb.png'
 draft: false
 ---
 

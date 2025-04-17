@@ -1,9 +1,14 @@
 ---
 title: Design pattern in ruby notes
-description: "Learning notes, the important knowledge"
-date: 2014-11-26
-tags: ["uncategorized"]
-image: "https://refactoring.guru/images/patterns/languages/ruby.png?id=f9f66be3c4a30f3e71a330ca61659d4c"
+description: Design patterns implementation notes in Ruby
+date: 2014-11-26T00:00:00.000Z
+tags:
+  - ruby
+  - design
+  - patterns
+  - programming
+image: >-
+  https://refactoring.guru/images/patterns/languages/ruby.png?id=f9f66be3c4a30f3e71a330ca61659d4c
 draft: false
 ---
 

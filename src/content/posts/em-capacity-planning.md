@@ -1,9 +1,15 @@
 ---
-title: Building the Engineering Capacity Planner - Solving the Resource Planning Puzzle
-description: Engineering Manager Tools
-date: 2024-09-04
-tags: ["uncategorized"]
-image: "https://bs-uploads.toptal.io/blackfish-uploads/components/blog_post_page/4093803/cover_image/regular_1708x683/0309_Your_role_in_delivering_great_products_as_an_Engineering_Manager_Zara_Newsletter___blog-67996821bb55e5b0e2a07a80a6392013.png"
+title: >-
+  Building the Engineering Capacity Planner - Solving the Resource Planning
+  Puzzle
+description: Capacity planning for EventMachine applications
+date: 2024-09-04T00:00:00.000Z
+tags:
+  - performance
+  - scaling
+  - architecture
+image: >-
+  https://bs-uploads.toptal.io/blackfish-uploads/components/blog_post_page/4093803/cover_image/regular_1708x683/0309_Your_role_in_delivering_great_products_as_an_Engineering_Manager_Zara_Newsletter___blog-67996821bb55e5b0e2a07a80a6392013.png
 draft: false
 ---
 

@@ -1,9 +1,14 @@
 ---
 title: Rails performance tips
-description: "A summary of Rails performance tips, especially on the database layer"
-date: 2016-11-24
-tags: ["uncategorized"]
-image: "https://thecodest.co/images/uploaded/ways_to_increase_your_rails_performance.png"
+description: Essential performance optimization tips for Ruby on Rails applications
+date: 2016-11-24T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - performance
+  - optimization
+image: >-
+  https://thecodest.co/images/uploaded/ways_to_increase_your_rails_performance.png
 draft: false
 ---
 

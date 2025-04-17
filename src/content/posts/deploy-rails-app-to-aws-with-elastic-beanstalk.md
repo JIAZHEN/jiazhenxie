@@ -1,9 +1,14 @@
 ---
 title: Deploy rails app to AWS with Elastic Beanstalk
-description: An instruction of how to set up rails app with AWS Elastic Beanstalk
-date: 2016-10-17
-tags: ["uncategorized"]
-image: "https://miro.medium.com/v2/resize:fit:1058/1*vqDloHZv9SVFtkr_0e7now.png"
+description: Deploying Rails applications to AWS Elastic Beanstalk
+date: 2016-10-17T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - devops
+  - aws
+  - deployment
+image: 'https://miro.medium.com/v2/resize:fit:1058/1*vqDloHZv9SVFtkr_0e7now.png'
 draft: false
 ---
 

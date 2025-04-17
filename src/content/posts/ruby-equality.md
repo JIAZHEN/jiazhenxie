@@ -1,9 +1,12 @@
 ---
 title: Ruby equality
-description: The differences of different equality in ruby
-date: 2013-11-03
-tags: ["uncategorized"]
-image: "https://cdn.shopify.com/s/files/1/0779/4361/articles/ShopifyEng_BlogIllustrations_220411_72ppi_01_ImplementingEqualityInRuby.jpg?v=1653388463"
+description: Understanding Ruby's equality operators and object comparison
+date: 2013-11-03T00:00:00.000Z
+tags:
+  - ruby
+  - programming
+image: >-
+  https://cdn.shopify.com/s/files/1/0779/4361/articles/ShopifyEng_BlogIllustrations_220411_72ppi_01_ImplementingEqualityInRuby.jpg?v=1653388463
 draft: false
 ---
 

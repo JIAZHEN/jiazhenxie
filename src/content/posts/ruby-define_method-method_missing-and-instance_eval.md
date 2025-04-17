@@ -1,9 +1,13 @@
 ---
-title: "Ruby - define_method, method_missing, and instance_eval"
-description: Metaprogramming in ruby
-date: 2013-11-02
-tags: ["uncategorized"]
-image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeQ1AckHtZUybCtVvIVeT_cCUqIPYjuagUsQ&usqp=CAU"
+title: 'Ruby - define_method, method_missing, and instance_eval'
+description: Deep dive into Ruby's metaprogramming features
+date: 2013-11-02T00:00:00.000Z
+tags:
+  - ruby
+  - metaprogramming
+  - advanced
+image: >-
+  https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeQ1AckHtZUybCtVvIVeT_cCUqIPYjuagUsQ&usqp=CAU
 draft: false
 ---
 

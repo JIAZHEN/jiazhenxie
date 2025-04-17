@@ -1,9 +1,11 @@
 ---
 title: 婴儿推车市场
-description: 婴儿推车市场概况，初为父母的准备
-date: 2017-02-25
-tags: ["uncategorized"]
-image: "https://pic2.zhimg.com/v2-a894dab3e4948ecbede1b7199ec4319d_b.jpg"
+description: Personal reflections and experiences
+date: 2017-02-25T00:00:00.000Z
+tags:
+  - personal
+  - experience
+image: 'https://pic2.zhimg.com/v2-a894dab3e4948ecbede1b7199ec4319d_b.jpg'
 draft: false
 ---
 

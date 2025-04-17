@@ -1,9 +1,13 @@
 ---
 title: AbRules - My AB testing gem
-description: A light weight ruby AB test library based on rules
-date: 2015-09-23
-tags: ["uncategorized"]
-image: "https://www.codewars.com/packs/assets/og-image.7f5134fb.png"
+description: Creating an A/B testing gem for Ruby applications
+date: 2015-09-23T00:00:00.000Z
+tags:
+  - ruby
+  - testing
+  - ab-testing
+  - tools
+image: 'https://www.codewars.com/packs/assets/og-image.7f5134fb.png'
 draft: false
 ---
 

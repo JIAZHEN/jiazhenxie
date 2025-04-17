@@ -1,9 +1,14 @@
 ---
 title: Using Yarn with Rails
-description: "As the rise of Javascript ecosystem, Javascript libraries are needed for better user experience. This article uses Yarn to get a better JS libraries management."
-date: 2016-11-17
-tags: ["uncategorized"]
-image: "https://images.ctfassets.net/1qj7i7j2q7hx/3ODwerz6BHAXQmGsCJjNLm/5c2dac6e099d4586404956a901f6ddde/1_p9SEAYl2BT71uInsGmhgLA.png"
+description: How to integrate Yarn package manager with Ruby on Rails applications
+date: 2016-11-17T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - javascript
+  - frontend
+image: >-
+  https://images.ctfassets.net/1qj7i7j2q7hx/3ODwerz6BHAXQmGsCJjNLm/5c2dac6e099d4586404956a901f6ddde/1_p9SEAYl2BT71uInsGmhgLA.png
 draft: false
 ---
 

@@ -1,9 +1,13 @@
 ---
 title: Setup Ruby on Rails in DigitalOcean
-description: Notes to deploy rails app in DigitalOcean
-date: 2014-08-30
-tags: ["uncategorized"]
-image: "https://miro.medium.com/v2/resize:fit:1400/1*zQFXeIUoRXpoS3X1VOd_PQ.png"
+description: Complete guide to deploying Ruby on Rails applications on DigitalOcean
+date: 2014-08-30T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - devops
+  - deployment
+image: 'https://miro.medium.com/v2/resize:fit:1400/1*zQFXeIUoRXpoS3X1VOd_PQ.png'
 draft: false
 ---
 

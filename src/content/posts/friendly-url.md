@@ -1,9 +1,14 @@
 ---
 title: Friendly URL
-description: Use the title as the post url
-date: 2013-11-07
-tags: ["uncategorized"]
-image: "https://cdn.tutsplus.com/cdn-cgi/image/width=600/webdesign/uploads/legacy/tuts/413_SEO_friendlyurls/seo-url.jpg"
+description: Implementing SEO-friendly URLs in web applications
+date: 2013-11-07T00:00:00.000Z
+tags:
+  - web
+  - seo
+  - rails
+  - ruby
+image: >-
+  https://cdn.tutsplus.com/cdn-cgi/image/width=600/webdesign/uploads/legacy/tuts/413_SEO_friendlyurls/seo-url.jpg
 draft: false
 ---
 

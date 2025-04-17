@@ -1,9 +1,14 @@
 ---
 title: Add the ability to forward email in MailCatcher
-description: The way to test mailcatcher locally
-date: 2013-10-24
-tags: ["uncategorized"]
-image: "https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png"
+description: Extending MailCatcher with email forwarding capabilities
+date: 2013-10-24T00:00:00.000Z
+tags:
+  - ruby
+  - rails
+  - testing
+  - tools
+image: >-
+  https://res.cloudinary.com/practicaldev/image/fetch/s--jvDLhx0b--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/cpcr5w0kgl6j94tss7n9.png
 draft: false
 ---
 

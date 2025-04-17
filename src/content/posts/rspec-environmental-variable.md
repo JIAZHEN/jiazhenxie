@@ -1,9 +1,13 @@
 ---
 title: Rspec environmental Variable
-description: Learn environmental variable
-date: 2013-10-13
-tags: ["uncategorized"]
-image: "https://cdn.hashnode.com/res/hashnode/image/upload/v1623416109911/DAFpo-cNa.png"
+description: Managing environment variables in RSpec tests
+date: 2013-10-13T00:00:00.000Z
+tags:
+  - ruby
+  - testing
+  - rspec
+image: >-
+  https://cdn.hashnode.com/res/hashnode/image/upload/v1623416109911/DAFpo-cNa.png
 draft: false
 ---
 
