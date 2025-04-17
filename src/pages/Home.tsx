@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import VantaBackground from "../components/VantaBackground";
 import { siteConfig } from "../config/site";
 
@@ -69,13 +70,13 @@ export default function Home() {
             transition={{ delay: 0.8 }}
             className="flex justify-center space-x-4"
           >
-            <a
-              href="/blog"
+            <Link
+              to="/blog"
               className="inline-flex items-center px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors"
             >
               Learn More
               <FiArrowRight className="ml-2" />
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </div>
