@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiX } from "react-icons/fi";
 import { blogPosts } from "../lib/blog-posts";
 import type { BlogPost } from "../types/blog";
 
@@ -21,9 +21,20 @@ export default function Blog() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-white">
-          Blog
-        </h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Blog
+          </h1>
+          {selectedTag && (
+            <button
+              onClick={() => setSelectedTag(null)}
+              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              <span>Showing: #{selectedTag}</span>
+              <FiX className="w-4 h-4" />
+            </button>
+          )}
+        </div>
 
         <div className="grid gap-8">
           {filteredPosts.map((post: BlogPost) => (
@@ -39,10 +50,12 @@ export default function Blog() {
                   {post.tags.map((tag: string) => (
                     <button
                       key={tag}
-                      onClick={() => setSelectedTag(tag)}
+                      onClick={() =>
+                        setSelectedTag(selectedTag === tag ? null : tag)
+                      }
                       className={`text-sm px-3 py-1 rounded-full ${
                         selectedTag === tag
-                          ? "bg-primary-500 text-white"
+                          ? "bg-primary-500 text-white hover:bg-primary-600"
                           : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                       }`}
                     >
