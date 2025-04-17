@@ -96,9 +96,11 @@ export default function Blog() {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                   {format(new Date(post.date), "MMMM d, yyyy")}
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {post.description}
-                </p>
+                {post.description && (
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 whitespace-pre-line">
+                    {post.description}
+                  </p>
+                )}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag: string) => (
                     <button
