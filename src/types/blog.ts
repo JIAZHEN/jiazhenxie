@@ -13,4 +13,9 @@ export interface BlogPost {
   date: string;
   description: string;
   tags: string[];
+  content?: string;
+  image?: string;
+  draft?: boolean;
 }
+
+export type BlogPosts = BlogPost[];
