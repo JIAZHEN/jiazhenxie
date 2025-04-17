@@ -13,13 +13,21 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Umami Analytics -->
+    <!-- Google Analytics -->
     <script
       async
-      defer
-      data-website-id="82916c4d-eb02-4b88-9d92-f182aea2781e"
-      src="https://umami.is/script.js"
+      src="https://www.googletagmanager.com/gtag/js?id=G-HWGJ79Y704"
     ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-HWGJ79Y704", {
+        send_page_view: false,
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
