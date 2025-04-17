@@ -82,7 +82,7 @@ export default function Home() {
                 to="/blog"
                 className="inline-flex items-center px-6 py-3 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors"
               >
-                Learn More
+                Blog Posts
                 <FiArrowRight className="ml-2" />
               </Link>
             </motion.div>
