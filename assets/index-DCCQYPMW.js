@@ -4817,7 +4817,7 @@ You can find this nifty tool here: [Engineering Capacity Planner](https://github
 
 ## The Bottom Line: How Much Can My Team Really Achieve?
 
-![image info](./../../images/em-capacity-planning_img1.png)
+![Engineering Team Capacity Dashboard](/images/em-capacity-planning_img1.png)
 
 After putting all this into practice, you can finally answer that elusive question: "How much work can my team realistically achieve in a given time frame?"
 
