@@ -27,4 +27,13 @@ export default defineConfig({
     host: true,
     open: true,
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
 });

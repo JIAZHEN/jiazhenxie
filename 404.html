@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      // Store the URL we want to redirect to
+      var url = window.location.href;
+
+      // Remove the domain and any leading slashes
+      var path = url.replace(/^https?:\/\/[^\/]+/, "");
+
+      // Redirect to index.html with the path as a hash
+      window.location.href = "/index.html#" + path;
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/" />
+    </noscript>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
