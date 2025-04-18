@@ -9,13 +9,13 @@
 
       // Create a new script element to load the main application
       var script = document.createElement("script");
-      script.src = "/index.js";
+      script.src = "/assets/index.js";
       document.head.appendChild(script);
 
       // Create a new link element to load the main styles
       var link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "/index.css";
+      link.href = "/assets/index.css";
       document.head.appendChild(link);
 
       // Create a div for the root element
@@ -26,7 +26,7 @@
       // Wait for the script to load
       script.onload = function () {
         // The React app will handle the routing
-        window.location.reload();
+        window.history.replaceState({}, "", path);
       };
     </script>
     <noscript>
