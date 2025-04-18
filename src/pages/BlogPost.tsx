@@ -17,7 +17,8 @@ export default function BlogPostPage() {
     async function loadPost() {
       if (slug) {
         try {
-          const postData = await getBlogPost(slug);
+          const decodedSlug = decodeURIComponent(slug);
+          const postData = await getBlogPost(decodedSlug);
           setPost(postData);
           setError(null);
         } catch (err) {

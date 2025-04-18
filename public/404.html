@@ -1,14 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Jiazhen Xie - Personal Website</title>
-    <script type="text/javascript">
-      // Simple redirect to index.html
-      window.location.href = "/";
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loading...</title>
+    <script>
+      // Check for dark mode preference
+      const isDarkMode =
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      if (isDarkMode) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Store the original URL
+      const originalUrl = window.location.href;
+
+      // Load the main application
+      const loadApp = () => {
+        // Create a script element for the main application
+        const script = document.createElement("script");
+        script.src = "/assets/index.js";
+        script.type = "module";
+
+        // Load CSS
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/assets/index.css";
+        document.head.appendChild(link);
+
+        script.onload = () => {
+          // Replace the current history entry with the original URL
+          window.history.replaceState({}, "", originalUrl);
+        };
+        document.head.appendChild(script);
+      };
+
+      // Load the application
+      loadApp();
     </script>
   </head>
   <body>
-    <p>Redirecting to home page...</p>
+    <div id="root"></div>
   </body>
 </html>

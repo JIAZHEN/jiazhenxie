@@ -65,7 +65,9 @@ export async function getBlogPosts(
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  // Decode the URL-encoded slug
+  const decodedSlug = decodeURIComponent(slug);
   // Find the post with the matching slug
   const posts = await getBlogPosts(true); // Include drafts when getting a specific post
-  return posts.find((post) => post.slug === slug) || null;
+  return posts.find((post) => post.slug === decodedSlug) || null;
 }
