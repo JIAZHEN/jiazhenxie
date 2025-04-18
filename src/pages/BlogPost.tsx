@@ -11,17 +11,35 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (slug) {
-      const postData = getBlogPost(slug);
-      setPost(postData);
-      setLoading(false);
+    async function loadPost() {
+      if (slug) {
+        try {
+          const postData = await getBlogPost(slug);
+          setPost(postData);
+          setError(null);
+        } catch (err) {
+          setError("Failed to load post");
+          console.error("Error loading post:", err);
+        } finally {
+          setLoading(false);
+        }
+      }
     }
+
+    loadPost();
   }, [slug]);
 
   if (loading) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-red-500">{error}</div>
+    );
   }
 
   if (!post) {

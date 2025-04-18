@@ -24,15 +24,17 @@ export interface BlogPost {
 const blogFiles = import.meta.glob("../content/posts/*.md", {
   query: "?raw",
   import: "default",
-  eager: true,
+  eager: false,
 });
 
-export function getBlogPosts(includeDrafts: boolean = false): BlogPost[] {
+export async function getBlogPosts(
+  includeDrafts: boolean = false,
+): Promise<BlogPost[]> {
   const posts: BlogPost[] = [];
 
   // Process each blog file
   for (const path in blogFiles) {
-    const fileContents = blogFiles[path] as string;
+    const fileContents = (await blogFiles[path]()) as string;
     const { attributes, body } =
       frontMatter<FrontMatterAttributes>(fileContents);
 
@@ -62,8 +64,8 @@ export function getBlogPosts(includeDrafts: boolean = false): BlogPost[] {
   );
 }
 
-export function getBlogPost(slug: string): BlogPost | null {
+export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   // Find the post with the matching slug
-  const posts = getBlogPosts(true); // Include drafts when getting a specific post
+  const posts = await getBlogPosts(true); // Include drafts when getting a specific post
   return posts.find((post) => post.slug === slug) || null;
 }
