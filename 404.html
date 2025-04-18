@@ -14,6 +14,13 @@
         const script = document.createElement("script");
         script.src = "/assets/index.js";
         script.type = "module";
+
+        // Load CSS
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/assets/index.css";
+        document.head.appendChild(link);
+
         script.onload = () => {
           // Replace the current history entry with the original URL
           window.history.replaceState({}, "", originalUrl);
