@@ -80,6 +80,16 @@ export default function Blog() {
                 <p className="text-gray-700 dark:text-gray-300">
                   {post.description}
                 </p>
+                <div className="flex gap-2 mt-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 rounded-full text-xs"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <Link
                   to={`/blog/${post.slug}`}
                   className="inline-flex items-center gap-2 mt-4 text-primary-600 dark:text-primary-400 hover:underline"
