@@ -90,6 +90,12 @@ npm run build
 
 The site can be deployed to platforms like Vercel or Netlify. The build output will be in the `dist` directory.
 
+```bash
+npm run deploy
+```
+
+This will deploy the site to the `gh-pages` branch of the repository.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
