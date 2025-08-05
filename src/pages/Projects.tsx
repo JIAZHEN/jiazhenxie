@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
+import SEO from "../components/SEO";
 
 // This would typically come from an API or file system
 const projects = [
@@ -75,25 +76,48 @@ const ProjectCard = ({ project }: { project: (typeof projects)[0] }) => {
 
 const Projects = () => {
   return (
-    <div className="max-w-4xl mx-auto py-20">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-bold mb-8">Projects</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-12">
-          Here are some of the projects I've worked on. Each project represents
-          different aspects of my skills and interests in web development.
-        </p>
+    <>
+      <SEO
+        title="Engineering Projects & Portfolio | Jiazhen Xie - Chinese Tech Leader"
+        description="Explore engineering projects and technical portfolio of Jiazhen Xie, Oxford-educated Chinese engineering leader in UK. Full-stack development, distributed systems, and engineering leadership projects."
+        type="website"
+        keywords={[
+          "engineering projects",
+          "software portfolio",
+          "full-stack projects",
+          "Chinese engineer UK",
+          "Oxford engineering projects",
+          "distributed systems",
+          "software architecture",
+          "engineering leadership portfolio",
+          "tech projects UK",
+        ]}
+        canonicalUrl="https://jiazhenxie.com/projects"
+      />
+      <div className="max-w-4xl mx-auto py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-4xl font-bold mb-8">
+            Engineering Projects & Portfolio
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-12">
+            Explore my engineering projects showcasing full-stack development,
+            software architecture, and technical leadership. Each project
+            demonstrates different aspects of modern engineering practices and
+            my approach to building scalable solutions.
+          </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      </motion.div>
-    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </>
   );
 };
 

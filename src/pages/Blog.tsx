@@ -64,9 +64,22 @@ export default function Blog() {
   return (
     <>
       <SEO
-        title="Blog | Jiazhen Xie"
-        description="Read my thoughts on software development, architecture, and technology."
+        title="Engineering Leadership Blog - Insights from UK Tech Industry | Jiazhen Xie"
+        description="Engineering leadership insights from Chinese tech leader in UK. Read about software architecture, team management, cross-cultural leadership, and engineering best practices from Oxford-educated engineering manager."
         type="website"
+        keywords={[
+          "engineering leadership blog",
+          "tech leadership insights UK",
+          "software engineering management",
+          "Chinese engineering leader blog",
+          "Oxford tech blog",
+          "engineering team management",
+          "cross-cultural leadership",
+          "software architecture insights",
+          "tech management blog UK",
+          "inclusive engineering leadership",
+        ]}
+        canonicalUrl="https://jiazhenxie.com/blog"
       />
       <div className="container mx-auto px-4 py-8 mt-16">
         <motion.div
@@ -75,7 +88,16 @@ export default function Blog() {
           transition={{ duration: 0.5 }}
         >
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-4xl font-bold">Blog</h1>
+            <div>
+              <h1 className="text-4xl font-bold mb-2">
+                Engineering Leadership Blog
+              </h1>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Insights on tech leadership, software architecture, and
+                engineering management from a Chinese leader in the UK tech
+                industry
+              </p>
+            </div>
             {selectedTag && (
               <button
                 onClick={handleClearFilter}

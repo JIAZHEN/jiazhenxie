@@ -38,9 +38,20 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Jiazhen Xie, Engineering leader | China ↔ UK | MSc Software Engineering, Oxford"
-        description="Engineering leader with experience in both China and UK. MSc in Software Engineering from the University of Oxford. Specializing in full-stack development, architecture, and technical leadership."
-        type="website"
+        title="Jiazhen Xie - Engineering Leader UK | Oxford Alumni | Chinese Tech Leader"
+        description="Engineering leader in the UK with 14+ years experience. Oxford MSc graduate specializing in tech management, team building, and software architecture. Rare Chinese leader in UK tech industry with proven track record in scaling high-performing engineering teams."
+        type="profile"
+        keywords={[
+          "engineering leader UK",
+          "Oxford alumni tech",
+          "Chinese engineering leader",
+          "software engineering manager UK",
+          "tech leadership",
+          "cross-cultural leadership",
+          "engineering management",
+          "UK tech industry leader",
+        ]}
+        canonicalUrl="https://jiazhenxie.com"
       />
       <VantaBackground>
         <div className="min-h-screen flex items-center justify-center">
@@ -62,15 +73,24 @@ export default function Home() {
               </span>
             </div>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
               className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-200"
             >
-              I lead engineering teams to build scalable solutions and solve
-              complex technical challenges.
-            </motion.p>
+              <p className="mb-4">
+                Engineering leader with 14+ years experience leading
+                high-performing teams in the UK tech industry. Oxford MSc
+                graduate specializing in software architecture, team management,
+                and technical leadership.
+              </p>
+              <p>
+                Bringing unique perspective as a Chinese engineering leader in
+                the UK, fostering inclusive cultures and driving innovation in
+                distributed systems and cloud architecture.
+              </p>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}
