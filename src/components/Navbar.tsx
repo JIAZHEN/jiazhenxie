@@ -22,6 +22,12 @@ const Navbar = () => {
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex space-x-6">
               <Link
+                to="/solutions"
+                className="hover:text-primary-500 transition-colors"
+              >
+                Solutions
+              </Link>
+              <Link
                 to="/about"
                 className="hover:text-primary-500 transition-colors"
               >

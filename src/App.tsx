@@ -6,6 +6,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
+import Solutions from "./pages/Solutions";
 import PageTracker from "./components/PageTracker";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/solutions" element={<Solutions />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
         </motion.main>
