@@ -235,19 +235,19 @@ ${formData.message}
         {/* Content */}
         <div className="container mx-auto relative z-10">
           <div className="max-w-5xl">
-            {/* Status badge */}
+            {/* Status badge - hidden on very small screens */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8"
+              className="mb-6 sm:mb-8 hidden xs:block"
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 border border-charcoal-300 dark:border-charcoal-600">
+              <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 border border-charcoal-300 dark:border-charcoal-600">
                 <span className="flex h-2 w-2 relative">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sage-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-sage-500" />
                 </span>
-                <span className="text-sm font-medium text-charcoal-600 dark:text-paper-400">
+                <span className="text-xs sm:text-sm font-medium text-charcoal-600 dark:text-paper-400">
                   Available for new partnerships
                 </span>
               </div>
@@ -258,7 +258,7 @@ ${formData.message}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="headline-xl mb-8"
+              className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-6 sm:mb-8"
             >
               Your strategic
               <span className="block text-primary-600 dark:text-primary-400">
@@ -270,7 +270,7 @@ ${formData.message}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mb-12"
+              className="text-base sm:text-lg lg:text-xl text-charcoal-600 dark:text-paper-400 max-w-2xl mb-8 sm:mb-12"
             >
               I connect{" "}
               <strong className="text-charcoal-900 dark:text-paper-100">
@@ -288,28 +288,28 @@ ${formData.message}
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="grid md:grid-cols-2 gap-6 mb-12"
+              className="grid gap-4 sm:gap-6 md:grid-cols-2 mb-8 sm:mb-12"
             >
               {/* Tech/Business Card */}
               <a
                 href="#pillars"
-                className="card-editorial group p-8 cursor-pointer"
+                className="card-editorial group p-5 sm:p-8 cursor-pointer"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-3 bg-primary-600 text-white">
-                    <FiServer className="w-6 h-6" />
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="p-2.5 sm:p-3 bg-primary-600 text-white">
+                    <FiServer className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <FiArrowRight className="w-5 h-5 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="font-serif text-2xl font-bold mb-3">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
                   Businesses & Startups
                 </h3>
-                <p className="text-charcoal-600 dark:text-paper-400 mb-6">
+                <p className="text-sm sm:text-base text-charcoal-600 dark:text-paper-400 mb-4 sm:mb-6">
                   Need a website, e-commerce platform, or custom system? I design, build, and deliver.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Websites", "E-Commerce", "Bespoke Systems"].map((tag) => (
-                    <span key={tag} className="tag-primary">
+                    <span key={tag} className="tag-primary text-xs">
                       {tag}
                     </span>
                   ))}
@@ -319,23 +319,23 @@ ${formData.message}
               {/* Families Card */}
               <a
                 href="#pillars"
-                className="card-editorial group p-8 cursor-pointer"
+                className="card-editorial group p-5 sm:p-8 cursor-pointer"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="p-3 bg-sage-600 text-white">
-                    <FiBookOpen className="w-6 h-6" />
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="p-2.5 sm:p-3 bg-sage-600 text-white">
+                    <FiBookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <FiArrowRight className="w-5 h-5 text-sage-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <h3 className="font-serif text-2xl font-bold mb-3">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
                   Ambitious Families
                 </h3>
-                <p className="text-charcoal-600 dark:text-paper-400 mb-6">
+                <p className="text-sm sm:text-base text-charcoal-600 dark:text-paper-400 mb-4 sm:mb-6">
                   Navigate the UK's elite 7+/8+ private school landscape with insider strategy.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["7+ Strategy", "Interview Prep", "School Selection"].map((tag) => (
-                    <span key={tag} className="tag">
+                    <span key={tag} className="tag text-xs">
                       {tag}
                     </span>
                   ))}
@@ -348,53 +348,53 @@ ${formData.message}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="flex flex-wrap gap-4 mb-16"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10 sm:mb-16"
             >
-              <a href="#contact" className="btn-primary group">
+              <a href="#contact" className="btn-primary group justify-center">
                 Start a Conversation
                 <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </a>
-              <a href="#pillars" className="btn-ghost">
+              <a href="#pillars" className="btn-ghost justify-center">
                 Explore Services
               </a>
             </motion.div>
 
-            {/* Trust indicators */}
+            {/* Trust indicators - grid on mobile, inline on desktop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex flex-wrap items-center gap-8 text-charcoal-500 dark:text-paper-500"
+              className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-6 lg:gap-8 text-charcoal-500 dark:text-paper-500"
             >
               <div className="flex items-center gap-2">
-                <FiAward className="w-5 h-5 text-primary-600" />
-                <span className="text-sm font-medium">Oxford MSc</span>
+                <FiAward className="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium">Oxford MSc</span>
               </div>
-              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
+              <div className="hidden sm:block w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
               <div className="flex items-center gap-2">
-                <FiTrendingUp className="w-5 h-5 text-sage-600" />
-                <span className="text-sm font-medium">15+ Years UK Experience</span>
+                <FiTrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-sage-600 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium">15+ Years UK</span>
               </div>
-              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
+              <div className="hidden sm:block w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
               <div className="flex items-center gap-2">
-                <FiGlobe className="w-5 h-5 text-primary-600" />
-                <span className="text-sm font-medium">Cross-Cultural Expert</span>
+                <FiGlobe className="w-4 h-4 sm:w-5 sm:h-5 text-primary-600 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium">Cross-Cultural</span>
               </div>
-              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600 hidden sm:block" />
+              <div className="hidden lg:block w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
               <div className="flex items-center gap-2">
-                <FiZap className="w-5 h-5 text-sage-600" />
-                <span className="text-sm font-medium">50+ Projects</span>
+                <FiZap className="w-4 h-4 sm:w-5 sm:h-5 text-sage-600 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium">50+ Projects</span>
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - hidden on small screens */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
         >
           <span className="text-xs font-medium uppercase tracking-widest text-charcoal-400">
             Scroll

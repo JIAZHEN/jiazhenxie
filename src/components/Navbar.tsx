@@ -87,12 +87,13 @@ const Navbar = () => {
             </div>
 
             {/* Right side icons */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-3">
+              {/* Social icons - hidden on mobile, shown in mobile menu */}
               <a
                 href={siteConfig.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-charcoal-600 dark:text-paper-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="hidden sm:block p-2 text-charcoal-600 dark:text-paper-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                 aria-label="GitHub"
               >
                 <FiGithub size={20} />
@@ -101,7 +102,7 @@ const Navbar = () => {
                 href={siteConfig.links.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-charcoal-600 dark:text-paper-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="hidden sm:block p-2 text-charcoal-600 dark:text-paper-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
                 aria-label="LinkedIn"
               >
                 <FiLinkedin size={20} />
