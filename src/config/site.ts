@@ -3,7 +3,7 @@ export const siteConfig = {
   title:
     "Jiazhen Xie - Engineering Leader UK | Oxford Alumni | Chinese Tech Leader",
   description:
-    "Engineering leader in the UK with 14+ years experience. Oxford MSc graduate. Chinese engineering leader specializing in tech management, team building, and software architecture.",
+    "Engineering leader in the UK with over a decade of experience. Oxford MSc graduate. Chinese engineering leader specializing in tech management, team building, and software architecture.",
   keywords: [
     "engineering leadership",
     "engineering leader UK",
@@ -39,7 +39,7 @@ export const siteConfig = {
       "Team Management",
       "Full-Stack Development",
     ],
-    experience: "14+ years in software engineering and leadership",
+    experience: "over a decade in software engineering and leadership",
     languages: ["English", "Chinese (Mandarin)"],
     twitter: "",
     github: "https://github.com/jiazhen",

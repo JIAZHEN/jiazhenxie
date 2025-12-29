@@ -52,7 +52,7 @@ export async function getBlogPosts(
       date: attributes.date,
       description: attributes.description,
       tags: attributes.tags || [],
-      image: attributes.image || "/images/blog-placeholder.jpg",
+      image: attributes.image || "",
       draft: attributes.draft || false,
       content: body,
     });

@@ -1,17 +1,24 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import {
   FiDatabase,
   FiCpu,
   FiUsers,
   FiTarget,
   FiBriefcase,
+  FiArrowRight,
+  FiAward,
+  FiMapPin,
+  FiBook,
 } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
 const skills = [
   {
-    category: "Backend",
-    icon: <FiDatabase />,
+    category: "Backend & Systems",
+    icon: FiDatabase,
+    color: "bg-primary-600",
     items: [
       "Distributed Systems",
       "Microservices",
@@ -20,8 +27,9 @@ const skills = [
     ],
   },
   {
-    category: "DevOps",
-    icon: <FiCpu />,
+    category: "DevOps & Cloud",
+    icon: FiCpu,
+    color: "bg-sage-600",
     items: [
       "Cloud Architecture",
       "Infrastructure as Code",
@@ -30,8 +38,9 @@ const skills = [
     ],
   },
   {
-    category: "Leadership & Management",
-    icon: <FiUsers />,
+    category: "Leadership",
+    icon: FiUsers,
+    color: "bg-primary-700",
     items: [
       "Engineering Leadership",
       "People Management",
@@ -40,8 +49,9 @@ const skills = [
     ],
   },
   {
-    category: "Product & Strategy",
-    icon: <FiTarget />,
+    category: "Strategy",
+    icon: FiTarget,
+    color: "bg-sage-700",
     items: [
       "Product Vision",
       "Technical Strategy",
@@ -50,8 +60,9 @@ const skills = [
     ],
   },
   {
-    category: "Business Domains",
-    icon: <FiBriefcase />,
+    category: "Domains",
+    icon: FiBriefcase,
+    color: "bg-charcoal-700",
     items: [
       "High-Tech Retail",
       "SaaS Platforms",
@@ -61,12 +72,81 @@ const skills = [
   },
 ];
 
+const timeline = [
+  {
+    year: "2024",
+    title: "Engineering Manager",
+    company: "Canva",
+    description: "Leading engineering teams to deliver impactful products at scale. Driving technical strategy and building high-performing, inclusive teams.",
+  },
+  {
+    year: "2020",
+    title: "Founding Engineering Lead",
+    company: "SaaS Startup",
+    description: "Built engineering team from 0 to 10+ people. Architected and shipped a SaaS platform from concept to production.",
+  },
+  {
+    year: "2018",
+    title: "MSc Software Engineering",
+    company: "University of Oxford",
+    description: "Deepened expertise in distributed systems and software architecture while working full-time.",
+  },
+  {
+    year: "2015",
+    title: "Senior Software Engineer → Tech Lead",
+    description: "Transitioned into technical leadership. Led cross-functional delivery teams and mentored junior engineers.",
+  },
+  {
+    year: "2010",
+    title: "Started UK Journey",
+    description: "Moved to the UK and began career as a software engineer. Built foundation in full-stack development and agile practices.",
+  },
+];
+
+// Animated skill bar
+const SkillBar = ({ skill, index }: { skill: typeof skills[0]; index: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -30 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="group"
+    >
+      <div className="card-editorial p-6 h-full">
+        <div className="flex items-center gap-4 mb-6">
+          <div className={`p-3 ${skill.color} text-white`}>
+            <skill.icon className="w-6 h-6" />
+          </div>
+          <h3 className="font-serif text-xl font-semibold">{skill.category}</h3>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {skill.items.map((item, i) => (
+            <motion.span
+              key={item}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: index * 0.1 + i * 0.05 + 0.3 }}
+              className="px-3 py-1.5 bg-charcoal-100 dark:bg-charcoal-700 text-sm"
+            >
+              {item}
+            </motion.span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 const About = () => {
   return (
     <>
       <SEO
         title="About Jiazhen Xie - Oxford Engineering Leader | Chinese Tech Management Expert"
-        description="Meet Jiazhen Xie, a Chinese engineering leader in the UK with Oxford MSc degree and 14+ years experience. Specializing in distributed systems, team leadership, and cross-cultural tech management in diverse environments."
+        description="Meet Jiazhen Xie, a Chinese engineering leader in the UK with Oxford MSc degree and over a decade of experience. Specializing in distributed systems, team leadership, and cross-cultural tech management in diverse environments."
         type="profile"
         keywords={[
           "Oxford engineering graduate",
@@ -80,81 +160,254 @@ const About = () => {
         ]}
         canonicalUrl="https://jiazhenxie.com/about"
       />
-      <div className="max-w-4xl mx-auto py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <h1 className="text-4xl font-bold mb-6">
-            About Jiazhen Xie - Engineering Leader
-          </h1>
-          <div className="prose dark:prose-invert max-w-none">
-            <h2 className="text-2xl font-semibold mb-4">
-              Oxford-Educated Chinese Engineering Leader in UK
-            </h2>
-            <p className="text-lg mb-4">
-              I'm an engineering leader with over 14 years of experience
-              building and scaling high-performing teams across the UK tech
-              industry. As an Oxford MSc graduate, I've led complex,
-              cross-functional projects to success and improved delivery
-              efficiency by up to 50%. My leadership style is grounded in
-              clarity, empathy, and data—I strive to foster a culture of
-              ownership, continuous improvement, and high trust.
-            </p>
 
-            <h3 className="text-xl font-semibold mb-3">
-              Unique Cross-Cultural Perspective
-            </h3>
-            <p className="text-lg">
-              I bring a strong technical foundation—enough to operate at a
-              Principal Engineer level—paired with the strategic mindset needed
-              for senior leadership. As a Chinese engineering leader fluent in
-              both Western and Chinese business and engineering cultures, I help
-              teams lead inclusively, navigate global collaboration, and bring
-              diverse perspectives to the table. This rare combination of
-              technical depth and cross-cultural leadership enables me to create
-              impact, build trust, and inspire diverse engineering teams.
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <h2 className="text-3xl font-bold mb-8">Skills & Technologies</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {skills.map((skill, index) => (
-              <motion.div
-                key={skill.category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="text-primary-500 mr-3 text-xl">
-                    {skill.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold">{skill.category}</h3>
+      <div className="mt-20 -mx-4">
+        {/* Hero Section - Asymmetric Layout */}
+        <section className="container mx-auto px-4 py-16 lg:py-24">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
+            {/* Left: Large number/visual */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-4 flex items-start"
+            >
+              <div className="relative">
+                <span className="font-serif text-[180px] lg:text-[240px] font-bold leading-none text-primary-600/10 dark:text-primary-400/10">
+                  15
+                </span>
+                <div className="absolute bottom-0 left-0 right-0 text-center lg:text-left lg:pl-4">
+                  <span className="text-sm font-medium uppercase tracking-widest text-charcoal-500 dark:text-paper-500">
+                    Years of Experience
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {skill.items.map((item) => (
-                    <span
-                      key={item}
-                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm"
-                    >
-                      {item}
-                    </span>
-                  ))}
+              </div>
+            </motion.div>
+
+            {/* Right: Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="lg:col-span-8"
+            >
+              <span className="tag-primary mb-6 inline-block">About Me</span>
+              <h1 className="headline-xl mb-8">
+                Engineering leader with a 
+                <span className="text-primary-600 dark:text-primary-400"> global </span>
+                perspective.
+              </h1>
+              <div className="space-y-6 body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl">
+                <p>
+                  I'm an engineering leader with over a decade of experience
+                  building and scaling high-performing teams across the UK tech
+                  industry. As an Oxford MSc graduate, I've led complex,
+                  cross-functional projects to success and improved delivery
+                  efficiency by up to 50%.
+                </p>
+                <p>
+                  My leadership style is grounded in clarity, empathy, and
+                  data—I strive to foster a culture of ownership, continuous
+                  improvement, and high trust.
+                </p>
+              </div>
+
+              {/* Quick stats */}
+              <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-charcoal-200 dark:border-charcoal-700">
+                <div>
+                  <div className="flex items-center gap-2 text-charcoal-500 dark:text-paper-500 mb-2">
+                    <FiMapPin className="w-4 h-4" />
+                    <span className="text-sm font-medium uppercase tracking-wider">Location</span>
+                  </div>
+                  <p className="font-serif text-xl">United Kingdom</p>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 text-charcoal-500 dark:text-paper-500 mb-2">
+                    <FiAward className="w-4 h-4" />
+                    <span className="text-sm font-medium uppercase tracking-wider">Education</span>
+                  </div>
+                  <p className="font-serif text-xl">Oxford MSc</p>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 text-charcoal-500 dark:text-paper-500 mb-2">
+                    <FiBook className="w-4 h-4" />
+                    <span className="text-sm font-medium uppercase tracking-wider">Focus</span>
+                  </div>
+                  <p className="font-serif text-xl">Leadership</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Cross-cultural Section */}
+        <section className="bg-charcoal-900 dark:bg-charcoal-950 text-paper-100 py-16 lg:py-24 px-4">
+          <div className="container mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <span className="inline-block px-4 py-2 border border-paper-100/20 text-sm font-medium uppercase tracking-widest mb-6">
+                  Cross-Cultural Leadership
+                </span>
+                <h2 className="headline-lg mb-8">
+                  Bridging
+                  <span className="text-primary-400"> Eastern & Western </span>
+                  perspectives.
+                </h2>
+                <div className="space-y-6 body-md text-paper-400">
+                  <p>
+                    I bring a strong technical foundation—enough to operate at a
+                    Principal Engineer level—paired with the strategic mindset needed
+                    for senior leadership.
+                  </p>
+                  <p>
+                    As a Chinese engineering leader fluent in both Western and Chinese
+                    business and engineering cultures, I help teams lead inclusively,
+                    navigate global collaboration, and bring diverse perspectives to
+                    the table.
+                  </p>
+                  <p>
+                    This rare combination of technical depth and cross-cultural
+                    leadership enables me to create impact, build trust, and inspire
+                    diverse engineering teams.
+                  </p>
                 </div>
               </motion.div>
-            ))}
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="relative"
+              >
+                {/* Global Mindset Image */}
+                <div className="relative overflow-hidden rounded-lg">
+                  <img
+                    src="/images/Global-Mindset.png"
+                    alt="Cross-cultural leadership - Bridging Eastern and Western perspectives"
+                    className="w-full h-auto object-cover"
+                  />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/30 to-transparent" />
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </section>
+
+        {/* Skills Section */}
+        <section className="py-16 lg:py-24 px-4">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="max-w-2xl mb-12"
+            >
+              <span className="tag mb-6 inline-block">Expertise</span>
+              <h2 className="headline-lg mb-6">
+                Skills &
+                <span className="text-primary-600 dark:text-primary-400"> capabilities.</span>
+              </h2>
+              <p className="body-md text-charcoal-600 dark:text-paper-400">
+                A blend of deep technical expertise and strategic leadership skills,
+                built over a decade in the UK tech industry.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {skills.map((skill, index) => (
+                <SkillBar key={skill.category} skill={skill} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Timeline Section */}
+        <section className="bg-charcoal-50 dark:bg-charcoal-800/50 py-16 lg:py-24 px-4">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <span className="tag-primary mb-6 inline-block">Journey</span>
+              <h2 className="headline-lg">
+                Career
+                <span className="text-primary-600 dark:text-primary-400"> milestones.</span>
+              </h2>
+            </motion.div>
+
+            <div className="max-w-3xl mx-auto">
+              {timeline.map((item, index) => (
+                <motion.div
+                  key={item.year}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="relative pl-8 pb-12 last:pb-0"
+                >
+                  {/* Timeline line */}
+                  <div className="absolute left-0 top-0 bottom-0 w-px bg-charcoal-300 dark:bg-charcoal-600" />
+                  
+                  {/* Timeline dot */}
+                  <div className="absolute left-0 top-1 w-2 h-2 -translate-x-1/2 bg-primary-600 rotate-45" />
+
+                  <div className="flex flex-wrap items-baseline gap-4 mb-2">
+                    <span className="font-serif text-2xl font-bold text-primary-600 dark:text-primary-400">
+                      {item.year}
+                    </span>
+                    <h3 className="font-serif text-xl font-semibold">{item.title}</h3>
+                  </div>
+                  {item.company && (
+                    <p className="text-sm font-medium text-charcoal-500 dark:text-paper-500 mb-2">
+                      {item.company}
+                    </p>
+                  )}
+                  <p className="text-charcoal-600 dark:text-paper-400">
+                    {item.description}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 lg:py-24 px-4">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="max-w-3xl mx-auto text-center"
+            >
+              <h2 className="headline-lg mb-6">
+                Let's work
+                <span className="text-primary-600 dark:text-primary-400"> together.</span>
+              </h2>
+              <p className="body-lg text-charcoal-600 dark:text-paper-400 mb-10">
+                Whether you're looking for strategic guidance, technical leadership,
+                or want to explore collaboration opportunities — I'd love to connect.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link to="/solutions" className="btn-primary group">
+                  View Solutions
+                  <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link to="/blog" className="btn-ghost">
+                  Read My Blog
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </div>
     </>
   );

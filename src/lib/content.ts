@@ -5,6 +5,7 @@ export interface BlogPost {
   date: string;
   description: string;
   tags: string[];
+  image: string;
   content: string;
 }
 
@@ -117,6 +118,7 @@ export const getAllPosts = (): BlogPost[] => {
         date: (data.date as string) || new Date().toISOString(),
         description: (data.description as string) || "",
         tags: (data.tags as string[]) || [],
+        image: (data.image as string) || "",
         content: markdownContent,
       };
     })

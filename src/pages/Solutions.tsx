@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  FiHome,
   FiBookOpen,
   FiUsers,
   FiServer,
@@ -20,50 +19,10 @@ import {
   FiZap,
   FiGlobe,
   FiTrendingUp,
+  FiArrowDown,
 } from "react-icons/fi";
 import SEO from "../components/SEO";
 import { siteConfig } from "../config/site";
-
-// Floating orb component for atmospheric effect - theme aware
-const FloatingOrb = ({
-  delay,
-  duration,
-  size,
-  lightColor,
-  darkColor,
-  initialX,
-  initialY,
-}: {
-  delay: number;
-  duration: number;
-  size: number;
-  lightColor: string;
-  darkColor: string;
-  initialX: string;
-  initialY: string;
-}) => (
-  <motion.div
-    className={`absolute rounded-full blur-3xl opacity-30 dark:opacity-20 ${lightColor} ${darkColor}`}
-    style={{
-      width: size,
-      height: size,
-      left: initialX,
-      top: initialY,
-    }}
-    animate={{
-      x: [0, 30, -20, 0],
-      y: [0, -40, 20, 0],
-      scale: [1, 1.1, 0.9, 1],
-    }}
-    transition={{
-      duration,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut",
-    }}
-  />
-);
-
 
 // Animation variants
 const fadeInUp = {
@@ -80,7 +39,7 @@ const staggerContainer = {
 };
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.9 },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
 };
 
@@ -92,9 +51,8 @@ const pillars = [
     subtitle: "Websites • E-Commerce • Bespoke Systems",
     description:
       "From company landing pages to full e-commerce platforms and custom business systems — I design, build, and deliver production-ready solutions.",
-    gradient: "from-blue-500 to-cyan-400",
-    bgLight: "bg-blue-50",
-    bgDark: "dark:bg-blue-900/20",
+    color: "bg-primary-600",
+    borderColor: "border-primary-600",
     features: ["E-Commerce & Websites", "Custom Business Apps", "API & Integrations"],
   },
   {
@@ -103,9 +61,8 @@ const pillars = [
     subtitle: "7+/8+ Private School Strategy • Interview Prep",
     description:
       "Navigate the UK's elite education landscape. Strategic positioning, assessment preparation, and insider knowledge for competitive advantage.",
-    gradient: "from-amber-500 to-orange-400",
-    bgLight: "bg-amber-50",
-    bgDark: "dark:bg-amber-900/20",
+    color: "bg-sage-600",
+    borderColor: "border-sage-600",
     features: ["School Selection", "Assessment Strategy", "Interview Coaching"],
   },
   {
@@ -114,9 +71,8 @@ const pillars = [
     subtitle: "Mentorship • CV Optimization • UK Market Integration",
     description:
       "Accelerate your UK career trajectory. From market positioning to personal branding, unlock opportunities others don't see.",
-    gradient: "from-emerald-500 to-teal-400",
-    bgLight: "bg-emerald-50",
-    bgDark: "dark:bg-emerald-900/20",
+    color: "bg-charcoal-700",
+    borderColor: "border-charcoal-700",
     features: ["Career Strategy", "Personal Branding", "Network Building"],
   },
 ];
@@ -254,172 +210,151 @@ ${formData.message}
         canonicalUrl="https://jiazhenxie.com/solutions"
       />
 
-      {/* Hero Section - Theme Aware */}
+      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center -mx-4 -mt-8 px-4 overflow-hidden">
-        {/* Theme-aware gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-950" />
+        {/* Background */}
+        <div className="absolute inset-0 grid-overlay" />
         
-        {/* Floating orbs for atmosphere - theme aware */}
-        <FloatingOrb delay={0} duration={8} size={400} lightColor="bg-blue-400" darkColor="dark:bg-blue-500" initialX="10%" initialY="20%" />
-        <FloatingOrb delay={2} duration={10} size={300} lightColor="bg-cyan-300" darkColor="dark:bg-cyan-500" initialX="60%" initialY="60%" />
-        <FloatingOrb delay={4} duration={12} size={350} lightColor="bg-amber-300" darkColor="dark:bg-amber-500" initialX="80%" initialY="10%" />
-        <FloatingOrb delay={1} duration={9} size={250} lightColor="bg-primary-400" darkColor="dark:bg-primary-500" initialX="30%" initialY="70%" />
-
-        {/* Grid pattern overlay - theme aware */}
-        <div
-          className="absolute inset-0 opacity-[0.04] dark:opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
+        {/* Geometric shapes */}
+        <motion.div
+          className="shape-circle bg-primary-500 w-[500px] h-[500px] -right-[200px] top-[10%]"
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 15, repeat: Infinity }}
+        />
+        <motion.div
+          className="shape-circle bg-sage-500 w-[400px] h-[400px] -left-[150px] bottom-[20%]"
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ duration: 18, repeat: Infinity }}
+        />
+        <motion.div
+          className="shape-rect bg-primary-400 w-[150px] h-[150px] right-[15%] bottom-[30%] rotate-12"
+          animate={{ rotate: [12, 20, 12] }}
+          transition={{ duration: 12, repeat: Infinity }}
         />
 
-        {/* Main content */}
+        {/* Content */}
         <div className="container mx-auto relative z-10">
-          <div className="max-w-6xl mx-auto">
-            {/* Top badge */}
+          <div className="max-w-5xl">
+            {/* Status badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="flex justify-center mb-8"
+              className="mb-8"
             >
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gray-900/5 dark:bg-white/5 border border-gray-900/10 dark:border-white/10 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-3 px-4 py-2 border border-charcoal-300 dark:border-charcoal-600">
                 <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sage-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-sage-500" />
                 </span>
-                <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
+                <span className="text-sm font-medium text-charcoal-600 dark:text-paper-400">
                   Available for new partnerships
                 </span>
               </div>
             </motion.div>
 
-            {/* Main headline - Staggered reveal */}
-            <div className="text-center mb-12">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
-              >
-                <span className="block">Your Strategic</span>
-                <motion.span
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.3 }}
-                  className="block bg-gradient-to-r from-blue-600 via-cyan-500 to-amber-500 dark:from-blue-400 dark:via-cyan-400 dark:to-amber-400 bg-clip-text text-transparent"
-                >
-                  Bridge to the UK
-                </motion.span>
-              </motion.h1>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
-              >
-                I connect <span className="text-gray-900 dark:text-white font-medium">ambitious tech leaders</span> and{" "}
-                <span className="text-gray-900 dark:text-white font-medium">discerning families</span> to the opportunities
-                that transform their UK journey.
-              </motion.p>
-            </div>
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="headline-xl mb-8"
+            >
+              Your strategic
+              <span className="block text-primary-600 dark:text-primary-400">
+                bridge to the UK.
+              </span>
+            </motion.h1>
 
-            {/* Two pathways - Visual bridge concept */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mb-12"
+            >
+              I connect{" "}
+              <strong className="text-charcoal-900 dark:text-paper-100">
+                ambitious tech leaders
+              </strong>{" "}
+              and{" "}
+              <strong className="text-charcoal-900 dark:text-paper-100">
+                discerning families
+              </strong>{" "}
+              to the opportunities that transform their UK journey.
+            </motion.p>
+
+            {/* Two pathway cards */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="grid md:grid-cols-2 gap-6 lg:gap-8 mb-12"
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="grid md:grid-cols-2 gap-6 mb-12"
             >
-              {/* Tech Leaders Card */}
-              <motion.div
-                whileHover={{ scale: 1.02, y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="group relative p-8 rounded-2xl bg-white dark:bg-white/5 border border-blue-200 dark:border-blue-500/20 shadow-lg shadow-blue-500/5 dark:shadow-none backdrop-blur-sm cursor-pointer overflow-hidden"
+              {/* Tech/Business Card */}
+              <a
+                href="#pillars"
+                className="card-editorial group p-8 cursor-pointer"
               >
-                {/* Hover glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
-                      <FiServer className="w-6 h-6" />
-                    </div>
-                    <FiArrowRight className="w-5 h-5 text-blue-500 dark:text-blue-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className="p-3 bg-primary-600 text-white">
+                    <FiServer className="w-6 h-6" />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Businesses & Startups
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Need a website, e-commerce platform, or custom system? I design, build, and deliver.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {["Websites", "E-Commerce", "Bespoke Systems"].map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  <FiArrowRight className="w-5 h-5 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-              </motion.div>
+                <h3 className="font-serif text-2xl font-bold mb-3">
+                  Businesses & Startups
+                </h3>
+                <p className="text-charcoal-600 dark:text-paper-400 mb-6">
+                  Need a website, e-commerce platform, or custom system? I design, build, and deliver.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["Websites", "E-Commerce", "Bespoke Systems"].map((tag) => (
+                    <span key={tag} className="tag-primary">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
 
               {/* Families Card */}
-              <motion.div
-                whileHover={{ scale: 1.02, y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="group relative p-8 rounded-2xl bg-white dark:bg-white/5 border border-amber-200 dark:border-amber-500/20 shadow-lg shadow-amber-500/5 dark:shadow-none backdrop-blur-sm cursor-pointer overflow-hidden"
+              <a
+                href="#pillars"
+                className="card-editorial group p-8 cursor-pointer"
               >
-                {/* Hover glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10 dark:from-amber-500/20 dark:to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 text-white">
-                      <FiBookOpen className="w-6 h-6" />
-                    </div>
-                    <FiArrowRight className="w-5 h-5 text-amber-500 dark:text-amber-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className="p-3 bg-sage-600 text-white">
+                    <FiBookOpen className="w-6 h-6" />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Ambitious Families
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Navigate the UK's elite 7+/8+ private school landscape with insider strategy.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {["7+ Strategy", "Interview Prep", "School Selection"].map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  <FiArrowRight className="w-5 h-5 text-sage-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-              </motion.div>
+                <h3 className="font-serif text-2xl font-bold mb-3">
+                  Ambitious Families
+                </h3>
+                <p className="text-charcoal-600 dark:text-paper-400 mb-6">
+                  Navigate the UK's elite 7+/8+ private school landscape with insider strategy.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["7+ Strategy", "Interview Prep", "School Selection"].map((tag) => (
+                    <span key={tag} className="tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
             </motion.div>
 
             {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="flex flex-wrap gap-4 mb-16"
             >
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg shadow-gray-900/20 dark:shadow-white/10"
-              >
+              <a href="#contact" className="btn-primary group">
                 Start a Conversation
-                <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </a>
-              <a
-                href="#pillars"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gray-900/5 dark:bg-white/5 text-gray-900 dark:text-white font-medium text-lg border border-gray-900/10 dark:border-white/10 hover:bg-gray-900/10 dark:hover:bg-white/10 transition-all"
-              >
+              <a href="#pillars" className="btn-ghost">
                 Explore Services
               </a>
             </motion.div>
@@ -428,27 +363,27 @@ ${formData.message}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.1 }}
-              className="flex flex-wrap justify-center items-center gap-8 text-gray-500 dark:text-gray-500"
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="flex flex-wrap items-center gap-8 text-charcoal-500 dark:text-paper-500"
             >
               <div className="flex items-center gap-2">
-                <FiAward className="w-5 h-5 text-amber-500" />
-                <span className="text-sm">Oxford MSc</span>
+                <FiAward className="w-5 h-5 text-primary-600" />
+                <span className="text-sm font-medium">Oxford MSc</span>
               </div>
-              <div className="h-4 w-px bg-gray-300 dark:bg-gray-700" />
+              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
               <div className="flex items-center gap-2">
-                <FiTrendingUp className="w-5 h-5 text-emerald-500" />
-                <span className="text-sm">14+ Years UK Experience</span>
+                <FiTrendingUp className="w-5 h-5 text-sage-600" />
+                <span className="text-sm font-medium">15+ Years UK Experience</span>
               </div>
-              <div className="h-4 w-px bg-gray-300 dark:bg-gray-700" />
+              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600" />
               <div className="flex items-center gap-2">
-                <FiGlobe className="w-5 h-5 text-blue-500" />
-                <span className="text-sm">Cross-Cultural Expert</span>
+                <FiGlobe className="w-5 h-5 text-primary-600" />
+                <span className="text-sm font-medium">Cross-Cultural Expert</span>
               </div>
-              <div className="h-4 w-px bg-gray-300 dark:bg-gray-700 hidden sm:block" />
+              <div className="w-px h-4 bg-charcoal-300 dark:bg-charcoal-600 hidden sm:block" />
               <div className="flex items-center gap-2">
-                <FiZap className="w-5 h-5 text-cyan-500" />
-                <span className="text-sm">50+ Projects</span>
+                <FiZap className="w-5 h-5 text-sage-600" />
+                <span className="text-sm font-medium">50+ Projects</span>
               </div>
             </motion.div>
           </div>
@@ -458,47 +393,49 @@ ${formData.message}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          transition={{ delay: 1.2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
+          <span className="text-xs font-medium uppercase tracking-widest text-charcoal-400">
+            Scroll
+          </span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-gray-300 dark:border-white/20 flex items-start justify-center p-2"
           >
-            <motion.div className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-white/60" />
+            <FiArrowDown className="w-5 h-5 text-charcoal-400" />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Enabler Framework - 3 Pillars */}
-      <section id="pillars" className="py-24 lg:py-32 -mx-4 px-4 bg-gray-50/50 dark:bg-gray-900/50">
+      {/* Three Pillars Section */}
+      <section id="pillars" className="py-24 lg:py-32 -mx-4 px-4 bg-charcoal-50 dark:bg-charcoal-800/50">
         <div className="container mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="text-center mb-16 lg:mb-20"
+            className="text-center mb-16"
           >
             <motion.span
               variants={fadeInUp}
-              className="inline-block px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-semibold mb-6"
+              className="tag-primary mb-6 inline-block"
             >
               The Enabler Framework
             </motion.span>
             <motion.h2
               variants={fadeInUp}
-              className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
+              className="headline-lg mb-6"
             >
-              Three Pillars of
-              <span className="block bg-gradient-to-r from-primary-600 to-cyan-500 bg-clip-text text-transparent">
-                Strategic Support
+              Three pillars of
+              <span className="block text-primary-600 dark:text-primary-400">
+                strategic support.
               </span>
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+              className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mx-auto"
             >
               A holistic approach to unlocking your potential in the UK —
               whether in technology, education, or career development.
@@ -516,26 +453,22 @@ ${formData.message}
               <motion.div
                 key={index}
                 variants={scaleIn}
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="group"
               >
-                <div className="h-full p-8 lg:p-10 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm group-hover:shadow-lg group-hover:border-gray-300 dark:group-hover:border-gray-600 transition-all duration-300">
+                <div className={`card-editorial h-full p-8 border-l-4 ${pillar.borderColor}`}>
                   {/* Icon */}
-                  <div
-                    className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${pillar.gradient} text-white shadow-lg mb-6`}
-                  >
+                  <div className={`inline-flex p-4 ${pillar.color} text-white mb-6`}>
                     <pillar.icon className="w-8 h-8" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="font-serif text-2xl font-bold mb-2">
                     {pillar.title}
                   </h3>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4 tracking-wide">
+                  <p className="text-sm font-medium text-charcoal-500 dark:text-paper-500 mb-4 uppercase tracking-wider">
                     {pillar.subtitle}
                   </p>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                  <p className="text-charcoal-600 dark:text-paper-400 mb-6">
                     {pillar.description}
                   </p>
 
@@ -544,11 +477,9 @@ ${formData.message}
                     {pillar.features.map((feature, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-3 text-gray-600 dark:text-gray-400"
+                        className="flex items-center gap-3 text-charcoal-600 dark:text-paper-400"
                       >
-                        <FiCheckCircle
-                          className={`w-5 h-5 flex-shrink-0 text-primary-500`}
-                        />
+                        <FiCheckCircle className="w-5 h-5 flex-shrink-0 text-primary-600 dark:text-primary-400" />
                         <span className="text-sm font-medium">{feature}</span>
                       </li>
                     ))}
@@ -560,7 +491,7 @@ ${formData.message}
         </div>
       </section>
 
-      {/* Proven Track Record */}
+      {/* Track Record Section */}
       <section className="py-24 lg:py-32 -mx-4 px-4">
         <div className="container mx-auto">
           <motion.div
@@ -572,28 +503,28 @@ ${formData.message}
           >
             {/* Content */}
             <motion.div variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-6">
+              <span className="inline-flex items-center gap-2 tag mb-6">
                 <FiShield className="w-4 h-4" />
                 Proven Track Record
               </span>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-8">
-                Expertise Forged in
-                <span className="block bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
-                  Experience.
+              <h2 className="headline-lg mb-8">
+                Expertise forged in
+                <span className="block text-primary-600 dark:text-primary-400">
+                  experience.
                 </span>
               </h2>
-              <div className="prose prose-lg dark:prose-invert">
-                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+              <div className="space-y-6 body-md text-charcoal-600 dark:text-paper-400">
+                <p>
                   I don't offer theories; I offer{" "}
-                  <span className="font-semibold text-gray-900 dark:text-white">
+                  <strong className="text-charcoal-900 dark:text-paper-100">
                     blueprints
-                  </span>
+                  </strong>
                   .
                 </p>
-                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p>
                   Having navigated the UK's tech and education systems for over
                   a decade, I provide the{" "}
-                  <span className="italic">'insider' logic</span> that agencies
+                  <em>'insider' logic</em> that agencies
                   miss. From scaling engineering teams at leading tech companies
                   to guiding families through the intricacies of the 7+ and 8+
                   process — my recommendations come from firsthand success, not
@@ -602,42 +533,42 @@ ${formData.message}
               </div>
             </motion.div>
 
-            {/* Stats/Credentials Grid */}
+            {/* Stats Grid */}
             <motion.div variants={fadeInUp}>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <FiCode className="w-8 h-8 text-primary-500 mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                    14+
+                <div className="card-editorial p-6 border-l-4 border-primary-600">
+                  <FiCode className="w-8 h-8 text-primary-600 mb-4" />
+                  <div className="font-serif text-4xl font-bold text-charcoal-900 dark:text-paper-100 mb-1">
+                    15+
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-charcoal-500 dark:text-paper-500 uppercase tracking-wider">
                     Years in UK Tech
                   </div>
                 </div>
-                <div className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <FiAward className="w-8 h-8 text-amber-500 mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                <div className="card-editorial p-6 border-l-4 border-sage-600">
+                  <FiAward className="w-8 h-8 text-sage-600 mb-4" />
+                  <div className="font-serif text-4xl font-bold text-charcoal-900 dark:text-paper-100 mb-1">
                     Oxford
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-charcoal-500 dark:text-paper-500 uppercase tracking-wider">
                     MSc Graduate
                   </div>
                 </div>
-                <div className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <FiClipboard className="w-8 h-8 text-emerald-500 mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                <div className="card-editorial p-6 border-l-4 border-primary-600">
+                  <FiClipboard className="w-8 h-8 text-primary-600 mb-4" />
+                  <div className="font-serif text-4xl font-bold text-charcoal-900 dark:text-paper-100 mb-1">
                     50+
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-charcoal-500 dark:text-paper-500 uppercase tracking-wider">
                     Projects Delivered
                   </div>
                 </div>
-                <div className="p-6 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <FiFileText className="w-8 h-8 text-violet-500 mb-4" />
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                <div className="card-editorial p-6 border-l-4 border-sage-600">
+                  <FiFileText className="w-8 h-8 text-sage-600 mb-4" />
+                  <div className="font-serif text-4xl font-bold text-charcoal-900 dark:text-paper-100 mb-1">
                     Leader
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-charcoal-500 dark:text-paper-500 uppercase tracking-wider">
                     Engineering Manager
                   </div>
                 </div>
@@ -647,8 +578,8 @@ ${formData.message}
         </div>
       </section>
 
-      {/* Common Challenges Grid */}
-      <section className="py-24 lg:py-32 -mx-4 px-4 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+      {/* Challenges Section */}
+      <section className="py-24 lg:py-32 -mx-4 px-4 bg-charcoal-900 dark:bg-charcoal-950 text-paper-100">
         <div className="container mx-auto">
           <motion.div
             initial="hidden"
@@ -659,16 +590,16 @@ ${formData.message}
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
+              className="headline-lg mb-6"
             >
-              Common Challenges
-              <span className="block text-primary-600 dark:text-primary-400">
-                I Help Solve
+              Common challenges
+              <span className="block text-primary-400">
+                I help solve.
               </span>
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+              className="body-lg text-paper-400 max-w-2xl mx-auto"
             >
               Click on a challenge to learn how I can help
             </motion.p>
@@ -688,18 +619,18 @@ ${formData.message}
                 onClick={() =>
                   setActiveChallenge(activeChallenge === index ? null : index)
                 }
-                className={`relative p-8 rounded-2xl cursor-pointer transition-all duration-500 border ${
+                className={`relative p-8 cursor-pointer transition-all duration-300 border ${
                   activeChallenge === index
-                    ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-transparent shadow-2xl scale-[1.02]"
-                    : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700"
+                    ? "bg-paper-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-paper-100 border-primary-600 shadow-2xl"
+                    : "bg-charcoal-800 dark:bg-charcoal-900 border-charcoal-700 hover:border-charcoal-500"
                 }`}
               >
                 {/* Tag */}
                 <span
-                  className={`absolute top-6 right-6 px-3 py-1 rounded-full text-xs font-semibold ${
+                  className={`absolute top-6 right-6 px-3 py-1 text-xs font-medium uppercase tracking-wider ${
                     activeChallenge === index
-                      ? "bg-white/20 dark:bg-gray-900/20"
-                      : "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
+                      ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
+                      : "bg-paper-100/10 text-paper-400"
                   }`}
                 >
                   {challenge.tag}
@@ -707,23 +638,23 @@ ${formData.message}
 
                 <div className="flex items-start gap-5">
                   <div
-                    className={`p-3 rounded-xl ${
+                    className={`p-3 ${
                       activeChallenge === index
-                        ? "bg-white/10 dark:bg-gray-900/10"
-                        : "bg-gradient-to-br from-primary-500 to-cyan-500 text-white"
+                        ? "bg-primary-600 text-white"
+                        : "bg-paper-100/10 text-paper-400"
                     }`}
                   >
                     <challenge.icon className="w-6 h-6" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-3">
+                    <h3 className="font-serif text-xl font-bold mb-3">
                       {challenge.question}
                     </h3>
                     <p
                       className={`leading-relaxed ${
                         activeChallenge === index
-                          ? "text-white/80 dark:text-gray-700"
-                          : "text-gray-600 dark:text-gray-400"
+                          ? "text-charcoal-600 dark:text-paper-400"
+                          : "text-paper-400"
                       }`}
                     >
                       {challenge.description}
@@ -734,11 +665,11 @@ ${formData.message}
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
-                        className="mt-6 pt-6 border-t border-white/20 dark:border-gray-800/30"
+                        className="mt-6 pt-6 border-t border-charcoal-200 dark:border-charcoal-600"
                       >
                         <a
                           href="#contact"
-                          className="inline-flex items-center gap-2 text-sm font-semibold hover:gap-3 transition-all"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-primary-600 dark:text-primary-400 hover:gap-3 transition-all"
                         >
                           Let's discuss your situation
                           <FiArrowRight className="w-4 h-4" />
@@ -753,10 +684,10 @@ ${formData.message}
         </div>
       </section>
 
-      {/* Friend of the Community CTA */}
+      {/* Contact Form Section */}
       <section
         id="contact"
-        className="py-24 lg:py-32 -mx-4 px-4 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"
+        className="py-24 lg:py-32 -mx-4 px-4"
       >
         <div className="container mx-auto">
           <motion.div
@@ -767,17 +698,17 @@ ${formData.message}
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900/10 dark:bg-white/10 text-gray-700 dark:text-white/80 text-sm font-medium mb-6">
+              <span className="inline-flex items-center gap-2 tag mb-6">
                 <FiUsers className="w-4 h-4" />
                 Friend of the Community
               </span>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
-                Let's Start a
-                <span className="block bg-gradient-to-r from-primary-600 to-cyan-500 dark:from-primary-400 dark:to-cyan-400 bg-clip-text text-transparent">
-                  Conversation.
+              <h2 className="headline-lg mb-6">
+                Let's start a
+                <span className="block text-primary-600 dark:text-primary-400">
+                  conversation.
                 </span>
               </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mx-auto">
                 Whether you were referred by a friend, found me through a
                 professional network, or are simply exploring options — I'd love
                 to hear about your goals.
@@ -789,15 +720,15 @@ ${formData.message}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center p-12 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-lg dark:shadow-none"
+                  className="text-center p-12 bg-charcoal-50 dark:bg-charcoal-800 border border-charcoal-200 dark:border-charcoal-700"
                 >
-                  <div className="inline-flex p-4 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 mb-6">
+                  <div className="inline-flex p-4 bg-sage-100 dark:bg-sage-900/30 text-sage-600 dark:text-sage-400 mb-6">
                     <FiCheckCircle className="w-12 h-12" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  <h3 className="font-serif text-2xl font-bold mb-4">
                     Message Received!
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
+                  <p className="text-charcoal-600 dark:text-paper-400 max-w-md mx-auto">
                     Thank you for reaching out. I'll review your message and get
                     back to you within 24–48 hours.
                   </p>
@@ -805,14 +736,14 @@ ${formData.message}
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="p-8 lg:p-12 rounded-2xl bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 shadow-lg dark:shadow-none"
+                  className="p-8 lg:p-12 bg-charcoal-50 dark:bg-charcoal-800 border border-charcoal-200 dark:border-charcoal-700"
                 >
                   <div className="grid md:grid-cols-2 gap-6 mb-6">
                     {/* Name */}
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
                       >
                         Your Name *
                       </label>
@@ -823,7 +754,7 @@ ${formData.message}
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 placeholder-charcoal-400 focus:outline-none focus:border-primary-600 transition-colors"
                         placeholder="John Doe"
                       />
                     </div>
@@ -832,7 +763,7 @@ ${formData.message}
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
                       >
                         Email Address *
                       </label>
@@ -843,7 +774,7 @@ ${formData.message}
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 placeholder-charcoal-400 focus:outline-none focus:border-primary-600 transition-colors"
                         placeholder="john@example.com"
                       />
                     </div>
@@ -852,7 +783,7 @@ ${formData.message}
                     <div>
                       <label
                         htmlFor="interest"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
                       >
                         Area of Interest *
                       </label>
@@ -862,23 +793,13 @@ ${formData.message}
                         required
                         value={formData.interest}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 focus:outline-none focus:border-primary-600 transition-colors appearance-none cursor-pointer"
                       >
-                        <option value="" className="bg-white dark:bg-gray-900">
-                          Select an option
-                        </option>
-                        <option value="tech" className="bg-white dark:bg-gray-900">
-                          IT Execution & Tech Leadership
-                        </option>
-                        <option value="education" className="bg-white dark:bg-gray-900">
-                          Elite Education Strategy (7+/8+)
-                        </option>
-                        <option value="career" className="bg-white dark:bg-gray-900">
-                          Career & Growth Mentoring
-                        </option>
-                        <option value="multiple" className="bg-white dark:bg-gray-900">
-                          Multiple Areas
-                        </option>
+                        <option value="">Select an option</option>
+                        <option value="tech">IT Execution & Tech Leadership</option>
+                        <option value="education">Elite Education Strategy (7+/8+)</option>
+                        <option value="career">Career & Growth Mentoring</option>
+                        <option value="multiple">Multiple Areas</option>
                       </select>
                     </div>
 
@@ -886,7 +807,7 @@ ${formData.message}
                     <div>
                       <label
                         htmlFor="referralSource"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
                       >
                         How did you hear about me? *
                       </label>
@@ -896,16 +817,13 @@ ${formData.message}
                         required
                         value={formData.referralSource}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 focus:outline-none focus:border-primary-600 transition-colors appearance-none cursor-pointer"
                       >
-                        <option value="" className="bg-white dark:bg-gray-900">
-                          Select a source
-                        </option>
+                        <option value="">Select a source</option>
                         {referralSources.map((source) => (
                           <option
                             key={source}
                             value={source.toLowerCase().replace(" ", "-")}
-                            className="bg-white dark:bg-gray-900"
                           >
                             {source}
                           </option>
@@ -918,7 +836,7 @@ ${formData.message}
                   <div className="mb-8">
                     <label
                       htmlFor="message"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                      className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
                     >
                       Tell me about your situation *
                     </label>
@@ -929,14 +847,14 @@ ${formData.message}
                       rows={5}
                       value={formData.message}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+                      className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 placeholder-charcoal-400 focus:outline-none focus:border-primary-600 transition-colors resize-none"
                       placeholder="Share some context about what you're looking for..."
                     />
                   </div>
 
                   {/* Error Message */}
                   {submitError && (
-                    <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
+                    <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 text-sm">
                       {submitError}
                     </div>
                   )}
@@ -945,7 +863,7 @@ ${formData.message}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto px-8 py-4 rounded-lg bg-gradient-to-r from-primary-500 to-cyan-500 text-white font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="btn-primary w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
@@ -961,7 +879,7 @@ ${formData.message}
                   </button>
 
                   {/* Privacy note */}
-                  <p className="mt-6 text-sm text-gray-500">
+                  <p className="mt-6 text-sm text-charcoal-500 dark:text-paper-500">
                     Your information is kept confidential. I respond to all
                     inquiries personally within 48 hours.
                   </p>
@@ -973,14 +891,14 @@ ${formData.message}
       </section>
 
       {/* Footer CTA */}
-      <section className="py-16 -mx-4 px-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+      <section className="py-16 -mx-4 px-4 border-t border-charcoal-200 dark:border-charcoal-700">
         <div className="container mx-auto text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <p className="text-charcoal-500 dark:text-paper-500 mb-4">
             Questions? Reach out directly at
           </p>
           <a
             href={`mailto:${siteConfig.links.email}`}
-            className="text-xl font-semibold text-primary-600 dark:text-primary-400 hover:underline"
+            className="font-serif text-xl font-semibold text-primary-600 dark:text-primary-400 hover:underline underline-offset-4"
           >
             {siteConfig.links.email}
           </a>
