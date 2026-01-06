@@ -4,6 +4,8 @@ import { FiArrowRight, FiArrowDown, FiGithub, FiLinkedin, FiMail } from "react-i
 import { Link } from "react-router-dom";
 import { siteConfig } from "../config/site";
 import SEO from "../components/SEO";
+import { getAllPosts } from "../lib/content";
+import type { BlogPost } from "../types/blog";
 
 // Animated counter component
 const Counter = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
@@ -63,6 +65,12 @@ const AnimatedText = ({ text, className = "" }: { text: string; className?: stri
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [latestPosts, setLatestPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    const posts = getAllPosts();
+    setLatestPosts(posts.slice(0, 3)); // Get the 3 most recent posts
+  }, []);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -413,29 +421,33 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Blog cards placeholder */}
+          {/* Latest Blog Posts */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
+            {latestPosts.map((post, i) => (
               <motion.div
-                key={i}
+                key={post.slug}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <Link to="/blog" className="card-editorial block p-6">
+                <Link to={`/blog/${post.slug}`} className="card-editorial block p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="tag text-xs">Leadership</span>
+                    {post.tags[0] && (
+                      <span className="tag text-xs">{post.tags[0]}</span>
+                    )}
                     <span className="text-xs text-charcoal-500 dark:text-paper-500">
-                      Dec 2024
+                      {new Date(post.date).toLocaleDateString("en-GB", {
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </span>
                   </div>
                   <h3 className="font-serif text-xl font-semibold mb-3 line-clamp-2">
-                    Engineering Leadership Insights
+                    {post.title}
                   </h3>
                   <p className="text-charcoal-600 dark:text-paper-400 text-sm line-clamp-3 mb-4">
-                    Discover proven strategies for building high-performing engineering 
-                    teams and fostering a culture of innovation and trust.
+                    {post.description}
                   </p>
                   <span className="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 font-medium">
                     Read more
