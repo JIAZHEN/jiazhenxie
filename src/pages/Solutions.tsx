@@ -126,6 +126,8 @@ export default function Solutions() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    contactMethod: "",
+    contactHandle: "",
     interest: "",
     referralSource: "",
     message: "",
@@ -155,6 +157,7 @@ export default function Solutions() {
           message: `
 Name: ${formData.name}
 Email: ${formData.email}
+Preferred Contact: ${formData.contactMethod}${formData.contactHandle ? ` - ${formData.contactHandle}` : ""}
 Area of Interest: ${formData.interest}
 Referral Source: ${formData.referralSource}
 
@@ -171,6 +174,8 @@ ${formData.message}
         setFormData({
           name: "",
           email: "",
+          contactMethod: "",
+          contactHandle: "",
           interest: "",
           referralSource: "",
           message: "",
@@ -778,6 +783,59 @@ ${formData.message}
                         placeholder="john@example.com"
                       />
                     </div>
+
+                    {/* Preferred Contact Method */}
+                    <div>
+                      <label
+                        htmlFor="contactMethod"
+                        className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
+                      >
+                        Preferred Contact Method
+                      </label>
+                      <select
+                        id="contactMethod"
+                        name="contactMethod"
+                        value={formData.contactMethod}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 focus:outline-none focus:border-primary-600 transition-colors appearance-none cursor-pointer"
+                      >
+                        <option value="">Email (default)</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="phone">Phone</option>
+                        <option value="wechat">WeChat</option>
+                      </select>
+                    </div>
+
+                    {/* Contact Handle - only show if a non-email method is selected */}
+                    {formData.contactMethod && (
+                      <div>
+                        <label
+                          htmlFor="contactHandle"
+                          className="block text-sm font-medium uppercase tracking-wider text-charcoal-700 dark:text-paper-300 mb-2"
+                        >
+                          {formData.contactMethod === "whatsapp"
+                            ? "WhatsApp Number"
+                            : formData.contactMethod === "phone"
+                            ? "Phone Number"
+                            : "WeChat ID"}
+                        </label>
+                        <input
+                          type={formData.contactMethod === "wechat" ? "text" : "tel"}
+                          id="contactHandle"
+                          name="contactHandle"
+                          value={formData.contactHandle}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-paper-50 dark:bg-charcoal-900 border border-charcoal-300 dark:border-charcoal-600 text-charcoal-900 dark:text-paper-100 placeholder-charcoal-400 focus:outline-none focus:border-primary-600 transition-colors"
+                          placeholder={
+                            formData.contactMethod === "whatsapp"
+                              ? "+1 234 567 8900"
+                              : formData.contactMethod === "phone"
+                              ? "+1 234 567 8900"
+                              : "your_wechat_id"
+                          }
+                        />
+                      </div>
+                    )}
 
                     {/* Interest Area */}
                     <div>
