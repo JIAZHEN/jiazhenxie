@@ -59,30 +59,30 @@
 }
 
 @layer components {
-  /* Editorial headline styles */
+  /* Editorial headline styles - Mobile First */
   .headline-xl {
-    @apply font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9];
+    @apply font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.95] sm:leading-[0.9];
   }
 
   .headline-lg {
-    @apply font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[0.95];
+    @apply font-serif text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
   }
 
   .headline-md {
-    @apply font-serif text-3xl md:text-4xl font-bold tracking-tight;
+    @apply font-serif text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight;
   }
 
   .headline-sm {
-    @apply font-serif text-2xl md:text-3xl font-semibold;
+    @apply font-serif text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold;
   }
 
-  /* Body text styles */
+  /* Body text styles - Mobile First */
   .body-lg {
-    @apply font-body text-lg md:text-xl leading-relaxed;
+    @apply font-body text-base sm:text-lg md:text-xl leading-relaxed;
   }
 
   .body-md {
-    @apply font-body text-base md:text-lg leading-relaxed;
+    @apply font-body text-sm sm:text-base md:text-lg leading-relaxed;
   }
 
   /* Editorial card with border accent */
@@ -105,17 +105,19 @@
     transform: translateY(-2px);
   }
 
-  /* Button styles */
+  /* Button styles - Mobile First with larger touch targets */
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3.5 sm:px-6 sm:py-3 bg-primary-600 text-white font-semibold;
     @apply hover:bg-primary-700 active:bg-primary-800 transition-all duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-primary-600/50 focus:ring-offset-2;
+    @apply min-h-[48px] sm:min-h-0 text-sm sm:text-base;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-2 px-6 py-3 border border-charcoal-300 dark:border-charcoal-600;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3.5 sm:px-6 sm:py-3 border border-charcoal-300 dark:border-charcoal-600;
     @apply text-charcoal-900 dark:text-paper-100 font-medium;
     @apply hover:bg-charcoal-100 dark:hover:bg-charcoal-800 transition-all duration-200;
+    @apply min-h-[48px] sm:min-h-0 text-sm sm:text-base;
   }
 
   /* Link styles */
@@ -132,9 +134,9 @@
     @apply w-full;
   }
 
-  /* Tag styles */
+  /* Tag styles - Mobile First */
   .tag {
-    @apply inline-flex items-center px-3 py-1 text-xs font-medium uppercase tracking-wider;
+    @apply inline-flex items-center px-2.5 py-1.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs font-medium uppercase tracking-wider;
     @apply bg-sage-100 dark:bg-sage-900/30 text-sage-700 dark:text-sage-300;
     @apply transition-colors duration-200;
   }
@@ -180,7 +182,7 @@
   }
 }
 
-/* Prose styling for blog posts */
+/* Prose styling for blog posts - Mobile First */
 .prose {
   @apply max-w-none font-body;
 }
@@ -193,46 +195,50 @@
 }
 
 .prose h1 {
-  @apply text-4xl md:text-5xl;
+  @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
 }
 
 .prose h2 {
-  @apply text-3xl md:text-4xl mt-12 mb-6;
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl mt-8 sm:mt-12 mb-4 sm:mb-6;
 }
 
 .prose h3 {
-  @apply text-2xl md:text-3xl mt-10 mb-4;
+  @apply text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6 sm:mt-10 mb-3 sm:mb-4;
 }
 
 .prose p {
-  @apply text-lg leading-relaxed text-charcoal-800 dark:text-paper-200 mb-6;
+  @apply text-base sm:text-lg leading-relaxed text-charcoal-800 dark:text-paper-200 mb-4 sm:mb-6;
 }
 
 .prose a {
   @apply text-primary-600 dark:text-primary-400 underline underline-offset-4 decoration-primary-300 dark:decoration-primary-700;
   @apply hover:decoration-primary-600 dark:hover:decoration-primary-400 transition-colors;
+  @apply break-words;
 }
 
 .prose ul,
 .prose ol {
-  @apply my-6 pl-6;
+  @apply my-4 sm:my-6 pl-4 sm:pl-6;
 }
 
 .prose li {
-  @apply text-lg text-charcoal-800 dark:text-paper-200 mb-2;
+  @apply text-base sm:text-lg text-charcoal-800 dark:text-paper-200 mb-2;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-primary-500 pl-6 italic text-charcoal-700 dark:text-paper-300 my-8;
+  @apply border-l-4 border-primary-500 pl-4 sm:pl-6 italic text-charcoal-700 dark:text-paper-300 my-6 sm:my-8;
+  @apply text-sm sm:text-base;
 }
 
 .prose pre {
-  @apply bg-charcoal-900 dark:bg-charcoal-950 text-paper-100 p-6 rounded-none overflow-x-auto my-8;
-  @apply border-l-4 border-primary-500;
+  @apply bg-charcoal-900 dark:bg-charcoal-950 text-paper-100 p-4 sm:p-6 rounded-none overflow-x-auto my-6 sm:my-8;
+  @apply border-l-4 border-primary-500 text-sm sm:text-base;
+  @apply -mx-4 sm:mx-0;
 }
 
 .prose code {
-  @apply bg-charcoal-100 dark:bg-charcoal-800 px-2 py-1 text-sm font-mono;
+  @apply bg-charcoal-100 dark:bg-charcoal-800 px-1.5 py-0.5 sm:px-2 sm:py-1 text-xs sm:text-sm font-mono;
+  @apply break-words;
 }
 
 .prose pre code {
@@ -240,11 +246,11 @@
 }
 
 .prose img {
-  @apply my-8 border border-charcoal-200 dark:border-charcoal-700;
+  @apply my-6 sm:my-8 border border-charcoal-200 dark:border-charcoal-700 w-full;
 }
 
 .prose hr {
-  @apply my-12 border-charcoal-200 dark:border-charcoal-700;
+  @apply my-8 sm:my-12 border-charcoal-200 dark:border-charcoal-700;
 }
 
 /* Animation delay utilities */
@@ -278,4 +284,56 @@
 /* Selection color */
 ::selection {
   @apply bg-primary-200 dark:bg-primary-900 text-primary-900 dark:text-primary-100;
+}
+
+/* Mobile-specific utilities */
+@layer utilities {
+  /* Safe area padding for notched devices */
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  /* Hide scrollbar on mobile for horizontal scroll sections */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Touch-friendly tap highlight */
+  .tap-highlight-transparent {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text selection for interactive elements */
+  .select-none-touch {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+}
+
+/* Improve touch scrolling */
+@supports (-webkit-overflow-scrolling: touch) {
+  .overflow-y-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Prevent scroll chaining on mobile menu */
+.overflow-y-auto {
+  overscroll-behavior: contain;
+}
+
+/* Touch manipulation for better button responsiveness */
+.touch-manipulation {
+  touch-action: manipulation;
 }

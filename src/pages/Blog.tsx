@@ -106,17 +106,17 @@ export default function Blog() {
         canonicalUrl="https://jiazhenxie.com/blog"
       />
 
-      <div className="mt-20 -mx-4 px-4">
+      <div className="mt-16 sm:mt-20 -mx-4 px-4">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="container mx-auto py-12 lg:py-20 border-b border-charcoal-200 dark:border-charcoal-700"
+          className="container mx-auto py-8 sm:py-12 lg:py-20 border-b border-charcoal-200 dark:border-charcoal-700"
         >
           <div className="max-w-4xl">
-            <span className="tag mb-6 inline-block">The Blog</span>
-            <h1 className="headline-xl mb-6">
+            <span className="tag mb-4 sm:mb-6 inline-block">The Blog</span>
+            <h1 className="headline-xl mb-4 sm:mb-6">
               Thoughts on
               <span className="block text-primary-600 dark:text-primary-400">
                 engineering leadership.
@@ -134,10 +134,10 @@ export default function Blog() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="container mx-auto py-8 border-b border-charcoal-200 dark:border-charcoal-700"
+          className="container mx-auto py-6 sm:py-8 border-b border-charcoal-200 dark:border-charcoal-700"
         >
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm font-medium uppercase tracking-widest text-charcoal-500 mr-4">
+          <div className="flex flex-col xs:flex-row flex-wrap items-start xs:items-center gap-3">
+            <span className="text-xs sm:text-sm font-medium uppercase tracking-wider sm:tracking-widest text-charcoal-500 xs:mr-4">
               Filter by topic
             </span>
             <AnimatePresence mode="popLayout">
@@ -176,14 +176,14 @@ export default function Blog() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="container mx-auto py-16 border-b border-charcoal-200 dark:border-charcoal-700"
+            className="container mx-auto py-10 sm:py-16 border-b border-charcoal-200 dark:border-charcoal-700"
           >
             <Link
               to={`/blog/${featuredPost.slug}`}
-              className="group grid lg:grid-cols-2 gap-8 lg:gap-16 items-center"
+              className="group grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16 items-center tap-highlight-transparent"
             >
               {/* Left: Image */}
-              <div className="relative aspect-[4/3] bg-charcoal-100 dark:bg-charcoal-800 overflow-hidden">
+              <div className="relative aspect-[16/10] sm:aspect-[4/3] bg-charcoal-100 dark:bg-charcoal-800 overflow-hidden">
                 {featuredPost.image && isValidImageUrl(featuredPost.image) && !featuredImageError ? (
                   <img
                     src={featuredPost.image}
@@ -194,47 +194,47 @@ export default function Blog() {
                 ) : (
                   <>
                     <div className="absolute inset-0 grid-overlay" />
-                    <div className="absolute inset-8 border border-charcoal-300 dark:border-charcoal-600 flex items-center justify-center">
-                      <span className="font-serif text-8xl text-primary-600/20 dark:text-primary-400/20 font-bold">
+                    <div className="absolute inset-4 sm:inset-8 border border-charcoal-300 dark:border-charcoal-600 flex items-center justify-center">
+                      <span className="font-serif text-5xl sm:text-8xl text-primary-600/20 dark:text-primary-400/20 font-bold">
                         01
                       </span>
                     </div>
                   </>
                 )}
                 {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-12 h-12 border-t-4 border-l-4 border-primary-600 transition-all duration-300 group-hover:w-16 group-hover:h-16" />
-                <div className="absolute bottom-0 right-0 w-12 h-12 border-b-4 border-r-4 border-primary-600 transition-all duration-300 group-hover:w-16 group-hover:h-16" />
+                <div className="absolute top-0 left-0 w-8 h-8 sm:w-12 sm:h-12 border-t-2 sm:border-t-4 border-l-2 sm:border-l-4 border-primary-600 transition-all duration-300 group-hover:w-10 group-hover:h-10 sm:group-hover:w-16 sm:group-hover:h-16" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-12 sm:h-12 border-b-2 sm:border-b-4 border-r-2 sm:border-r-4 border-primary-600 transition-all duration-300 group-hover:w-10 group-hover:h-10 sm:group-hover:w-16 sm:group-hover:h-16" />
               </div>
 
               {/* Right: Content */}
               <div>
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 sm:mb-6">
                   <span className="tag-primary">Featured</span>
-                  <span className="flex items-center gap-2 text-sm text-charcoal-500 dark:text-paper-500">
-                    <FiCalendar className="w-4 h-4" />
+                  <span className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-charcoal-500 dark:text-paper-500">
+                    <FiCalendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     {new Date(featuredPost.date).toLocaleDateString("en-GB", {
                       day: "numeric",
-                      month: "long",
+                      month: "short",
                       year: "numeric",
                     })}
                   </span>
                 </div>
-                <h2 className="headline-md mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <h2 className="headline-md mb-3 sm:mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                   {featuredPost.title}
                 </h2>
-                <p className="body-md text-charcoal-600 dark:text-paper-400 mb-6 line-clamp-3">
+                <p className="body-md text-charcoal-600 dark:text-paper-400 mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-3">
                   {featuredPost.description}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
                   {featuredPost.tags.slice(0, 3).map((tag) => (
                     <span key={tag} className="tag">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <span className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium group-hover:gap-4 transition-all duration-300">
+                <span className="inline-flex items-center gap-2 text-sm sm:text-base text-primary-600 dark:text-primary-400 font-medium group-hover:gap-3 sm:group-hover:gap-4 transition-all duration-300">
                   Read article
-                  <FiArrowRight className="w-5 h-5" />
+                  <FiArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </span>
               </div>
             </Link>
@@ -242,8 +242,8 @@ export default function Blog() {
         )}
 
         {/* Posts Grid */}
-        <section className="container mx-auto py-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section className="container mx-auto py-10 sm:py-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {(selectedTag ? visiblePosts : remainingPosts).map((post, index) => (
               <motion.article
                 key={post.slug}
@@ -253,15 +253,15 @@ export default function Blog() {
               >
                 <Link
                   to={`/blog/${post.slug}`}
-                  className="card-editorial block h-full p-6 group"
+                  className="card-editorial block h-full p-4 sm:p-6 group tap-highlight-transparent"
                 >
                   {/* Number */}
-                  <span className="font-serif text-5xl text-primary-600/10 dark:text-primary-400/10 font-bold mb-4 block">
+                  <span className="font-serif text-3xl sm:text-4xl lg:text-5xl text-primary-600/10 dark:text-primary-400/10 font-bold mb-3 sm:mb-4 block">
                     {String(index + (selectedTag ? 1 : 2)).padStart(2, "0")}
                   </span>
 
                   {/* Meta */}
-                  <div className="flex items-center gap-4 mb-4 text-sm text-charcoal-500 dark:text-paper-500">
+                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 text-xs sm:text-sm text-charcoal-500 dark:text-paper-500">
                     <span className="flex items-center gap-1">
                       <FiCalendar className="w-3 h-3" />
                       {new Date(post.date).toLocaleDateString("en-GB", {
@@ -277,17 +277,17 @@ export default function Blog() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                  <h3 className="font-serif text-lg sm:text-xl font-semibold mb-2 sm:mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                     {post.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-charcoal-600 dark:text-paper-400 text-sm line-clamp-3 mb-4">
+                  <p className="text-charcoal-600 dark:text-paper-400 text-xs sm:text-sm line-clamp-3 mb-3 sm:mb-4">
                     {post.description}
                   </p>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                     {post.tags.slice(0, 2).map((tag) => (
                       <span
                         key={tag}
@@ -295,7 +295,7 @@ export default function Blog() {
                           e.preventDefault();
                           handleTagClick(tag);
                         }}
-                        className="tag text-xs cursor-pointer"
+                        className="tag text-[10px] sm:text-xs cursor-pointer"
                       >
                         {tag}
                       </span>
@@ -303,9 +303,9 @@ export default function Blog() {
                   </div>
 
                   {/* Read more */}
-                  <span className="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 font-medium">
+                  <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium">
                     Read more
-                    <FiArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    <FiArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
                   </span>
                 </Link>
               </motion.article>

@@ -139,7 +139,7 @@ export default function BlogPostPage() {
         wordCount={wordCount}
       />
 
-      <article className="mt-20 -mx-4">
+      <article className="mt-16 sm:mt-20 -mx-4">
         {/* Header */}
         <motion.header
           initial={{ opacity: 0 }}
@@ -147,17 +147,17 @@ export default function BlogPostPage() {
           transition={{ duration: 0.6 }}
           className="border-b border-charcoal-200 dark:border-charcoal-700"
         >
-          <div className="container mx-auto px-4 py-12 lg:py-20">
+          <div className="container mx-auto px-4 py-8 sm:py-12 lg:py-20">
             {/* Breadcrumb */}
             <motion.nav
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="mb-8"
+              className="mb-6 sm:mb-8"
             >
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 text-sm text-charcoal-500 dark:text-paper-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="inline-flex items-center gap-2 text-xs sm:text-sm text-charcoal-500 dark:text-paper-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors tap-highlight-transparent py-2"
               >
                 <FiArrowLeft className="w-4 h-4" />
                 Back to Blog
@@ -170,7 +170,7 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex flex-wrap gap-2 mb-6"
+                className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6"
               >
                 {post.tags.map((tag) => (
                   <Link
@@ -188,7 +188,7 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="headline-lg mb-8"
+                className="headline-lg mb-6 sm:mb-8"
               >
                 {post.title}
               </motion.h1>
@@ -198,21 +198,21 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="flex flex-wrap items-center gap-6 text-sm text-charcoal-500 dark:text-paper-500"
+                className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-charcoal-500 dark:text-paper-500"
               >
-                <div className="flex items-center gap-2">
-                  <FiUser className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <FiUser className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>{siteConfig.author.name}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FiCalendar className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <FiCalendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <time dateTime={post.date}>{formatDate(post.date)}</time>
                 </div>
-                <div className="flex items-center gap-2">
-                  <FiClock className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <FiClock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>{readingTime}</span>
                 </div>
-                <span className="text-charcoal-400 dark:text-paper-600">
+                <span className="hidden xs:inline text-charcoal-400 dark:text-paper-600">
                   {wordCount.toLocaleString()} words
                 </span>
               </motion.div>
@@ -250,34 +250,38 @@ export default function BlogPostPage() {
           transition={{ delay: 0.6 }}
           className="container mx-auto px-4"
         >
-          <div className="grid lg:grid-cols-12 gap-8 py-12 lg:py-16">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 py-8 sm:py-12 lg:py-16">
             {/* Sidebar - Share buttons */}
             <aside className="lg:col-span-2 order-2 lg:order-1">
-              <div className="lg:sticky lg:top-28">
-                <div className="flex lg:flex-col gap-4">
+              <div className="lg:sticky lg:top-24">
+                {/* Mobile: horizontal layout, Desktop: vertical */}
+                <div className="flex lg:flex-col gap-3 sm:gap-4">
                   <span className="text-xs font-medium uppercase tracking-widest text-charcoal-500 dark:text-paper-500 hidden lg:block mb-2">
                     Share
                   </span>
+                  <span className="text-xs font-medium uppercase tracking-wider text-charcoal-500 dark:text-paper-500 lg:hidden flex items-center">
+                    Share:
+                  </span>
                   <button
                     onClick={() => handleShare("twitter")}
-                    className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all"
+                    className="p-2.5 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all tap-highlight-transparent"
                     aria-label="Share on Twitter"
                   >
-                    <FiTwitter className="w-5 h-5" />
+                    <FiTwitter className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     onClick={() => handleShare("linkedin")}
-                    className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all"
+                    className="p-2.5 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all tap-highlight-transparent"
                     aria-label="Share on LinkedIn"
                   >
-                    <FiLinkedin className="w-5 h-5" />
+                    <FiLinkedin className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     onClick={() => navigator.clipboard.writeText(window.location.href)}
-                    className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all"
+                    className="p-2.5 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 transition-all tap-highlight-transparent"
                     aria-label="Copy link"
                   >
-                    <FiShare2 className="w-5 h-5" />
+                    <FiShare2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </div>
               </div>
@@ -295,11 +299,11 @@ export default function BlogPostPage() {
               </div>
 
               {/* End divider */}
-              <div className="my-16">
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-16 h-px bg-charcoal-300 dark:bg-charcoal-600" />
+              <div className="my-10 sm:my-16">
+                <div className="flex items-center justify-center gap-3 sm:gap-4">
+                  <div className="w-12 sm:w-16 h-px bg-charcoal-300 dark:bg-charcoal-600" />
                   <div className="w-2 h-2 bg-primary-600 rotate-45" />
-                  <div className="w-16 h-px bg-charcoal-300 dark:bg-charcoal-600" />
+                  <div className="w-12 sm:w-16 h-px bg-charcoal-300 dark:bg-charcoal-600" />
                 </div>
               </div>
 
@@ -308,28 +312,28 @@ export default function BlogPostPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="p-8 bg-charcoal-50 dark:bg-charcoal-800 border-l-4 border-primary-600"
+                className="p-4 sm:p-6 lg:p-8 bg-charcoal-50 dark:bg-charcoal-800 border-l-4 border-primary-600"
               >
-                <div className="flex flex-col sm:flex-row items-start gap-6">
+                <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                   <img
                     src="/images/jiazhen-xie.jpeg"
                     alt={siteConfig.author.name}
-                    className="w-20 h-20 rounded-full object-cover flex-shrink-0"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover flex-shrink-0"
                   />
                   <div>
-                    <h3 className="font-serif text-xl font-bold mb-2">
+                    <h3 className="font-serif text-lg sm:text-xl font-bold mb-2">
                       About {siteConfig.author.name}
                     </h3>
-                    <p className="text-charcoal-600 dark:text-paper-400 mb-4">
+                    <p className="text-sm sm:text-base text-charcoal-600 dark:text-paper-400 mb-3 sm:mb-4">
                       Chinese engineering leader in the UK with{" "}
                       {siteConfig.author.experience}. {siteConfig.author.education}.
                       Specializing in engineering leadership, software architecture,
                       and building high-performing diverse teams.
                     </p>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-3 sm:gap-4">
                       <Link
                         to="/about"
-                        className="text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                        className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
                       >
                         Learn more →
                       </Link>
@@ -337,7 +341,7 @@ export default function BlogPostPage() {
                         href={siteConfig.author.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                        className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
                       >
                         Connect on LinkedIn →
                       </a>

@@ -121,30 +121,30 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center -mx-4 -mt-8 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100dvh] flex items-center -mx-4 -mt-6 sm:-mt-8 overflow-hidden pt-16 sm:pt-20">
         {/* Background Elements */}
         <div className="absolute inset-0 grid-overlay" />
         
-        {/* Geometric shapes */}
+        {/* Geometric shapes - smaller on mobile */}
         <motion.div
-          className="shape-circle bg-primary-500 w-[600px] h-[600px] -right-[200px] -top-[200px]"
+          className="shape-circle bg-primary-500 w-[300px] sm:w-[400px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[600px] -right-[100px] sm:-right-[150px] md:-right-[200px] -top-[100px] sm:-top-[150px] md:-top-[200px]"
           animate={{ scale: [1, 1.1, 1], rotate: [0, 10, 0] }}
           transition={{ duration: 20, repeat: Infinity }}
         />
         <motion.div
-          className="shape-circle bg-sage-500 w-[400px] h-[400px] -left-[150px] bottom-[10%]"
+          className="shape-circle bg-sage-500 w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] -left-[80px] sm:-left-[100px] md:-left-[150px] bottom-[10%]"
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ duration: 15, repeat: Infinity }}
         />
         <motion.div
-          className="shape-rect bg-primary-400 w-[200px] h-[200px] right-[10%] bottom-[20%] rotate-12"
+          className="shape-rect bg-primary-400 w-[100px] sm:w-[150px] md:w-[200px] h-[100px] sm:h-[150px] md:h-[200px] right-[5%] sm:right-[10%] bottom-[20%] rotate-12 hidden xs:block"
           animate={{ rotate: [12, 18, 12] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
 
         <motion.div
           style={{ opacity: heroOpacity, y: heroY }}
-          className="container mx-auto px-6 lg:px-8 relative z-10"
+          className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
           <div className="max-w-5xl">
             {/* Eyebrow */}
@@ -152,7 +152,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8"
+              className="mb-4 sm:mb-6 md:mb-8"
             >
               <span className="tag">Engineering Leader • Oxford MSc</span>
             </motion.div>
@@ -162,7 +162,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="headline-xl mb-6"
+              className="headline-xl mb-4 sm:mb-6"
             >
               <AnimatedText text="Building the" />
               <br />
@@ -178,7 +178,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="h-12 mb-8 overflow-hidden"
+              className="h-10 sm:h-12 mb-6 sm:mb-8 overflow-hidden"
             >
               <motion.div
                 key={currentRoleIndex}
@@ -186,10 +186,10 @@ export default function Home() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -40, opacity: 0 }}
                 transition={{ duration: 0.4 }}
-                className="flex items-center gap-3"
+                className="flex items-center gap-2 sm:gap-3"
               >
-                <span className="w-12 h-[2px] bg-primary-600" />
-                <span className="text-2xl md:text-3xl font-body text-charcoal-600 dark:text-paper-400">
+                <span className="w-8 sm:w-12 h-[2px] bg-primary-600" />
+                <span className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-body text-charcoal-600 dark:text-paper-400">
                   {roles[currentRoleIndex]}
                 </span>
               </motion.div>
@@ -200,7 +200,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mb-10"
+              className="body-lg text-charcoal-600 dark:text-paper-400 max-w-2xl mb-8 sm:mb-10"
             >
               I'm <strong className="text-charcoal-900 dark:text-paper-100">{siteConfig.name}</strong>, 
               an Oxford-educated engineering leader with over a decade building and scaling 
@@ -213,13 +213,13 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1 }}
-              className="flex flex-wrap gap-4 mb-12"
+              className="flex flex-col xs:flex-row flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-12"
             >
-              <Link to="/blog" className="btn-primary group">
+              <Link to="/blog" className="btn-primary group w-full xs:w-auto">
                 Read My Insights
                 <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link to="/solutions" className="btn-ghost group">
+              <Link to="/solutions" className="btn-ghost group w-full xs:w-auto">
                 Explore Solutions
                 <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </Link>
@@ -230,17 +230,17 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
-              className="flex items-center gap-6"
+              className="flex items-center gap-4 sm:gap-6"
             >
-              <span className="text-sm font-medium uppercase tracking-widest text-charcoal-500 dark:text-paper-500">
+              <span className="text-xs sm:text-sm font-medium uppercase tracking-widest text-charcoal-500 dark:text-paper-500 hidden xs:block">
                 Connect
               </span>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <a
                   href={siteConfig.links.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                  className="p-3 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 tap-highlight-transparent"
                   aria-label="GitHub"
                 >
                   <FiGithub className="w-5 h-5" />
@@ -249,14 +249,14 @@ export default function Home() {
                   href={siteConfig.links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                  className="p-3 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 tap-highlight-transparent"
                   aria-label="LinkedIn"
                 >
                   <FiLinkedin className="w-5 h-5" />
                 </a>
                 <a
                   href={`mailto:${siteConfig.links.email}`}
-                  className="p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                  className="p-3 sm:p-3 border border-charcoal-200 dark:border-charcoal-700 text-charcoal-600 dark:text-paper-400 hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 tap-highlight-transparent"
                   aria-label="Email"
                 >
                   <FiMail className="w-5 h-5" />
@@ -266,12 +266,12 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - hidden on small screens */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="hidden sm:flex absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
         >
           <span className="text-xs font-medium uppercase tracking-widest text-charcoal-400">
             Scroll
@@ -286,22 +286,22 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 -mx-4 px-4 bg-charcoal-900 dark:bg-charcoal-950 text-paper-100">
+      <section className="py-16 sm:py-20 md:py-24 -mx-4 px-4 bg-charcoal-900 dark:bg-charcoal-950 text-paper-100">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-16">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 lg:gap-16">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ delay: index * 0.15 }}
                 className="text-center"
               >
-                <div className="font-serif text-6xl md:text-7xl font-bold text-primary-400 mb-4">
+                <div className="font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-400 mb-2 sm:mb-4">
                   <Counter value={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm font-medium uppercase tracking-widest text-paper-400">
+                <div className="text-[10px] xs:text-xs sm:text-sm font-medium uppercase tracking-wider sm:tracking-widest text-paper-400">
                   {stat.label}
                 </div>
               </motion.div>
@@ -311,9 +311,9 @@ export default function Home() {
       </section>
 
       {/* About Preview Section */}
-      <section className="py-24 lg:py-32 -mx-4 px-4">
+      <section className="py-16 sm:py-20 lg:py-32 -mx-4 px-4">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center">
             {/* Left: Content */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -321,14 +321,14 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="tag-primary mb-6 inline-block">About Me</span>
-              <h2 className="headline-lg mb-8">
+              <span className="tag-primary mb-4 sm:mb-6 inline-block">About Me</span>
+              <h2 className="headline-lg mb-6 sm:mb-8">
                 Cross-cultural
                 <span className="block text-primary-600 dark:text-primary-400">
                   leadership excellence.
                 </span>
               </h2>
-              <div className="space-y-6 body-md text-charcoal-600 dark:text-paper-400">
+              <div className="space-y-4 sm:space-y-6 body-md text-charcoal-600 dark:text-paper-400">
                 <p>
                   As a Chinese engineering leader in the UK, I bring a unique perspective 
                   that bridges Eastern and Western business cultures. This rare combination 
@@ -343,10 +343,10 @@ export default function Home() {
               </div>
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 mt-8 text-primary-600 dark:text-primary-400 font-medium hover:gap-3 transition-all duration-300"
+                className="inline-flex items-center gap-2 mt-6 sm:mt-8 text-primary-600 dark:text-primary-400 font-medium hover:gap-3 transition-all duration-300 text-sm sm:text-base"
               >
                 Learn more about my journey
-                <FiArrowRight className="w-5 h-5" />
+                <FiArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             </motion.div>
 
@@ -356,13 +356,13 @@ export default function Home() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative order-first lg:order-last"
             >
-              <div className="aspect-square bg-charcoal-100 dark:bg-charcoal-800 relative overflow-hidden">
+              <div className="aspect-[4/5] sm:aspect-square bg-charcoal-100 dark:bg-charcoal-800 relative overflow-hidden">
                 {/* Decorative elements */}
                 <div className="absolute inset-0 grid-overlay" />
-                <div className="absolute top-8 right-8 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl" />
-                <div className="absolute bottom-8 left-8 w-24 h-24 bg-sage-500/20 rounded-full blur-2xl" />
+                <div className="absolute top-4 sm:top-8 right-4 sm:right-8 w-20 sm:w-32 h-20 sm:h-32 bg-primary-500/20 rounded-full blur-2xl" />
+                <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 w-16 sm:w-24 h-16 sm:h-24 bg-sage-500/20 rounded-full blur-2xl" />
                 
                 {/* Photo */}
                 <img
@@ -372,18 +372,18 @@ export default function Home() {
                 />
                 
                 {/* Overlay with name */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal-900/90 via-charcoal-900/50 to-transparent p-8">
-                  <h3 className="font-serif text-2xl font-bold text-white mb-1">Jiazhen Xie</h3>
-                  <p className="text-sm text-paper-300 uppercase tracking-widest">
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal-900/90 via-charcoal-900/50 to-transparent p-4 sm:p-8">
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">Jiazhen Xie</h3>
+                  <p className="text-xs sm:text-sm text-paper-300 uppercase tracking-widest">
                     Engineering Leader
                   </p>
                 </div>
 
                 {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-600" />
-                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary-600" />
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary-600" />
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-600" />
+                <div className="absolute top-0 left-0 w-6 h-6 sm:w-8 sm:h-8 border-t-2 border-l-2 border-primary-600" />
+                <div className="absolute top-0 right-0 w-6 h-6 sm:w-8 sm:h-8 border-t-2 border-r-2 border-primary-600" />
+                <div className="absolute bottom-0 left-0 w-6 h-6 sm:w-8 sm:h-8 border-b-2 border-l-2 border-primary-600" />
+                <div className="absolute bottom-0 right-0 w-6 h-6 sm:w-8 sm:h-8 border-b-2 border-r-2 border-primary-600" />
               </div>
             </motion.div>
           </div>
@@ -391,15 +391,15 @@ export default function Home() {
       </section>
 
       {/* Blog Preview Section */}
-      <section className="py-24 lg:py-32 -mx-4 px-4 bg-charcoal-50 dark:bg-charcoal-800/50">
+      <section className="py-16 sm:py-20 lg:py-32 -mx-4 px-4 bg-charcoal-50 dark:bg-charcoal-800/50">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 sm:mb-12 gap-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="tag mb-4 inline-block">Latest Insights</span>
+              <span className="tag mb-3 sm:mb-4 inline-block">Latest Insights</span>
               <h2 className="headline-lg">
                 From the
                 <span className="text-primary-600 dark:text-primary-400"> blog.</span>
@@ -413,16 +413,16 @@ export default function Home() {
             >
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:gap-3 transition-all duration-300 mt-6 md:mt-0"
+                className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:gap-3 transition-all duration-300 text-sm sm:text-base"
               >
                 View all posts
-                <FiArrowRight className="w-5 h-5" />
+                <FiArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             </motion.div>
           </div>
 
-          {/* Latest Blog Posts */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Latest Blog Posts - horizontal scroll on mobile */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {latestPosts.map((post, i) => (
               <motion.div
                 key={post.slug}
@@ -431,27 +431,27 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <Link to={`/blog/${post.slug}`} className="card-editorial block p-6">
-                  <div className="flex items-center gap-2 mb-4">
+                <Link to={`/blog/${post.slug}`} className="card-editorial block p-4 sm:p-6 h-full tap-highlight-transparent">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4 flex-wrap">
                     {post.tags[0] && (
-                      <span className="tag text-xs">{post.tags[0]}</span>
+                      <span className="tag text-[10px] sm:text-xs">{post.tags[0]}</span>
                     )}
-                    <span className="text-xs text-charcoal-500 dark:text-paper-500">
+                    <span className="text-[10px] sm:text-xs text-charcoal-500 dark:text-paper-500">
                       {new Date(post.date).toLocaleDateString("en-GB", {
                         month: "short",
                         year: "numeric",
                       })}
                     </span>
                   </div>
-                  <h3 className="font-serif text-xl font-semibold mb-3 line-clamp-2">
+                  <h3 className="font-serif text-lg sm:text-xl font-semibold mb-2 sm:mb-3 line-clamp-2">
                     {post.title}
                   </h3>
-                  <p className="text-charcoal-600 dark:text-paper-400 text-sm line-clamp-3 mb-4">
+                  <p className="text-charcoal-600 dark:text-paper-400 text-xs sm:text-sm line-clamp-3 mb-3 sm:mb-4">
                     {post.description}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-sm text-primary-600 dark:text-primary-400 font-medium">
+                  <span className="inline-flex items-center gap-2 text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium">
                     Read more
-                    <FiArrowRight className="w-4 h-4" />
+                    <FiArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </span>
                 </Link>
               </motion.div>
@@ -461,23 +461,23 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 lg:py-32 -mx-4 px-4">
+      <section className="py-16 sm:py-20 lg:py-32 -mx-4 px-4">
         <div className="container mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-3xl mx-auto text-center px-2"
           >
-            <h2 className="headline-lg mb-6">
+            <h2 className="headline-lg mb-4 sm:mb-6">
               Ready to
               <span className="text-primary-600 dark:text-primary-400"> connect?</span>
             </h2>
-            <p className="body-lg text-charcoal-600 dark:text-paper-400 mb-10">
+            <p className="body-lg text-charcoal-600 dark:text-paper-400 mb-8 sm:mb-10">
               Whether you're looking for strategic guidance, technical leadership, 
               or just want to exchange ideas — I'd love to hear from you.
             </p>
-            <Link to="/solutions" className="btn-primary group">
+            <Link to="/solutions" className="btn-primary group w-full xs:w-auto">
               Get in Touch
               <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>

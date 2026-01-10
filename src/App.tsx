@@ -21,7 +21,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="container mx-auto px-4 py-8"
+            className="container mx-auto px-4 sm:px-6 py-6 sm:py-8"
           >
             <Routes>
               <Route path="/" element={<Home />} />
@@ -35,16 +35,16 @@ function App() {
         </AnimatePresence>
 
         {/* Footer */}
-        <footer className="border-t border-charcoal-200 dark:border-charcoal-700 py-12 mt-auto">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-600 flex items-center justify-center">
-                  <span className="text-white font-serif font-bold text-lg">J</span>
+        <footer className="border-t border-charcoal-200 dark:border-charcoal-700 py-8 sm:py-12 mt-auto safe-area-inset-bottom">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-600 flex items-center justify-center">
+                  <span className="text-white font-serif font-bold text-base sm:text-lg">J</span>
                 </div>
-                <span className="font-serif text-lg font-semibold">Jiazhen Xie</span>
+                <span className="font-serif text-base sm:text-lg font-semibold">Jiazhen Xie</span>
               </div>
-              <div className="text-sm text-charcoal-500 dark:text-paper-500">
+              <div className="text-xs sm:text-sm text-charcoal-500 dark:text-paper-500">
                 © {new Date().getFullYear()} All rights reserved.
               </div>
             </div>
