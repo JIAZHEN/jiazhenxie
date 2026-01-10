@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#C45A3B" />
+    <meta name="msapplication-TileColor" content="#C45A3B" />
+
+    <!-- Performance Hints -->
+    <link rel="preconnect" href="https://jiazhenxie.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <title>Devise (authentication) with Rails 4 | Jiazhen Xie</title>
+    
+    <!-- Google Fonts - Editorial typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-HWGJ79Y704"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-HWGJ79Y704");
+    </script>
+    <script type="module" crossorigin src="/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index.css">
+  
+    <!-- Primary Meta Tags -->
+    <title>Devise (authentication) with Rails 4 | Jiazhen Xie</title>
+    <meta name="title" content="Devise (authentication) with Rails 4 | Jiazhen Xie" />
+    <meta name="description" content="Implementing authentication with Devise in Rails 4" />
+    <meta name="author" content="Jiazhen Xie" />
+    <meta name="keywords" content="ruby, rails, authentication, security" />
+    <link rel="canonical" href="https://jiazhenxie.com/blog/devise-authentication-with-rails-4" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://jiazhenxie.com/blog/devise-authentication-with-rails-4" />
+    <meta property="og:title" content="Devise (authentication) with Rails 4 | Jiazhen Xie" />
+    <meta property="og:description" content="Implementing authentication with Devise in Rails 4" />
+    <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:300/1*dsK3Tnu8MZZcFKEKgz0QCg.png" />
+    <meta property="og:site_name" content="Jiazhen Xie" />
+    <meta property="article:published_time" content="Mon Apr 21 2014 01:00:00 GMT+0100 (British Summer Time)" />
+    <meta property="article:author" content="Jiazhen Xie" />
+    <meta property="article:tag" content="ruby" />
+    <meta property="article:tag" content="rails" />
+    <meta property="article:tag" content="authentication" />
+    <meta property="article:tag" content="security" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://jiazhenxie.com/blog/devise-authentication-with-rails-4" />
+    <meta name="twitter:title" content="Devise (authentication) with Rails 4 | Jiazhen Xie" />
+    <meta name="twitter:description" content="Implementing authentication with Devise in Rails 4" />
+    <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:300/1*dsK3Tnu8MZZcFKEKgz0QCg.png" />
+  
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Devise (authentication) with Rails 4 | Jiazhen Xie","description":"Implementing authentication with Devise in Rails 4","author":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"datePublished":"2014-04-21T00:00:00.000Z","dateModified":"2014-04-21T00:00:00.000Z","publisher":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jiazhenxie.com/blog/devise-authentication-with-rails-4"},"url":"https://jiazhenxie.com/blog/devise-authentication-with-rails-4","keywords":"ruby, rails, authentication, security","image":"https://miro.medium.com/v2/resize:fit:300/1*dsK3Tnu8MZZcFKEKgz0QCg.png"}</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <article style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif;">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">Devise (authentication) with Rails 4</h1>
+        <p style="color: #666; margin-bottom: 1rem;">
+          By Jiazhen Xie | 21 April 2014
+        </p>
+        <p style="margin-bottom: 1rem;">Tags: ruby, rails, authentication, security</p>
+        <div style="line-height: 1.6;"><p>As a Ruby developer, I always want to improve my skills and keep up the pace of the technical trend. Recently I&#039;ve updated this site to use Ruby 2.0 and Rails 4 (I will write another blog for the upgrade). A couple days ago I started thinking it&#039;s the time to use authentication system for this site. Situation My current authentication system was created from scratch, which I learned from Michael Hartl. It&#039;s nice, help to understand the system as for the beginner (alternatively Zane&#039;s RoR resourc...</p></div>
+        <p style="margin-top: 2rem;"><a href="/" style="color: #C45A3B;">← Back to Home</a></p>
+      </article>
+    </noscript>
+  </body>
+</html>

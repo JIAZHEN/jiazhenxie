@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#C45A3B" />
+    <meta name="msapplication-TileColor" content="#C45A3B" />
+
+    <!-- Performance Hints -->
+    <link rel="preconnect" href="https://jiazhenxie.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <title>Using Yarn with Rails | Jiazhen Xie</title>
+    
+    <!-- Google Fonts - Editorial typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-HWGJ79Y704"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-HWGJ79Y704");
+    </script>
+    <script type="module" crossorigin src="/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index.css">
+  
+    <!-- Primary Meta Tags -->
+    <title>Using Yarn with Rails | Jiazhen Xie</title>
+    <meta name="title" content="Using Yarn with Rails | Jiazhen Xie" />
+    <meta name="description" content="How to integrate Yarn package manager with Ruby on Rails applications" />
+    <meta name="author" content="Jiazhen Xie" />
+    <meta name="keywords" content="ruby, rails, javascript, frontend" />
+    <link rel="canonical" href="https://jiazhenxie.com/blog/using-yarn-with-rails" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://jiazhenxie.com/blog/using-yarn-with-rails" />
+    <meta property="og:title" content="Using Yarn with Rails | Jiazhen Xie" />
+    <meta property="og:description" content="How to integrate Yarn package manager with Ruby on Rails applications" />
+    <meta property="og:image" content="https://images.ctfassets.net/1qj7i7j2q7hx/3ODwerz6BHAXQmGsCJjNLm/5c2dac6e099d4586404956a901f6ddde/1_p9SEAYl2BT71uInsGmhgLA.png" />
+    <meta property="og:site_name" content="Jiazhen Xie" />
+    <meta property="article:published_time" content="Thu Nov 17 2016 00:00:00 GMT+0000 (Greenwich Mean Time)" />
+    <meta property="article:author" content="Jiazhen Xie" />
+    <meta property="article:tag" content="ruby" />
+    <meta property="article:tag" content="rails" />
+    <meta property="article:tag" content="javascript" />
+    <meta property="article:tag" content="frontend" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://jiazhenxie.com/blog/using-yarn-with-rails" />
+    <meta name="twitter:title" content="Using Yarn with Rails | Jiazhen Xie" />
+    <meta name="twitter:description" content="How to integrate Yarn package manager with Ruby on Rails applications" />
+    <meta name="twitter:image" content="https://images.ctfassets.net/1qj7i7j2q7hx/3ODwerz6BHAXQmGsCJjNLm/5c2dac6e099d4586404956a901f6ddde/1_p9SEAYl2BT71uInsGmhgLA.png" />
+  
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Using Yarn with Rails | Jiazhen Xie","description":"How to integrate Yarn package manager with Ruby on Rails applications","author":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"datePublished":"2016-11-17T00:00:00.000Z","dateModified":"2016-11-17T00:00:00.000Z","publisher":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jiazhenxie.com/blog/using-yarn-with-rails"},"url":"https://jiazhenxie.com/blog/using-yarn-with-rails","keywords":"ruby, rails, javascript, frontend","image":"https://images.ctfassets.net/1qj7i7j2q7hx/3ODwerz6BHAXQmGsCJjNLm/5c2dac6e099d4586404956a901f6ddde/1_p9SEAYl2BT71uInsGmhgLA.png"}</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <article style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif;">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">Using Yarn with Rails</h1>
+        <p style="color: #666; margin-bottom: 1rem;">
+          By Jiazhen Xie | 17 November 2016
+        </p>
+        <p style="margin-bottom: 1rem;">Tags: ruby, rails, javascript, frontend</p>
+        <div style="line-height: 1.6;"><p>Background As the rise of Javascript, it&#039;s undeniable that we would need to use Javascript libraries to get better user experiences on the web application. In Rails, however, adding a Javascript library is not as smoonth as adding a gem. You could download the javascript library and manually put it in . However, the responsiblities of configurations and correcting font paths are on you. Or maybe rely on a relavant gem if luckily find it. But what if the gem is no longer maintained? Look at Javas...</p></div>
+        <p style="margin-top: 2rem;"><a href="/" style="color: #C45A3B;">← Back to Home</a></p>
+      </article>
+    </noscript>
+  </body>
+</html>

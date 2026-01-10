@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#C45A3B" />
+    <meta name="msapplication-TileColor" content="#C45A3B" />
+
+    <!-- Performance Hints -->
+    <link rel="preconnect" href="https://jiazhenxie.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <title>Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie</title>
+    
+    <!-- Google Fonts - Editorial typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-HWGJ79Y704"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-HWGJ79Y704");
+    </script>
+    <script type="module" crossorigin src="/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index.css">
+  
+    <!-- Primary Meta Tags -->
+    <title>Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie</title>
+    <meta name="title" content="Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie" />
+    <meta name="description" content="Deploying Rails applications to AWS Elastic Beanstalk" />
+    <meta name="author" content="Jiazhen Xie" />
+    <meta name="keywords" content="ruby, rails, devops, aws, deployment" />
+    <link rel="canonical" href="https://jiazhenxie.com/blog/deploy-rails-app-to-aws-with-elastic-beanstalk" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://jiazhenxie.com/blog/deploy-rails-app-to-aws-with-elastic-beanstalk" />
+    <meta property="og:title" content="Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie" />
+    <meta property="og:description" content="Deploying Rails applications to AWS Elastic Beanstalk" />
+    <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1058/1*vqDloHZv9SVFtkr_0e7now.png" />
+    <meta property="og:site_name" content="Jiazhen Xie" />
+    <meta property="article:published_time" content="Mon Oct 17 2016 01:00:00 GMT+0100 (British Summer Time)" />
+    <meta property="article:author" content="Jiazhen Xie" />
+    <meta property="article:tag" content="ruby" />
+    <meta property="article:tag" content="rails" />
+    <meta property="article:tag" content="devops" />
+    <meta property="article:tag" content="aws" />
+    <meta property="article:tag" content="deployment" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://jiazhenxie.com/blog/deploy-rails-app-to-aws-with-elastic-beanstalk" />
+    <meta name="twitter:title" content="Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie" />
+    <meta name="twitter:description" content="Deploying Rails applications to AWS Elastic Beanstalk" />
+    <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1058/1*vqDloHZv9SVFtkr_0e7now.png" />
+  
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Deploy rails app to AWS with Elastic Beanstalk | Jiazhen Xie","description":"Deploying Rails applications to AWS Elastic Beanstalk","author":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"datePublished":"2016-10-17T00:00:00.000Z","dateModified":"2016-10-17T00:00:00.000Z","publisher":{"@type":"Person","name":"Jiazhen Xie","url":"https://jiazhenxie.com"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jiazhenxie.com/blog/deploy-rails-app-to-aws-with-elastic-beanstalk"},"url":"https://jiazhenxie.com/blog/deploy-rails-app-to-aws-with-elastic-beanstalk","keywords":"ruby, rails, devops, aws, deployment","image":"https://miro.medium.com/v2/resize:fit:1058/1*vqDloHZv9SVFtkr_0e7now.png"}</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <article style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif;">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">Deploy rails app to AWS with Elastic Beanstalk</h1>
+        <p style="color: #666; margin-bottom: 1rem;">
+          By Jiazhen Xie | 17 October 2016
+        </p>
+        <p style="margin-bottom: 1rem;">Tags: ruby, rails, devops, aws, deployment</p>
+        <div style="line-height: 1.6;"><p>What is AWS Elastic Beanstalk? AWS Elastic Beanstalk is a cloud deployment and provisioning service that automates the process of getting applications set up on the Amazon Web Services (AWS) infrastructure. You don&#039;t pay for Elastic Beanstalk, it&#039;s free service but you do pay for the resources it created. Get startted First thing first you need an amason AWS account, simply sign up on Amazon AWS, it offers free tier for a year when this is written. Rails app Assuming that you already have a rail...</p></div>
+        <p style="margin-top: 2rem;"><a href="/" style="color: #C45A3B;">← Back to Home</a></p>
+      </article>
+    </noscript>
+  </body>
+</html>
