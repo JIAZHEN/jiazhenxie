@@ -6,7 +6,7 @@
   "homepage": "https://jiazhenxie.com",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && node scripts/generate-sitemap.js && vite build && cp public/404.html dist/",
+    "build": "tsc -b && node scripts/generate-sitemap.js && vite build && cp public/404.html dist/ && node scripts/prerender.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist -b gh-pages"
