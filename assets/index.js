@@ -2331,7 +2331,7 @@ So now with Yarn, we can easily retrieve the appropriate Javascript libraries an
 `,sR=Object.freeze(Object.defineProperty({__proto__:null,default:Iv},Symbol.toStringTag,{value:"Module"})),Nv=`---
 title: "Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less"
 description: AI doesn't replace analysts—it enables methodology that humans alone couldn't sustain. The counterintuitive case for AI-assisted rigor.
-date: 2025-01-18T00:00:00.000Z
+date: 2026-01-18T00:00:00.000Z
 tags:
   - ai
   - data
