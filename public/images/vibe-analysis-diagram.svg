@@ -1,0 +1,97 @@
+<svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill: #1e293b; stroke: #3b82f6; stroke-width: 2; rx: 12; }
+    .box-audit { fill: #1e293b; stroke: #10b981; stroke-width: 2; rx: 12; }
+    .box-human { fill: #1e293b; stroke: #f59e0b; stroke-width: 2; rx: 12; }
+    .box-output { fill: #1e293b; stroke: #8b5cf6; stroke-width: 2; rx: 12; }
+    .title { fill: #f8fafc; font-family: system-ui, sans-serif; font-size: 15px; font-weight: 700; }
+    .desc { fill: #94a3b8; font-family: system-ui, sans-serif; font-size: 12px; }
+    .badge { fill: #0f172a; rx: 4; }
+    .badge-text { fill: #94a3b8; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 600; }
+    .arrow { stroke: #475569; stroke-width: 2; fill: none; }
+    .arrow-head { fill: #475569; }
+    .barrier { stroke: #ef4444; stroke-width: 2; stroke-dasharray: 8 4; }
+    .barrier-text { fill: #ef4444; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 600; }
+    .phase-label { fill: #64748b; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  </style>
+  
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="500" fill="#0f172a"/>
+  
+  <!-- Phase labels -->
+  <text class="phase-label" x="80" y="30">Input</text>
+  <text class="phase-label" x="280" y="30">Parallel Analysis</text>
+  <text class="phase-label" x="540" y="30">Validation</text>
+  <text class="phase-label" x="740" y="30">Output</text>
+  
+  <!-- Question Box -->
+  <rect class="box" x="40" y="200" width="140" height="100"/>
+  <text class="title" x="110" y="240" text-anchor="middle">Question</text>
+  <text class="desc" x="110" y="262" text-anchor="middle">"Why did traffic</text>
+  <text class="desc" x="110" y="278" text-anchor="middle">drop 12%?"</text>
+  
+  <!-- Arrow from question splitting -->
+  <path class="arrow" d="M 180 250 L 220 250 L 220 145 L 260 145" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M 180 250 L 220 250 L 220 355 L 260 355" marker-end="url(#arrow)"/>
+  
+  <!-- Primary Analyst Box -->
+  <rect class="box" x="260" y="80" width="180" height="130"/>
+  <rect class="badge" x="275" y="95" width="70" height="20"/>
+  <text class="badge-text" x="310" y="109" text-anchor="middle">PRIMARY</text>
+  <text class="title" x="350" y="145" text-anchor="middle">Analyst Path</text>
+  <text class="desc" x="350" y="168" text-anchor="middle">Rank hypotheses</text>
+  <text class="desc" x="350" y="184" text-anchor="middle">Decompose dimensions</text>
+  <text class="desc" x="350" y="200" text-anchor="middle">Find patterns</text>
+  
+  <!-- Blind Auditor Box -->
+  <rect class="box-audit" x="260" y="290" width="180" height="130"/>
+  <rect class="badge" x="275" y="305" width="70" height="20"/>
+  <text class="badge-text" x="310" y="319" text-anchor="middle">AUDITOR</text>
+  <text class="title" x="350" y="355" text-anchor="middle">Blind Path</text>
+  <text class="desc" x="350" y="378" text-anchor="middle">Same question</text>
+  <text class="desc" x="350" y="394" text-anchor="middle">Same data</text>
+  <text class="desc" x="350" y="410" text-anchor="middle">Zero shared context</text>
+  
+  <!-- Information Barrier -->
+  <line class="barrier" x1="250" y1="250" x2="450" y2="250"/>
+  <rect fill="#0f172a" x="300" y="238" width="100" height="24" rx="4"/>
+  <text class="barrier-text" x="350" y="254" text-anchor="middle">NO CROSSTALK</text>
+  
+  <!-- Arrows to reconciliation -->
+  <path class="arrow" d="M 440 145 L 480 145 L 480 230 L 520 230" marker-end="url(#arrow)"/>
+  <path class="arrow" d="M 440 355 L 480 355 L 480 270 L 520 270" marker-end="url(#arrow)"/>
+  
+  <!-- Reconciliation Box -->
+  <rect class="box" x="520" y="185" width="160" height="130"/>
+  <text class="title" x="600" y="225" text-anchor="middle">Reconcile</text>
+  <text class="desc" x="600" y="252" text-anchor="middle">Match → High confidence</text>
+  <text class="desc" x="600" y="272" text-anchor="middle">Diverge → Investigate</text>
+  <text class="desc" x="600" y="292" text-anchor="middle">why paths disagree</text>
+  
+  <!-- Arrow to human -->
+  <path class="arrow" d="M 680 250 L 720 250" marker-end="url(#arrow)"/>
+  
+  <!-- Human Review Box -->
+  <rect class="box-human" x="720" y="185" width="150" height="130"/>
+  <text class="title" x="795" y="225" text-anchor="middle">Human Review</text>
+  <text class="desc" x="795" y="252" text-anchor="middle">Business context</text>
+  <text class="desc" x="795" y="272" text-anchor="middle">Judgment call</text>
+  <text class="desc" x="795" y="292" text-anchor="middle">Ship or investigate more</text>
+  
+  <!-- Legend at bottom -->
+  <rect fill="#1e293b" stroke="#3b82f6" stroke-width="2" x="280" y="455" width="16" height="16" rx="3"/>
+  <text class="desc" x="304" y="468">AI execution</text>
+  
+  <rect fill="#1e293b" stroke="#10b981" stroke-width="2" x="420" y="455" width="16" height="16" rx="3"/>
+  <text class="desc" x="444" y="468">Blind validation</text>
+  
+  <rect fill="#1e293b" stroke="#f59e0b" stroke-width="2" x="560" y="455" width="16" height="16" rx="3"/>
+  <text class="desc" x="584" y="468">Human judgment</text>
+  
+</svg>

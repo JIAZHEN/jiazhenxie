@@ -1,7 +1,7 @@
 ---
 title: "Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less"
-description: AI doesn't replace analysts—it enables methodology that humans alone couldn't sustain. The counterintuitive case for AI-assisted rigor.
-date: 2025-01-18T00:00:00.000Z
+description: AI doesn't replace analysts. It enables methodology that humans alone couldn't sustain.
+date: 2026-01-18T00:00:00.000Z
 tags:
   - ai
   - data
@@ -14,114 +14,88 @@ draft: false
 
 # Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
----
+# Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
-"Vibe coding" has become the shorthand for a new way of building software: you describe what you want, iterate with AI, and somehow working code emerges. Critics worry it's making developers sloppier—trading understanding for velocity.
+_Imagine this scenario._
 
-But there's a less-discussed counterpart: **vibe analysis**. And here's the twist: where vibe coding is often criticized for reducing rigor, vibe analysis actually _increases_ it.
+The slide reads "Root Cause: Bot Detection Update." You've spent two days on this analysis. Traffic down 12% week-over-week. Clean timeline correlation. The new bot filter went live Tuesday, traffic dropped Wednesday.
 
-I've spent months building AI-assisted analytical workflows, and the result surprised me. AI doesn't make analysis sloppier. It enables a methodology that humans alone couldn't sustain.
+You walk through the decomposition. Desktop down, mobile flat. UK and Germany hit hardest. The Snowflake queries are tight. The narrative is airtight.
 
----
+Your CEO leans back. "How do we know these were bots and not real users?"
 
-## The Problem with Human Analysis
+You open your mouth. Nothing comes out.
 
-Analysts are brilliant at pattern recognition. Give a good analyst messy data and an ambiguous question, and they'll find something interesting. That's the job.
+You'd never tested that hypothesis. You found a pattern that fit and stopped looking. The data was consistent with your explanation, but it was also consistent with explanations you never explored.
 
-But analysts are terrible at consistency. We anchor on our first hypothesis and unconsciously seek confirming evidence. We skip boring verification steps when stakeholders are waiting. We conflate "where the metric moved" with "why it moved" because the meeting is in fifteen minutes.
+Two weeks later the team finds the actual cause: a payment provider outage in three European countries. It happened to coincide with the bot detection rollout. Completely unrelated.
 
-The result? Confident-sounding analysis that's often wrong. Not because analysts lack skill, but because the methodology required for rigor is tedious—and humans cut corners when methodology gets tedious.
+If you've done analysis long enough, some version of this has happened to you. Not because you lack skill. But under time pressure, you did what every analyst does: found something plausible and moved on.
 
-I've seen this pattern repeatedly: an analyst investigates a metric drop, finds a plausible explanation in the first dimension they check, and presents it as root cause. The stakeholders nod. Everyone moves on. Six weeks later, the actual root cause surfaces—and it's something different entirely.
+"Vibe coding" has become shorthand for building software by iterating with AI until working code emerges. Critics worry it makes developers sloppy.
 
-The problem isn't intelligence. It's discipline.
+There's a less-discussed counterpart: **vibe analysis**. The term comes from Andrej Karpathy, and I first encountered it applied to data work on the [How I AI podcast](https://www.youtube.com/watch?v=KOr-xQuNK4A).
 
----
+Here's the twist: where vibe coding often reduces rigor, vibe analysis can increase it.
 
-## The Counterintuitive Insight
+But only if you build validation into the workflow.
 
-Here's what I didn't expect when I started building AI-assisted analysis: AI enables _more_ rigor, not less.
+## The Problem Isn't Skill. It's Time.
 
-Not because AI is smarter than human analysts. It's not. AI can't intuit which business context matters or which stakeholder will ask the uncomfortable follow-up question. Humans are still essential for judgment.
+Good analysts know what rigorous analysis looks like. Check statistical significance. Test multiple hypotheses. Distinguish correlation from causation.
 
-But AI doesn't get bored.
+The problem isn't knowledge. It's that rigorous methodology takes time, and time is scarce.
 
-AI will actually run a 16-query analytical sequence, every single time. It will check the signal for statistical significance before decomposing. It will test interaction effects between dimensions even when the single-dimension breakdown looks conclusive. It will distinguish between "where the change happened" and "why it might have happened" because that distinction is in the protocol.
+When stakeholders need answers by end of day, you check the most likely hypothesis. If it fits, you move on. Rational behavior. Often incomplete.
 
-Human analysts know they should do all of this. In practice, under time pressure, they skip steps. AI doesn't skip steps—it follows the methodology you design.
+## Vibe Analysis Without Validation Is Just Faster Overconfidence
 
-**The human provides judgment. AI provides discipline.**
+AI makes exploration cheap. Decompose a metric across twelve dimensions? Describe what you want, AI runs the queries, synthesizes patterns.
 
-This inverts the usual framing. We worry AI will make us sloppier. For analysis, the opposite is true: AI lets us encode best practices into executable workflows, and then actually execute them.
+But when you generate findings quickly, you can generate confident-sounding nonsense quickly. AI doesn't know when it's wrong.
 
----
+The interesting problem isn't automation. It's verification.
 
-## The Key Innovation: The Blind Auditor
+## The Blind Auditor
 
-The most interesting part of the methodology I built isn't the automation. It's the verification architecture.
+When you investigate a metric change, anchoring bias is your biggest enemy. You form a hypothesis and find confirming evidence. You can't will yourself out of it.
 
-When you investigate a metric change, anchoring bias is your biggest enemy. You form a hypothesis, consciously or not, and then you find evidence that confirms it. This isn't a character flaw—it's how human cognition works. You can't will yourself out of it.
+So I built a second path.
 
-So I built a blind auditor.
+![Vibe Analysis Architecture](/images/vibe-analysis-diagram.svg)
 
-Here's how it works: The primary analyst path does what you'd expect—ranks hypotheses, confirms the signal is real, decomposes by dimensions to find where the change is concentrated. This produces a set of findings.
+The primary analyst path does what you'd expect: ranks hypotheses, confirms signals, decomposes by dimensions.
 
-But a separate auditor agent runs in parallel. The auditor sees _only_ the original question and the data. It doesn't see the analyst's hypothesis ranking. It doesn't see the findings. It does its own independent decomposition and produces its own conclusions.
+A separate auditor agent runs in parallel. It sees only the original question and the data. No hypothesis ranking. No findings from the first path. Complete information separation.
 
-Then the two paths reconcile.
+Then the paths reconcile.
 
-If they converge on the same root cause—high confidence. This is genuine verification, not an analyst checking their own work.
+Convergence? High confidence. Divergence? One path missed something. That's where the interesting findings are.
 
-If they diverge—that's actually more valuable. It means there's something in the data that one path missed. The divergence triggers investigation. Often, the auditor catches something the analyst was anchored away from seeing.
+In my first ten investigations using this workflow, the blind auditor flagged a different primary factor three times. Each would have been a wrong recommendation to the exec team.
 
-This isn't possible without AI. You can't ask a human analyst to investigate blind while another human investigates with full context—the coordination overhead is too high, and frankly, humans will just talk to each other. But AI agents can maintain genuine information separation. You can design a workflow where verification actually happens.
+This architecture isn't possible without AI. Human analysts would just talk to each other.
 
-Anchoring bias is the #1 enemy of good analysis. The blind auditor attacks it structurally.
+## Human Judgment Gates the Output
 
----
+AI generates the analysis. AI validates through the blind auditor. But before anything ships, a human reviews the executive summary.
 
-## Where vs. Why
+The human isn't checking every query. That's what validation handles. The human asks: Does this make sense? Are we answering the right question? Is confidence appropriate?
 
-One of the hardest things in analysis is distinguishing correlation from causation. When a metric drops and you find that desktop traffic is down while mobile is up, you've found _where_ the change is concentrated. You haven't found _why_.
+Human provides judgment. AI provides discipline.
 
-But under time pressure, analysts conflate these. "Desktop traffic is down" becomes the answer, when really it's just a pointer to where the answer might be.
+## What's Next
 
-The methodology forces explicit separation. Every finding gets tagged: is this explaining WHERE the change is concentrated, or WHY it happened?
+Once an executive summary passes human review, the validated findings flow into other formats. Dashboard. Slides. Video explanation. One command, multiple outputs.
 
-"WHERE" findings have high confidence—they're mechanical decompositions of the data. "WHY" findings have lower confidence—they're interpretations that require additional evidence.
+The bottleneck shifts entirely to human judgment: what questions matter, whether answers make sense, how to communicate findings. Everything else is execution.
 
-This seems simple, but it's surprisingly hard to maintain under pressure. The framework enforces it. The executive summary clearly labels what we know versus what we suspect. Stakeholders can calibrate their confidence appropriately.
+Next time your analyst presents a root cause, ask: what checked their work that wasn't them?
 
-AI enforces this discipline because it follows the protocol. Humans conflate WHERE and WHY when the meeting starts in five minutes.
+If the answer is nothing, you're probably making decisions on incomplete analysis. Not because your team lacks skill. Because the methodology required for rigor is tedious, and humans cut corners when methodology gets tedious.
 
----
-
-## What This Means for Leaders
-
-If you lead a data team, here's what this shift means:
-
-**Your analysts become methodology designers.** Instead of running queries, they design the analytical frameworks that AI executes. The creative, judgment-intensive work becomes: what's the right decomposition strategy for this type of question? What evidence would distinguish root cause from correlation? What verification architecture prevents anchoring?
-
-**Quality becomes consistent.** Today, analysis quality varies by analyst and by how much time they have. With encoded methodology, you get the same rigor whether it's the senior analyst or a junior, whether it's Q4 crunch or a quiet Wednesday.
-
-**Speed and rigor increase together.** Usually these trade off. Move faster, cut corners. Be thorough, take longer. AI-executed methodology breaks this tradeoff: 16 queries run in sequence regardless of deadline pressure.
-
-The ROI isn't just faster analysis. It's fewer wrong decisions based on confident-but-flawed investigation.
+AI doesn't fix judgment. It fixes discipline.
 
 ---
 
-## The Bigger Picture
-
-"Vibe analysis" sounds casual, but the practice is the opposite. It's analysis where you articulate what you want to understand, and AI ensures you actually do the work to understand it properly.
-
-AI isn't making us sloppier—it's enabling standards we couldn't maintain manually. The methodology I follow now is more rigorous than anything I sustained before AI assistance. Not because I'm more disciplined, but because discipline is encoded into the workflow.
-
-This is how AI changes work: not by replacing human judgment, but by making human judgment the bottleneck—in a good way. The tedious parts execute automatically. The judgment parts surface to the human. You spend your cognitive budget on what actually matters.
-
-For engineering leaders thinking about AI adoption: don't just ask "what can AI automate?" Ask "what methodology would we follow if executing it wasn't tedious?" Then build that.
-
-The answer might surprise you. It's probably more rigorous than what you're doing today.
-
----
-
-_Jiazhen Xie is an Engineering Leader based in the UK. Oxford alum. He believes AI is going to change everyone—starting with how we understand our own data. Find him at [jiazhenxie.com](https://jiazhenxie.com)._
+_Jiazhen Xie leads engineering teams in the UK. He builds systems that make analysis harder to get wrong. Find him at [jiazhenxie.com](https://jiazhenxie.com)._
