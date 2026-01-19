@@ -2344,99 +2344,97 @@ draft: false
 
 # Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
-Last month I presented a root cause analysis to my exec team. Traffic had dropped 12% week-over-week, and I had the answer: our new bot detection was filtering out legitimate crawlers, which tanked our SEO visibility.
+The slide read "Root Cause: Bot Detection Update." I'd spent two days on this analysis. Traffic down 12% week-over-week. Clean timeline correlation. The new bot filter went live Tuesday, traffic dropped Wednesday.
 
-I had the Snowflake queries. I had the timeline correlation. I had a clean narrative that explained exactly what happened and what to fix.
+I walked through the decomposition. Desktop down, mobile flat. UK and Germany hit hardest. The Snowflake queries were tight. The narrative was airtight.
 
-Our CEO asked one question: "How do we know these were bots and not real users abandoning checkout?"
+Our CEO leaned back. "How do we know these were bots and not real users?"
 
-I didn't have an answer. I'd never tested that hypothesis. I found a pattern that fit, built a story around it, and stopped looking. The data was consistent with my explanation, but it was also consistent with explanations I never explored.
+I opened my mouth. Nothing came out.
 
-We spent two more weeks investigating. The actual cause? A payment provider outage in three European countries that happened to coincide with the bot detection rollout.
+I'd never tested that hypothesis. I found a pattern that fit and stopped looking. The data was consistent with my explanation, but it was also consistent with explanations I never explored.
 
-I'd been doing analysis for years. I knew better. But under time pressure, I did what every analyst does: I found something plausible and moved on.
+Two weeks later we found the actual cause: a payment provider outage in three European countries. It happened to coincide with the bot detection rollout. Completely unrelated.
 
-That experience changed how I think about this work.
+I'd been doing analysis for years. I knew better. But under time pressure, I did what every analyst does: found something plausible and moved on.
 
 ---
 
-"Vibe coding" has become shorthand for building software by describing what you want and iterating with AI until working code emerges. Critics worry it's making developers sloppy.
+"Vibe coding" has become shorthand for building software by iterating with AI until working code emerges. Critics worry it makes developers sloppy.
 
 There's a less-discussed counterpart: **vibe analysis**. The term comes from Andrej Karpathy, and I first encountered it applied to data work on the [How I AI podcast](https://www.youtube.com/watch?v=KOr-xQuNK4A).
 
-Here's the twist: where vibe coding often reduces rigor, vibe analysis can increase it. But only if you build validation into the workflow.
+Here's the twist: where vibe coding often reduces rigor, vibe analysis can increase it.
+
+But only if you build validation into the workflow.
 
 ---
 
 ## The Problem Isn't Skill. It's Time.
 
-Good analysts know what rigorous analysis looks like. Check statistical significance. Test multiple hypotheses. Distinguish correlation from causation. Verify findings independently.
+Good analysts know what rigorous analysis looks like. Check statistical significance. Test multiple hypotheses. Distinguish correlation from causation.
 
-The problem isn't knowledge. It's that rigorous methodology takes time, and time is the scarcest resource on any data team.
+The problem isn't knowledge. It's that rigorous methodology takes time, and time is scarce.
 
-When stakeholders need answers by end of day, corners get cut. Not laziness, necessity. You check the most likely hypothesis. If it fits, you move on.
-
-This is rational behavior under constraints. It also means confident-sounding analysis is often incomplete.
+When stakeholders need answers by end of day, you check the most likely hypothesis. If it fits, you move on. Rational behavior. Often incomplete.
 
 ---
 
-## Vibe Analysis Makes Exploration Easy
+## Vibe Analysis Without Validation Is Just Faster Overconfidence
 
-AI changes this: the tedious parts of analysis become cheap.
+AI makes exploration cheap. Decompose a metric across twelve dimensions? Describe what you want, AI runs the queries, synthesizes patterns.
 
-Decompose a metric across twelve dimensions? That used to take hours. Now you describe what you want to understand, AI generates the queries, runs them, synthesizes patterns.
-
-But easy exploration creates its own risk. When you generate findings quickly, you can generate confident-sounding nonsense quickly. AI doesn't know when it's wrong.
-
-Vibe analysis without validation is just faster overconfidence.
-
----
-
-## The Key Innovation: Validation Architecture
+But when you generate findings quickly, you can generate confident-sounding nonsense quickly. AI doesn't know when it's wrong.
 
 The interesting problem isn't automation. It's verification.
 
-I built this workflow using Claude Skills and MCPs. The Skill encodes the analytical methodology. MCPs connect to data sources like Snowflake and handle execution. Together they enable a validation architecture that would be impractical to run manually.
+---
 
-**The Blind Auditor**
+## The Blind Auditor
 
 When you investigate a metric change, anchoring bias is your biggest enemy. You form a hypothesis and find confirming evidence. You can't will yourself out of it.
 
-So I built validation into the workflow. The primary analyst path ranks hypotheses, confirms signals, decomposes by dimensions. A separate auditor agent runs in parallel, seeing only the original question and data. No hypothesis ranking. No findings from the first path.
+So I built a second path.
 
-Then the paths reconcile. Convergence means high confidence. Divergence means one path missed something, and that's often more valuable.
+![Vibe Analysis Architecture](/images/vibe-analysis-diagram.svg)
 
-This isn't possible without AI. Humans would just talk to each other.
+The primary analyst path does what you'd expect: ranks hypotheses, confirms signals, decomposes by dimensions.
 
-**Where vs. Why Separation**
+A separate auditor agent runs in parallel. It sees only the original question and the data. No hypothesis ranking. No findings from the first path. Complete information separation.
 
-The methodology also forces distinction between WHERE findings (where a change concentrated) and WHY findings (the cause). Under time pressure, analysts conflate these. The framework enforces separation. Every finding gets tagged.
+Then the paths reconcile.
+
+Convergence? High confidence. Divergence? One path missed something. That's where the interesting findings are.
+
+In my first ten investigations using this workflow, the blind auditor flagged a different primary factor three times. Each would have been a wrong recommendation to the exec team.
+
+This architecture isn't possible without AI. Human analysts would just talk to each other.
 
 ---
 
-## Human in the Loop
+## Human Judgment Gates the Output
 
 AI generates the analysis. AI validates through the blind auditor. But before anything ships, a human reviews the executive summary.
 
-The human isn't checking every query. That's what validation architecture handles. The human asks: Does this make sense given business context? Are we answering the right question? Is confidence appropriate given evidence?
+The human isn't checking every query. That's what validation handles. The human asks: Does this make sense? Are we answering the right question? Is confidence appropriate?
 
-Human provides judgment. AI provides discipline. The combination is more rigorous than either alone.
-
-The results so far have been really good. Analysis that used to take a day now takes minutes, with more thorough methodology than I ever sustained manually.
+Human provides judgment. AI provides discipline.
 
 ---
 
 ## What's Next
 
-Here's what excites me about where this is heading.
+Once an executive summary passes human review, the validated findings flow into other formats. Dashboard. Slides. Video explanation. One command, multiple outputs.
 
-Once an executive summary passes human review, the validated findings can flow into other formats through a single MCP command. Dashboard. Slides. Video explanation. The same verified analysis, repurposed instantly for different audiences.
+The bottleneck shifts entirely to human judgment: what questions matter, whether answers make sense, how to communicate findings. Everything else is execution.
 
-The bottleneck shifts entirely to human judgment: deciding what questions matter, validating that answers make sense, choosing how to communicate findings. Everything else becomes execution.
+---
 
-For leaders thinking about AI: don't just ask what to automate. Ask what methodology you'd follow if execution wasn't the bottleneck.
+Next time your analyst presents a root cause, ask: what checked their work that wasn't them?
 
-The answer is probably more rigorous than what you're doing today.
+If the answer is nothing, you're probably making decisions on incomplete analysis. Not because your team lacks skill. Because the methodology required for rigor is tedious, and humans cut corners when methodology gets tedious.
+
+AI doesn't fix judgment. It fixes discipline.
 
 ---
 
