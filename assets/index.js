@@ -2368,8 +2368,6 @@ Here's the twist: where vibe coding often reduces rigor, vibe analysis can incre
 
 But only if you build validation into the workflow.
 
----
-
 ## The Problem Isn't Skill. It's Time.
 
 Good analysts know what rigorous analysis looks like. Check statistical significance. Test multiple hypotheses. Distinguish correlation from causation.
@@ -2378,8 +2376,6 @@ The problem isn't knowledge. It's that rigorous methodology takes time, and time
 
 When stakeholders need answers by end of day, you check the most likely hypothesis. If it fits, you move on. Rational behavior. Often incomplete.
 
----
-
 ## Vibe Analysis Without Validation Is Just Faster Overconfidence
 
 AI makes exploration cheap. Decompose a metric across twelve dimensions? Describe what you want, AI runs the queries, synthesizes patterns.
@@ -2387,8 +2383,6 @@ AI makes exploration cheap. Decompose a metric across twelve dimensions? Describ
 But when you generate findings quickly, you can generate confident-sounding nonsense quickly. AI doesn't know when it's wrong.
 
 The interesting problem isn't automation. It's verification.
-
----
 
 ## The Blind Auditor
 
@@ -2410,8 +2404,6 @@ In my first ten investigations using this workflow, the blind auditor flagged a 
 
 This architecture isn't possible without AI. Human analysts would just talk to each other.
 
----
-
 ## Human Judgment Gates the Output
 
 AI generates the analysis. AI validates through the blind auditor. But before anything ships, a human reviews the executive summary.
@@ -2420,15 +2412,11 @@ The human isn't checking every query. That's what validation handles. The human 
 
 Human provides judgment. AI provides discipline.
 
----
-
 ## What's Next
 
 Once an executive summary passes human review, the validated findings flow into other formats. Dashboard. Slides. Video explanation. One command, multiple outputs.
 
 The bottleneck shifts entirely to human judgment: what questions matter, whether answers make sense, how to communicate findings. Everything else is execution.
-
----
 
 Next time your analyst presents a root cause, ask: what checked their work that wasn't them?
 
