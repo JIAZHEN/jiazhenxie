@@ -2344,21 +2344,23 @@ draft: false
 
 # Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
-The slide read "Root Cause: Bot Detection Update." I'd spent two days on this analysis. Traffic down 12% week-over-week. Clean timeline correlation. The new bot filter went live Tuesday, traffic dropped Wednesday.
+# Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
-I walked through the decomposition. Desktop down, mobile flat. UK and Germany hit hardest. The Snowflake queries were tight. The narrative was airtight.
+_Imagine this scenario._
 
-Our CEO leaned back. "How do we know these were bots and not real users?"
+The slide reads "Root Cause: Bot Detection Update." You've spent two days on this analysis. Traffic down 12% week-over-week. Clean timeline correlation. The new bot filter went live Tuesday, traffic dropped Wednesday.
 
-I opened my mouth. Nothing came out.
+You walk through the decomposition. Desktop down, mobile flat. UK and Germany hit hardest. The Snowflake queries are tight. The narrative is airtight.
 
-I'd never tested that hypothesis. I found a pattern that fit and stopped looking. The data was consistent with my explanation, but it was also consistent with explanations I never explored.
+Your CEO leans back. "How do we know these were bots and not real users?"
 
-Two weeks later we found the actual cause: a payment provider outage in three European countries. It happened to coincide with the bot detection rollout. Completely unrelated.
+You open your mouth. Nothing comes out.
 
-I'd been doing analysis for years. I knew better. But under time pressure, I did what every analyst does: found something plausible and moved on.
+You'd never tested that hypothesis. You found a pattern that fit and stopped looking. The data was consistent with your explanation, but it was also consistent with explanations you never explored.
 
----
+Two weeks later the team finds the actual cause: a payment provider outage in three European countries. It happened to coincide with the bot detection rollout. Completely unrelated.
+
+If you've done analysis long enough, some version of this has happened to you. Not because you lack skill. But under time pressure, you did what every analyst does: found something plausible and moved on.
 
 "Vibe coding" has become shorthand for building software by iterating with AI until working code emerges. Critics worry it makes developers sloppy.
 
