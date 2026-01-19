@@ -14,8 +14,6 @@ draft: false
 
 # Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
 
-# Vibe Analysis: Why AI Makes Analysts More Rigorous, Not Less
-
 _Imagine this scenario._
 
 The slide reads "Root Cause: Bot Detection Update." You've spent two days on this analysis. Traffic down 12% week-over-week. Clean timeline correlation. The new bot filter went live Tuesday, traffic dropped Wednesday.
