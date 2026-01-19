@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiGithub, FiLinkedin, FiMoon, FiSun, FiMenu, FiX } from "react-icons/fi";
+import {
+  FiGithub,
+  FiLinkedin,
+  FiMoon,
+  FiSun,
+  FiMenu,
+  FiX,
+} from "react-icons/fi";
 import { siteConfig } from "../config/site";
 
 const navLinks = [
   { path: "/", label: "Home" },
-  { path: "/solutions", label: "Solutions" },
+  // { path: "/solutions", label: "Solutions" },
   { path: "/about", label: "About" },
   { path: "/blog", label: "Blog" },
 ];
@@ -49,9 +56,14 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
-            <Link to="/" className="group flex items-center gap-2 sm:gap-3 tap-highlight-transparent">
+            <Link
+              to="/"
+              className="group flex items-center gap-2 sm:gap-3 tap-highlight-transparent"
+            >
               <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-600 flex items-center justify-center transition-transform duration-300 group-hover:rotate-3">
-                <span className="text-white font-serif font-bold text-base sm:text-lg">J</span>
+                <span className="text-white font-serif font-bold text-base sm:text-lg">
+                  J
+                </span>
               </div>
               <span className="font-serif text-lg sm:text-xl font-semibold tracking-tight hidden xs:block">
                 {siteConfig.name}
@@ -61,11 +73,7 @@ const Navbar = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="relative group"
-                >
+                <Link key={link.path} to={link.path} className="relative group">
                   <span
                     className={`text-sm font-medium tracking-wide uppercase transition-colors duration-200 ${
                       location.pathname === link.path
@@ -78,7 +86,9 @@ const Navbar = () => {
                   <motion.span
                     className="absolute -bottom-1 left-0 h-[2px] bg-primary-600"
                     initial={{ width: 0 }}
-                    animate={{ width: location.pathname === link.path ? "100%" : 0 }}
+                    animate={{
+                      width: location.pathname === link.path ? "100%" : 0,
+                    }}
                     transition={{ duration: 0.2 }}
                   />
                   <span className="absolute -bottom-1 left-0 h-[2px] bg-primary-600 w-0 group-hover:w-full transition-all duration-300" />
@@ -107,7 +117,7 @@ const Navbar = () => {
               >
                 <FiLinkedin size={20} />
               </a>
-              
+
               {/* Theme toggle - larger touch target on mobile */}
               <button
                 onClick={toggleTheme}
@@ -119,7 +129,11 @@ const Navbar = () => {
                   animate={{ rotate: isDark ? 0 : 180 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {isDark ? <FiSun size={22} className="sm:w-5 sm:h-5" /> : <FiMoon size={22} className="sm:w-5 sm:h-5" />}
+                  {isDark ? (
+                    <FiSun size={22} className="sm:w-5 sm:h-5" />
+                  ) : (
+                    <FiMoon size={22} className="sm:w-5 sm:h-5" />
+                  )}
                 </motion.div>
               </button>
 
