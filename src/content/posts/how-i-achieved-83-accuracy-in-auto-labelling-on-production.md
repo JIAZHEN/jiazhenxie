@@ -61,3 +61,16 @@ Also, by comparing to the period between `2016-12-15` and `2017-1-3` and the one
 
 [Random Forest predict_proba](http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html) - Rather than predicting the most likely feature name directly, get the probabilities of each feature. We could probably define a threshold saying “if the probability of a garment’s fibre being ViscoseRayon - Mix is over 0.7, we confident that’s correct”
 ![con-wallis-viscoserayon - mix](https://user-images.githubusercontent.com/1108303/34579852-9c3fcfba-f182-11e7-8824-c04b90739714.png)
+
+Both confidence intervals and `predict_proba` point toward the same goal: quantifying how certain the model is about each prediction so we can fully automate the high-confidence ones and only route uncertain cases to human moderators.
+
+## Key takeaways
+
+Looking back at this project, a few lessons stand out:
+
+1. **Start simple, then iterate.** AWS Machine Learning gave us a quick win for category prediction at 92% accuracy, but fell short for the more nuanced feature prediction task. Switching to Scikit-Learn gave us the flexibility we needed.
+2. **Domain knowledge matters.** Weighting product titles more heavily than descriptions through feature union — a simple insight from understanding the data — pushed accuracy from 65% to 83%.
+3. **Production engineering is half the battle.** Training an accurate model is only part of the story. Integrating a Python model into a Ruby pipeline via IO pipes introduced real challenges around memory, deadlocks, and error handling that required just as much effort.
+4. **Measure in production, not just in the lab.** Our production accuracy of 94.29% exceeded the offline figure of 83%, likely because production data was cleaner and more consistent than our heterogeneous training set.
+
+The next step is to leverage prediction confidence — via `predict_proba` or confidence intervals — to identify which predictions are reliable enough to skip human moderation entirely, making auto-labelling truly autonomous for high-confidence features.
