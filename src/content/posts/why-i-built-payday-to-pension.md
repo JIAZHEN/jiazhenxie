@@ -1,6 +1,6 @@
 ---
 title: Why I built Payday to Pension
-description: Connecting pension contributions to take-home pay, with a small calculator I built to make the numbers easier to understand.
+description: What could £200 less monthly take-home pay add to your pension? Explore tax relief, the £100k threshold and employer matching with Payday to Pension.
 date: 2026-10-22T00:00:00.000Z
 tags:
   - personal-finance
@@ -9,100 +9,96 @@ tags:
 draft: false
 ---
 
-Salary is a number we pay attention to. We negotiate it. Compare it. Work out what a new role would mean after tax.
+If I could manage £200 less cash each month, how much more would actually reach my pension?
 
-Pension is often a percentage we accepted when we joined the company.
+That was the question I wanted to answer.
 
-5% from me. Something from the employer. There is tax relief. Probably fine.
+I had heard about salary sacrifice. Tax relief. Employer matching. I understood that pensions were supposed to be tax-efficient. But knowing the words didn’t give me a feel for the trade-off on my own payslip.
 
-It’s easy to leave it there. There are enough things to think about this month. Retirement is somewhere much further down the backlog.
+So I built [Payday to Pension](/payday-to-pension). Start with the cash you can spare. See what could reach your pension, and where the difference comes from.
 
-But a good salary doesn’t answer a fairly basic question: when that salary stops, what pays for your life?
+All salary figures here are hypothetical. The short-term examples use the model’s 2026/27 England, Wales and Northern Ireland rules.
 
-I built [Payday to Pension](/payday-to-pension) to make that question easier to explore. All salary figures below are hypothetical examples.
+## Why: start with the cash you can spare
 
-![An example connecting less monthly take-home pay to an extra pension contribution and a larger total pension pot at retirement](/images/pension/payday-tradeoff.svg)
+“Contribute another £500 to your pension” sounds like £500 less to live on this month.
 
-Here is a concrete example. A 35-year-old earning £80,000 adds £500 a month through salary sacrifice. In the model, today’s take-home pay falls by about £290. The employer contribution stays the same.
+Depending on your scheme and tax position, it may cost much less than that. The employer might add something too. But those are different things, and I wanted to see them separately.
 
-Over 32 years, the extra contributions could build an extra pot of around £319,000 in today’s money at 3% real growth, before fees. That is a total pot, not £319,000 of income a year. At the model’s 4% withdrawal rate and simplified retirement tax, it could add around £905 a month to retirement income.
+Here is the starting example: £110,000 base salary, 5% already going into a pension through salary sacrifice, and 3% from the employer. Both percentages apply to the full base salary. No bonus, other income or extra employer matching.
 
-The monthly cash cost is a snapshot of today’s rules. The model changes National Insurance relief from April 2029. The pot projection assumes the £500 gross contribution continues throughout. These are assumptions to explore, not promised outcomes.
+In that setup, **£200 less monthly take-home pay could put about £474 more a month into the pension**.
 
-## Why: the percentage hides the actual question
+That extra £474 is the new contribution. It is on top of what was already going in.
 
-There are plenty of pension explanations online. Salary sacrifice, employer matching, tax relief, compound growth. You can recognise all the terms and still struggle to connect them to your own payslip.
+Why the difference? Income Tax and employee National Insurance fall. Part of the new contribution also restores Personal Allowance, because the starting adjusted net income is above £100,000. Once the contribution takes it below that threshold, the next pound has a different cash cost. You can’t multiply the whole contribution by one attractive tax-relief percentage.
 
-The bit I wanted to see was the connection. If I can manage £200 less cash each month, how much could actually reach my pension? And where would the difference come from?
+That is why I wanted a calculator, rather than a headline about the “60% tax trap”. [Personal Allowance falls by £1 for every £2 of adjusted net income above £100,000](https://www.gov.uk/income-tax-rates). Where you start, and what you already contribute, matter.
 
-Even the starting number can be misleading.
+## What: see where the extra pension comes from
 
-Take an £80,000 salary. Suppose the pension setup is 5% from you and 3% from your employer. That sounds like £6,400 a year going into the pension.
+The same £200 cash budget can produce a different result if an employer matches additional contributions.
 
-It would be, if those percentages applied to the whole salary.
+![Extra monthly pension from a £200 cash budget: about £474 without extra employer matching, £749 with a hypothetical 1:1 match, or £1,422 with a hypothetical 2:1 match](/images/pension/cash-budget-matching.svg)
 
-But some schemes use qualifying earnings. Under the band currently listed on [GOV.UK](https://www.gov.uk/workplace-pensions/what-you-your-employer-and-the-government-pay), that means earnings between £6,240 and £50,270. In this example, the 8% applies to £44,030. About £3,522 a year, or £294 a month, goes in. On the whole salary it would be about £533 a month.
+These are three different scheme illustrations, all starting with a £110,000 salary and a 5% employee contribution through salary sacrifice:
 
-Same headline percentages. Quite different amounts.
+| Employer scheme | Extra monthly pension for £200 less cash |
+| --- | ---: |
+| Current employer contribution 3%, no extra matching | £474 |
+| Current employer contribution 5%, extra £1 for each extra £1 you contribute, stopping at 8% employee contributions | £749 |
+| Current employer contribution 10%, extra £2 for each extra £1 you contribute, stopping at 12% employee contributions | £1,422 |
 
-This isn’t a claim about every employer. Scheme rules vary. It is a reason to check what the percentage on your benefits page is actually a percentage of.
+The last scheme is deliberately hypothetical. £200 does not turn into £1,422 through tax relief alone. In that example, about £474 is the extra employee contribution and £948 is extra employer money. Without that employer rule, that result disappears.
 
-A pay rise above the qualifying-earnings ceiling can leave those contributions unchanged. Your lifestyle might grow with your salary while your pension contributions don’t.
+The middle example also shows why the cap matters. The employer stops matching before the whole £200 cash budget is used. Contributions above that point can still get tax relief, but they do not bring another employer pound.
 
-## What: start with a monthly income you can picture
+This is the useful discovery for me. Not “pensions are good”, but “am I leaving matching available in my actual scheme unused?” Or “what happens if I put in enough to move below £100,000 adjusted net income?”
 
-Most of us have a better feel for a monthly budget than a retirement pot.
+The tool breaks the result into your cash cost, tax relief, National Insurance savings and additional employer money. You can change the budget and see which parts move.
 
-£500,000 sounds big. Whether it supports the life you have in mind is another question.
+[Explore the £200 example →](/payday-to-pension)
 
-The tool starts with the cash you can spare. Choose a monthly reduction in take-home pay and it works backwards to an extra pension contribution. The example is already filled in; then you can replace its salary, bonus and scheme details with your own. It compares adjusted net income before and after the change, including the £100,000 Personal Allowance threshold. The retirement projection is a separate second step: monthly income in today’s money, based on ages and a pot you can adjust.
+## How: explore first, then check your scheme
 
-It shows an estimated retirement income alongside your target. Then it brings the question back to payday: what leaves your pay, what the employer adds, and what the change might produce later.
+You don’t need a retirement target or a pension balance to try the first comparison. It opens with a labelled example. Move the monthly cash budget up or down and see what changes.
 
-You can explore contributing more, working longer, employer matching and other savings. You can also see when the numbers still don’t get you to the target. That’s useful information too.
+Then replace the example with your own salary, bonus and scheme details. There are a few things worth checking with payroll:
 
-You must confirm the contribution method and earnings basis before seeing a personal comparison. The labelled example is there if you want to explore first. Relief at source shows the initial cash payment separately from the final cost after any extra HMRC relief. The long-term projection opens only when you choose to go further.
+- **What is the percentage based on?** Full base salary and qualifying earnings can produce very different amounts. In this tool, “full base salary” excludes bonus; qualifying earnings use the annual band. Your employer’s definition may differ.
+- **How are contributions taken?** Salary sacrifice, net pay and relief at source handle tax and cash timing differently.
+- **Does the employer match more?** Check both the matching rate and the limit. The employer contribution you already receive is separate from any extra matching available.
 
-![Extra pension pot from £500 monthly contributions between ages 35 and 67: contributions alone compared with illustrative 3% real growth](/images/pension/extra-pot-growth.svg)
+If your employer percentage uses the same selected earnings basis, changing that basis updates both current contributions. If you know the employer’s annual contribution, enter that amount instead. It stays fixed when you change the employee basis. The tool makes that distinction visible.
 
-The dashed line is what you put in: £192,000 over 32 years. The solid line adds a steady 3% real return. Actual markets won’t follow that line. The point is to see what comes from contributions and what depends on growth.
+There is also an optional annual payroll amount if a percentage doesn’t describe your own contribution properly.
 
-## What could £200 less cash actually do?
+With relief at source, **cash paid now and cost after all tax relief are different questions**. The provider adds basic-rate relief, and you may need to [claim additional relief from HMRC](https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief). The tool lets you choose which budget you mean. A later claim is not treated as money already available on payday.
 
-In the £110,000 salary example, with 5% already going into the pension through salary sacrifice, £200 less monthly cash could fund about £474 more monthly pension. There is no extra employer match in that first comparison. The difference comes from the tax and National Insurance calculation, including where the contribution crosses the £100,000 adjusted-income threshold.
+Once the inputs look right, save them as your setup. You can revisit the examples without replacing it. Inputs are saved in your browser; there is no account.
 
-![A £200 monthly cash budget could produce about £474 extra pension without extra matching, £749 with a hypothetical 1:1 match up to 8%, or £1,422 with a hypothetical 2:1 match](/images/pension/cash-budget-matching.svg)
+## Then ask what it could mean later
 
-The larger figures need an actual employer scheme behind them. For these illustrations, the current employer rates are 3%, 5% and 10% respectively; the 1:1 scheme stops at 8% employee contributions and the 2:1 scheme stops at 12%. The 2:1 case is a hypothetical scheme, not an entitlement everyone has. It adds about £948 of employer money to the £474 extra employee contribution. That is where the £1,422 comes from.
+The immediate cash trade-off comes first. The long-term retirement picture is an optional next step.
 
-This is the part I wanted the tool to make visible. What comes from tax relief? What comes from my employer? What changes if the extra matching stops? It should help you find a useful question to ask payroll, rather than require you to know the answer before you start.
+For a **separate illustration**, £500 extra gross pension each month from age 35 to 67 adds up to £192,000 of contributions. At a steady 3% real annual growth rate, the model projects about £319,000 in today’s money before fees.
 
-If your employer contribution is a percentage of the same earnings basis, changing the basis now updates both amounts. If you enter a confirmed annual employer amount, it stays fixed and the page says so. The tool does not assume every employer uses the same rule.
+![A separate illustration: £500 gross monthly pension contributions over 32 years, comparing £192,000 of contributions with illustrative 3% real growth](/images/pension/extra-pot-growth.svg)
 
-## How: change one thing and follow it through
+This is not the £200-budget example above. It is a way to see how contributions and growth play different roles. Actual markets won’t follow that smooth line.
 
-Start with a monthly cash budget. Move it up or down and watch how much reaches the pension. Then check the income and scheme assumptions: base salary, cash bonus, current contributions and whether your employer matches more. Age and retirement targets come later.
+The retirement projection lets you change ages, an existing pot and assumptions. It repeats the current annual salary, bonus and workplace contributions; other income, SIPP contributions and Gift Aid from the short-term comparison are not carried over. Treat it as a separate illustration, rather than a full financial plan.
 
-Then get closer to your actual setup. Check your pension balance, contribution percentages and which earnings they apply to. Find out whether your employer offers matching and how contributions are taken from your pay.
+## What I would do with the answer
 
-That last detail matters. Salary sacrifice, net pay and relief at source handle tax relief differently. With relief at source, the provider adds basic-rate relief; if you pay tax above that rate, you may need to [claim additional relief yourself](https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief). Hearing that pensions are tax-efficient doesn’t tell you whether your own relief has been fully claimed.
+I would use it to find the next question to ask payroll, and to decide whether an extra contribution is worth looking into.
 
-Now change one thing: the cash you can spare. See what happens to cash and adjusted net income. If you are close to £100,000, try the amount needed to reach that level. This is a comparison, not a recommendation; access to your cash still matters. Childcare eligibility may be affected, but the tool does not count childcare as a saving.
+It is especially useful around £100,000 adjusted net income, or where extra employer matching is available. Below that income, the cash trade-off can still be useful. The result will depend on your tax band and scheme.
 
-I find this much easier to reason about than reading another explanation of why saving earlier is good. You have a starting point, an assumption you can change, and a visible result.
+A bigger pension still means less accessible cash. Rent, a mortgage, family costs, an emergency fund and savings before pension access age all belong in the decision. Future pension withdrawals may be taxable too.
 
-## Where I would be careful with the result
+The calculator has limits. Scottish Income Tax, tapered or reduced annual allowances, carry-forward and complex income are outside its supported comparison. It does not add childcare benefits to the result. Annual estimates can also differ from monthly payroll because of bonus timing, tax codes and National Insurance calculations.
 
-This is a simplified calculator. It assumes steady contributions and a constant real return. Your career and investments won’t behave that neatly. The model also leaves out fees and career breaks.
+What I wanted was a clearer starting point. “I can spare £200. What could that actually do?” feels much easier to act on than another reminder to save more for retirement.
 
-The retirement income is an estimate using a withdrawal-rate assumption, not a guaranteed payment. The State Pension figure assumes full entitlement at the age entered. Check your own forecast rather than assuming you’ll receive that amount.
-
-If you earn more, the omitted details can matter more. The tool doesn’t model Scottish Income Tax, tapered annual allowances, carry-forward or higher-rate tax in retirement. The short-term comparison separates extra relief under relief at source from the initial payment, so a future claim is not presented as cash already on your payslip. The separate long-term projection still uses a simpler payslip model. Treat the result as a way to understand the moving parts, rather than a complete tax calculation.
-
-Pensions also tie money up. An emergency fund, a mortgage, family costs and access to savings before retirement belong in the decision. This page can’t decide those priorities for you.
-
-I wanted something that makes the next question clearer. Maybe it’s “what does my employer match?” Maybe it’s “which pay is this based on?” Maybe it’s simply “what would enough actually look like?”
-
-[Try Payday to Pension with your own numbers →](/payday-to-pension)
-
-No account. Inputs stay in your browser. If you copy a share link, the numbers are included in that link, so share it with that in mind.
+[Try Payday to Pension →](/payday-to-pension)

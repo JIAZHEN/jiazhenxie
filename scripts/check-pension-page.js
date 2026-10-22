@@ -11,9 +11,9 @@ for (const pattern of [/<title>[\s\S]*?<\/title>/g, /<meta name="description"[^>
 }
 assert.ok(html.includes(`href="${canonical}"`));
 assert.ok(html.includes(`content="${canonical}"`));
-assert.ok(html.includes('Same headline percentages. Quite different amounts.'));
-assert.ok(html.includes('Why: the percentage hides the actual question'));
-assert.ok(html.includes('How: change one thing and follow it through'));
+assert.ok(html.includes('£1,422'));
+assert.ok(html.includes('Why: start with the cash you can spare'));
+assert.ok(html.includes('How: explore first, then check your scheme'));
 assert.ok(html.includes('href="/payday-to-pension"'));
 assert.equal((html.match(/<h1\b/g) || []).length, 1);
 const schema = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
@@ -22,7 +22,7 @@ assert.ok(article);
 assert.equal(article.url, canonical);
 assert.equal(article.author.name, 'Jiazhen Xie');
 assert.ok(article.datePublished);
-for (const name of ['payday-tradeoff', 'extra-pot-growth', 'cash-budget-matching']) {
+for (const name of ['extra-pot-growth', 'cash-budget-matching']) {
   assert.ok(html.includes(`/images/pension/${name}.svg`));
   assert.ok(fs.existsSync(`dist/images/pension/${name}.svg`));
 }

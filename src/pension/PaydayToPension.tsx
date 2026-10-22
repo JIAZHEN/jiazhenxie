@@ -31,7 +31,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
   const [inputs, setInputs] = useState<CalculatorInputs>(() => initialInputs ?? loadInitial())
   const [shareNote, setShareNote] = useState('')
   const shareHash = useRef(
-    typeof window !== 'undefined' && window.location.hash.length > 1
+    !initialInputs && typeof window !== 'undefined' && window.location.hash.length > 1
   )
   const today = useMemo(() => new Date(), [])
   const analysis = useMemo(() => analyse(inputs, today), [inputs, today])
@@ -47,7 +47,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
   useEffect(() => {
     const encoded = encodeInputs(inputs)
     try {
-      window.localStorage.setItem(STORAGE_KEY, encoded)
+      if (!initialInputs) window.localStorage.setItem(STORAGE_KEY, encoded)
     } catch {
       // Ignore quota and private-mode failures.
     }
@@ -56,24 +56,24 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
     if (window.location.hash !== nextHash) {
       window.history.replaceState(null, '', nextHash)
     }
-  }, [inputs])
+  }, [inputs, initialInputs])
 
   function patch(partial: Partial<CalculatorInputs>) {
-    shareHash.current = true
+    if (!initialInputs) shareHash.current = true
     setInputs(current => ({ ...current, ...partial }))
   }
 
   function clearData() {
     try {
-      window.localStorage.removeItem(STORAGE_KEY)
+      if (!initialInputs) window.localStorage.removeItem(STORAGE_KEY)
     } catch {
       // Ignore.
     }
     shareHash.current = false
-    setInputs(defaultInputs)
-    window.history.replaceState(null, '', window.location.pathname)
+    setInputs(initialInputs ?? defaultInputs)
+    if (!initialInputs) window.history.replaceState(null, '', window.location.pathname)
     setShareNote(
-      'Cleared on this phone. The figures are back to the starting example.'
+      initialInputs ? 'Projection reset to the comparison above.' : 'Cleared on this phone. The figures are back to the starting example.'
     )
   }
 
@@ -446,7 +446,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               className="min-h-[2.75rem] rounded-xl border border-[color:var(--pension-accent)] bg-[color:var(--pension-input)] px-4 py-3 text-sm font-medium text-[color:var(--pension-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
               onClick={clearData}
             >
-              Clear my data
+              {initialInputs ? 'Reset this projection' : 'Clear my data'}
             </button>
           </div>
           {shareNote ? (
@@ -455,7 +455,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
             </p>
           ) : (
             <p className="text-sm text-[color:var(--pension-muted)]">
-              Stays on this phone. Nothing is sent to a server.
+              {initialInputs ? 'Projection edits last while this section stays open. Copy a link to keep them.' : 'Stays on this phone. Nothing is sent to a server.'}
             </p>
           )}
         </form>

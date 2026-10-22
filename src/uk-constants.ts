@@ -95,9 +95,9 @@ export const PENSION_ANNUAL_ALLOWANCE = 60_000
 
 /**
  * National Living Wage hourly floor used for the salary-sacrifice warning.
- * 2026/27. VERIFY BEFORE LAUNCH.
+ * Age 21+, April 2026: https://www.gov.uk/national-minimum-wage-rates
  */
-export const MINIMUM_WAGE_HOURLY = 12.21
+export const MINIMUM_WAGE_HOURLY = 12.71
 
 /**
  * From this date, National Insurance relief on salary-sacrifice pension

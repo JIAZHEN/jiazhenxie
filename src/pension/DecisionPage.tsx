@@ -49,6 +49,7 @@ export function PaydayToPension() {
   const [setup, setSetup] = useState<Setup>(opening.setup)
   const [isExample, setExample] = useState(opening.isExample)
   const [showRetirement, setRetirement] = useState(false)
+  const [showLegacy, setLegacy] = useState(false)
   const legacy = typeof window !== 'undefined' && window.location.hash.startsWith('#v=1&')
   const patch = (value: Partial<Setup>) => { setSetup(previous => ({ ...previous, ...value })) }
   useEffect(() => {
@@ -95,15 +96,15 @@ export function PaydayToPension() {
           )}
           <div className="my-4 space-y-3 border-b border-[color:var(--pension-border)] pb-4">
             {setup.inputMode === 'cash' ? <>
-              <NumberField id="decision-budget" label="I could take home less each month" prefix="£" value={setup.cashBudget} max={5000} step={25} onChange={cashBudget => patch({ cashBudget: cashBudget ?? 0 })} />
+              <NumberField id="decision-budget" label={setup.budgetTiming === 'payday' ? 'I could take home less each month' : 'My monthly cost after all tax relief'} prefix="£" value={setup.cashBudget} max={5000} step={25} onChange={cashBudget => patch({ cashBudget: cashBudget ?? 0 })} />
               <input className="pension-salary-slider" type="range" min="0" max={Math.max(1000, setup.cashBudget)} step="25" value={setup.cashBudget} aria-label="Monthly cash budget" aria-valuetext={`${formatGbp(setup.cashBudget)} less cash a month`} onChange={event => patch({ cashBudget: Number(event.target.value) })} />
             </> : <NumberField id="decision-extra" label="Extra gross employee pension each month" prefix="£" value={setup.extraMonthly} max={10000} step={50} onChange={value => patch({ extraMonthly: value ?? 0 })} />}
             {(setup.method === 'reliefAtSource' || setup.otherRasAnnual > 0) && <Choice name="cash-timing" label="Cash budget means…" value={setup.budgetTiming} options={[{ value: 'payday', label: 'Cash paid now' }, { value: 'afterRelief', label: 'Cost after all relief' }]} onChange={budgetTiming => patch({ budgetTiming })} />}
             <button type="button" className="text-xs underline underline-offset-2" onClick={() => patch({ inputMode: setup.inputMode === 'cash' ? 'gross' : 'cash' })}>{setup.inputMode === 'cash' ? 'Instead, set an extra pension amount' : 'Start with my cash budget instead'}</button>
             <p className="text-xs text-[color:var(--pension-muted)]">Annual estimates divided by 12. Relief claimed later is shown separately; any extra employer matching must be confirmed.</p>
           </div>
-          {!ready && <div className="mt-3 text-sm leading-relaxed"><p>Still needed: {missing.join(', ')}.</p><p className="mt-2 text-xs text-[color:var(--pension-muted)]">Use a current pension % with a confirmed earnings basis, or an annual payroll amount in optional settings.</p><a href="#pension-setup" className="mt-2 inline-block underline">Complete my setup ↑</a></div>}
-          {ready && <a href="#pension-setup" className="mt-3 inline-block text-xs underline underline-offset-2">Edit income & pension setup ↑</a>}
+          {!ready && <div className="mt-3 text-sm leading-relaxed"><p>Still needed: {missing.join(', ')}.</p><p className="mt-2 text-xs text-[color:var(--pension-muted)]">Use a current pension % with a confirmed earnings basis, or an annual payroll amount in optional settings.</p><a href="#pension-setup" className="mt-2 inline-block underline">Complete my setup ↓</a></div>}
+          {ready && <a href="#pension-setup" className="mt-3 inline-block text-xs underline underline-offset-2">Edit income & pension setup ↓</a>}
           {unsupported && <p role="alert" className="mt-3 text-sm leading-relaxed">This setup is outside the supported calculation. Scottish tax, savings/dividend tax, share awards, self-employment, foreign income and reduced annual allowances need a separate assessment. We won’t show a personal tax-saving figure.</p>}
           {decision?.issues.map(issue => <p role="alert" key={issue} className="mt-3 text-sm leading-relaxed">{issue}</p>)}
           {valid && decision && <>
@@ -188,7 +189,7 @@ export function PaydayToPension() {
       <p className="mt-3 text-xs leading-relaxed text-[color:var(--pension-muted)]">Separate illustrative projection: adjust the starting age, retirement age and existing pot. This year’s salary plus bonus and pension contributions repeat every year; other income, personal/SIPP contributions and Gift Aid are not carried into the projection. Future tax rules and bonus income may change.</p>
       {showRetirement && valid ? <Suspense fallback={<p>Loading projection…</p>}><RetirementCalculator key={JSON.stringify(retirement)} initialInputs={retirement} /></Suspense> : <p className="mt-3 text-sm">Complete a supported pension setup above to initialise the projection.</p>}
     </details>
-    {legacy && <details className="mx-auto mt-4 max-w-6xl p-4"><summary className="cursor-pointer">Open your older retirement share link</summary><Suspense fallback={<p>Loading saved projection…</p>}><RetirementCalculator /></Suspense></details>}
+    {legacy && <details className="mx-auto mt-4 max-w-6xl p-4" onToggle={event => setLegacy(event.currentTarget.open)}><summary className="cursor-pointer">Open your older retirement share link</summary>{showLegacy && <Suspense fallback={<p>Loading saved projection…</p>}><RetirementCalculator /></Suspense>}</details>}
     <footer className="mx-auto mt-6 max-w-6xl text-xs leading-relaxed text-[color:var(--pension-muted)]">This is a calculator, not financial advice. Figures are estimates. Pension money is generally locked until pension access age; future withdrawals may be taxable. Check scheme details and your own tax position before changing contributions.</footer>
   </div>
 }
