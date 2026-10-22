@@ -15,6 +15,7 @@ interface Setup {
   pensionAccessed: boolean; unsupportedIncome: boolean
 }
 const empty: Setup = { salary: null, bonus: 0, otherIncome: 0, giftAidNet: 0, otherRasAnnual: 0, employeePercent: null, currentWorkplaceAnnual: null, employerAnnual: null, extraMonthly: 500, basis: '', method: '', region: '', pensionAccessed: false, unsupportedIncome: false }
+const example: Setup = { ...empty, salary: 110000, employeePercent: 5, employerAnnual: 3300, basis: 'full', method: 'salarySacrifice', region: 'ewni' }
 const storageKey = 'pension-decision-v2'
 function initial(): Setup {
   try {
@@ -35,8 +36,13 @@ function initial(): Setup {
 }
 
 export function PaydayToPension() {
-  const [setup, setSetup] = useState<Setup>(initial)
-  const [isExample, setExample] = useState(false)
+  const [opening] = useState(() => {
+    const saved = initial()
+    const hasPersonalSetup = Object.entries(saved).some(([key, value]) => value !== empty[key as keyof Setup])
+    return { setup: hasPersonalSetup ? saved : { ...example }, isExample: !hasPersonalSetup }
+  })
+  const [setup, setSetup] = useState<Setup>(opening.setup)
+  const [isExample, setExample] = useState(opening.isExample)
   const [showRetirement, setRetirement] = useState(false)
   const legacy = typeof window !== 'undefined' && window.location.hash.startsWith('#v=1&')
   const patch = (value: Partial<Setup>) => { setSetup(previous => ({ ...previous, ...value })) }
@@ -58,7 +64,7 @@ export function PaydayToPension() {
   const unsupported = setup.region === 'scotland' || setup.pensionAccessed || setup.unsupportedIncome
   const valid = decision != null && !unsupported && decision.issues.length === 0
   const retirement = decision ? { ...defaultInputs, grossAnnualSalary: (setup.salary ?? 0) + setup.bonus, contributionBasis: 'full' as const, employeePercent: ((decision.existing + setup.extraMonthly * 12) / Math.max(1, (setup.salary ?? 0) + setup.bonus)) * 100, employerPercent: (setup.employerAnnual ?? 0) / Math.max(1, (setup.salary ?? 0) + setup.bonus) * 100, salarySacrifice: setup.method === 'salarySacrifice' ? 'yes' as const : 'no' as const, taxRelief: setup.method === 'netPay' ? 'netPay' as const : 'reliefAtSource' as const } : undefined
-  const demo = () => { setSetup({ ...empty, salary: 110000, employeePercent: 5, employerAnnual: 3300, basis: 'full', method: 'salarySacrifice', region: 'ewni' }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
+  const demo = () => { setSetup({ ...example }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
 
   return <div className="pension-tool mt-16 sm:mt-20 bg-[color:var(--pension-canvas)] p-4 text-[color:var(--pension-ink)] sm:p-6">
     <SEO title="UK Pension Contribution Calculator" description="Compare how extra pension contributions affect take-home pay and adjusted net income. A UK calculator with clearly stated assumptions." canonicalUrl="https://jiazhenxie.com/payday-to-pension" />
