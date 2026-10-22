@@ -16,6 +16,7 @@ const navLinks = [
   // { path: "/solutions", label: "Solutions" },
   { path: "/about", label: "About" },
   { path: "/blog", label: "Blog" },
+  { path: "/payday-to-pension", label: "Pension tool" },
 ];
 
 const Navbar = () => {

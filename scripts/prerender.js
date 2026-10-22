@@ -2,6 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import matter from 'gray-matter';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +27,13 @@ const siteConfig = {
 
 // Static pages to pre-render
 const staticPages = [
+  {
+    path: '/payday-to-pension',
+    title: 'Payday to Pension — UK Pension Calculator | Jiazhen Xie',
+    description: "Work backwards from the monthly retirement income you want, in today's money. Explore pension contributions and their effect on take-home pay.",
+    keywords: ['UK pension calculator', 'retirement income', 'salary sacrifice'],
+    type: 'website',
+  },
   {
     path: '/about',
     title: 'About Jiazhen Xie | Engineering Leader UK | Oxford Alumni',
@@ -189,11 +200,16 @@ function generateStructuredData({ url, title, description, type, keywords, image
 
 // ============ HTML Generation ============
 
-function generateHtml(template, { url, title, description, keywords, image, type, publishedTime, noscriptContent }) {
+function generateHtml(template, { url, title, description, keywords, image, type, publishedTime, noscriptContent, bodyContent }) {
   const metaTags = generateMetaTags({ url, title, description, keywords, image, type, publishedTime });
   const structuredData = generateStructuredData({ url, title, description, type, keywords, image, publishedTime });
   
-  let html = template;
+  // Each generated URL owns one complete set of metadata.
+  let html = template
+    .replace(/<title>[\s\S]*?<\/title>/gi, '')
+    .replace(/<meta\b[^>]*(?:name|property)=["'](?:title|description|keywords|author|twitter:[^"']*|og:[^"']*)["'][^>]*>/gi, '')
+    .replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '')
+    .replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
   
   // Replace the title
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(title)}</title>`);
@@ -202,7 +218,9 @@ function generateHtml(template, { url, title, description, keywords, image, type
   html = html.replace('</head>', `${metaTags}\n    ${structuredData}\n  </head>`);
   
   // Insert noscript content after <div id="root">
-  if (noscriptContent) {
+  if (bodyContent) {
+    html = html.replace('<div id="root"></div>', `<div id="root">${bodyContent}</div>`);
+  } else if (noscriptContent) {
     html = html.replace('<div id="root"></div>', `<div id="root"></div>${noscriptContent}`);
   }
   
@@ -229,7 +247,15 @@ function prerenderStaticPages(template) {
       </div>
     </noscript>`;
     
-    const html = generateHtml(template, {
+    // The calculator needs its own metadata rather than the homepage defaults.
+    const pageTemplate = page.path === '/payday-to-pension'
+      ? template
+          .replace(/<title>[^<]*<\/title>/g, '')
+          .replace(/<meta\b[^>]*(?:name|property)=["'](?:title|description|keywords|author|twitter:[^"']*|og:[^"']*)["'][^>]*>/gi, '')
+          .replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '')
+          .replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
+      : template;
+    const html = generateHtml(pageTemplate, {
       url: `${siteConfig.url}${page.path}`,
       title: page.title,
       description: page.description,
@@ -290,6 +316,14 @@ function prerenderBlogPosts(template) {
       image: frontMatter.image || `${siteConfig.url}/images/jiazhen-xie.jpeg`,
       type: 'article',
       publishedTime: frontMatter.date,
+      bodyContent: slug === 'why-i-built-payday-to-pension'
+        ? renderToStaticMarkup(React.createElement('article', {
+            className: 'prose mx-auto max-w-3xl px-6 py-24',
+          },
+          React.createElement('h1', null, frontMatter.title),
+          React.createElement('p', null, `By ${siteConfig.author.name} · ${formatDate(frontMatter.date)}`),
+          React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, postContent)))
+        : undefined,
       noscriptContent
     });
     

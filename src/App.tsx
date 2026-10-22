@@ -7,6 +7,9 @@ import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
 import Solutions from "./pages/Solutions";
+import { lazy, Suspense } from "react";
+const PaydayToPension = lazy(() => import("./pension/PaydayToPension").then(module => ({ default: module.PaydayToPension })));
+
 import PageTracker from "./components/PageTracker";
 
 function App() {
@@ -24,6 +27,11 @@ function App() {
             className="container mx-auto px-4 sm:px-6 py-6 sm:py-8"
           >
             <Routes>
+              <Route path="/payday-to-pension" element={
+                <Suspense fallback={<p role="status" className="pt-24">Loading pension calculator…</p>}>
+                  <PaydayToPension />
+                </Suspense>
+              } />
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />

@@ -99,3 +99,19 @@ This will deploy the site to the `gh-pages` branch of the repository.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## Payday to Pension
+
+The UK pension calculator lives at `/payday-to-pension`, with an entry in the desktop and mobile navigation. It is loaded separately from the main pages. The build generates a dedicated HTML entry for GitHub Pages direct visits.
+
+- UI: `src/pension/`; pure calculation functions: `src/calc/`.
+- Inputs stay in localStorage; sharing encodes them in the URL fragment.
+- Rates and assumptions: `src/uk-constants.ts`. See `PENSION-CHECKLIST.md` for the inherited pre-launch verification checklist.
+- Imported from `wealth-chaos`; no backend or additional runtime dependencies.
+
+Run `npm run dev` and open `/payday-to-pension`, or `npm run build` for the production output.
+
+### Pension article and visual checks
+
+`npm run build` generates the article charts from the same pension model as the interactive example. The pension article gets full visible HTML in its static entry, including chart images and tool links. `npm run check:pension` validates the built article metadata, schema, assets, sitemap and illustrative amounts. Charts use a fixed, labelled example dated 22 October 2026.

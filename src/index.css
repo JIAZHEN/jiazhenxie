@@ -337,3 +337,40 @@
 .touch-manipulation {
   touch-action: manipulation;
 }
+
+/* Pension worksheets keep a paper surface in either site theme. */
+.pension-tool { color-scheme: light; }
+.pension-tool .ptp-summary::-webkit-details-marker { display: none; }
+.pension-tool #results { scroll-margin-top: 7rem; }
+
+
+/* Compact introduction: show the trade-off, then get to the visitor's inputs. */
+.pension-intro { padding: 1.5rem 1rem 0; max-width: 72rem; margin: 0 auto; }
+.pension-eyebrow { font-size: .65rem; font-weight: 700; letter-spacing: .14em; color: #a34832; margin-bottom: .75rem; }
+.pension-intro h1 { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.12; letter-spacing: -.035em; }
+.pension-intro h1 em { color: #a34832; font-weight: 400; }
+.pension-intro-copy { margin-top: .75rem; max-width: 36rem; font-size: .9rem; line-height: 1.7; color: #57534e; }
+.pension-intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 1rem 0 .5rem; }
+.pension-primary-link { display: inline-flex; gap: 1rem; align-items: center; padding: .8rem 1rem; background: #a34832; color: #fff; font-weight: 600; font-size: .85rem; }
+.pension-primary-link:hover { background: #873d2d; }
+.pension-text-link { color: #a34832; font-size: .75rem; text-decoration: underline; text-underline-offset: 4px; }
+.pension-intro-small { font-size: .68rem; line-height: 1.6; color: #78716c; }
+.pension-quick-example { margin-top: 1rem; padding: 1rem; border: 1px solid #e5e0d9; background: #fdfcfa; }
+.pension-extra-label { display: flex; justify-content: space-between; gap: .75rem; font-size: .75rem; align-items: center; }
+.pension-extra-label strong { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pension-salary-slider { width: 100%; min-height: 2.75rem; accent-color: #a34832; cursor: pointer; }
+.pension-tradeoff { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.pension-tradeoff dt { font-size: .68rem; color: #57534e; }
+.pension-tradeoff dd { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.5rem, 3vw, 2.5rem); color: #a34832; margin-top: .25rem; font-variant-numeric: tabular-nums; }
+.pension-tradeoff div:last-child dd { color: #4d704d; }
+.pension-tradeoff small { font-size: .63rem; color: #78716c; }
+.pension-income-note { margin: .75rem 0; font-size: .75rem; color: #57534e; line-height: 1.7; }
+.pension-example-details { font-size: .68rem; color: #78716c; line-height: 1.7; }
+.pension-example-details summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.pension-example-details p { margin-top: .5rem; }
+#your-numbers { scroll-margin-top: 6rem; }
+@media (min-width: 900px) {
+  .pension-intro-compact { display: grid; grid-template-columns: 1fr 1fr; column-gap: 3rem; padding-top: 2rem; }
+  .pension-intro-compact > .pension-eyebrow, .pension-intro-compact > h1, .pension-intro-compact > .pension-intro-copy, .pension-intro-compact > .pension-intro-actions, .pension-intro-compact > .pension-intro-small { grid-column: 1; }
+  .pension-quick-example { grid-column: 2; grid-row: 1 / 6; margin-top: 0; }
+}

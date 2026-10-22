@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="title desc"><title id="title">What an extra £500 into a pension could mean</title><desc id="desc">Illustration at age 35, salary £80,000, salary sacrifice. £290 less take-home each month; £500 extra monthly contribution; £319,325 extra total pension pot at 67. These amounts have different units.</desc><rect width="800" height="480" fill="#faf8f5"/><g font-family="Arial, sans-serif" fill="#262626"><text x="40" y="38" fill="#a34832" font-size="13" letter-spacing="2">PAYDAY → PENSION</text><text x="40" y="82" font-size="30" font-weight="600">A monthly decision. A long-term difference.</text>
+  <rect x="40" y="115" width="720" height="86" rx="8" fill="#f3e4de"/><text x="60" y="146" font-size="16">LESS TAKE-HOME / MONTH, TODAY</text><text x="60" y="184" fill="#a34832" font-size="34">£290</text>
+  <rect x="40" y="215" width="720" height="86" rx="8" fill="#e6ebe6"/><text x="60" y="246" font-size="16">EXTRA INTO THE PENSION / MONTH</text><text x="60" y="284" fill="#4d704d" font-size="34">£500</text>
+  <text x="40" y="343" font-size="17">Extra total pot at 67: <tspan font-weight="700" fill="#4d704d">£319,325</tspan></text>
+  <text x="40" y="376" font-size="17">Estimated extra retirement income: £905 / month</text>
+  <text x="40" y="416" font-size="13" fill="#57534e">Age 35 → 67 · £80k salary · 3% real growth · 4% withdrawal rate</text>
+  <text x="40" y="440" font-size="13" fill="#57534e">Employer contribution unchanged. No fees. Future figures in today’s money.</text>
+  <text x="40" y="463" font-size="12" fill="#57534e">Take-home cost is today’s; NI savings change from April 2029. Estimates, not guarantees.</text></g></svg>

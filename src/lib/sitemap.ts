@@ -17,6 +17,7 @@ export interface SitemapUrl {
 
 export function generateSitemap(): string {
   const urls: SitemapUrl[] = [
+    { url: `${siteConfig.url}/payday-to-pension`, changefreq: "monthly", priority: 0.8 },
     {
       url: siteConfig.url,
       lastmod: new Date().toISOString(),

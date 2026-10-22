@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const siteUrl = "https://jiazhenxie.com";
 
 const staticPages = [
+  { url: "/payday-to-pension", changefreq: "monthly", priority: "0.8" },
   { url: "", changefreq: "weekly", priority: "1.0" },
   { url: "/about", changefreq: "monthly", priority: "0.8" },
   { url: "/blog", changefreq: "daily", priority: "0.9" },

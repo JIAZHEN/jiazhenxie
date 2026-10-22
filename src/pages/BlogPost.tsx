@@ -112,12 +112,8 @@ export default function BlogPostPage() {
   return (
     <>
       <SEO
-        title={`${post.title} | Engineering Leadership Blog`}
-        description={`${
-          post.description || post.content.substring(0, 160)
-        } - Insights from ${
-          siteConfig.author.name
-        }, Chinese engineering leader in UK tech industry.`}
+        title={isLeadershipPost ? `${post.title} | Engineering Leadership Blog` : post.title}
+        description={post.description || post.content.substring(0, 160)}
         type="article"
         publishedTime={post.date}
         tags={post.tags}
