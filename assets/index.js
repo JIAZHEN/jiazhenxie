@@ -2517,8 +2517,8 @@ draft: false
 - 机柜架构
 - 服务器架构，多用定制。
 `,dR=Object.freeze(Object.defineProperty({__proto__:null,default:Rv},Symbol.toStringTag,{value:"Module"})),Pv=`---
-title: You know your salary. Do you know your pension?
-description: Why I built Payday to Pension, what a good salary can hide, and how to connect retirement income to this month’s payslip.
+title: Why I built Payday to Pension
+description: Connecting pension contributions to take-home pay, with a small calculator I built to make the numbers easier to understand.
 date: 2026-10-22T00:00:00.000Z
 tags:
   - personal-finance
@@ -2533,11 +2533,11 @@ Pension is often a percentage we accepted when we joined the company.
 
 5% from me. Something from the employer. There is tax relief. Probably fine.
 
-If you work in tech and earn a decent salary, it’s easy to leave it there. There are enough things to think about this month. Retirement is somewhere much further down the backlog.
+It’s easy to leave it there. There are enough things to think about this month. Retirement is somewhere much further down the backlog.
 
 But a good salary doesn’t answer a fairly basic question: when that salary stops, what pays for your life?
 
-I built [Payday to Pension](/payday-to-pension) to make that question easier to explore.
+I built [Payday to Pension](/payday-to-pension) to make that question easier to explore. All salary figures below are hypothetical examples.
 
 ![An example connecting less monthly take-home pay to an extra pension contribution and a larger total pension pot at retirement](/images/pension/payday-tradeoff.svg)
 
