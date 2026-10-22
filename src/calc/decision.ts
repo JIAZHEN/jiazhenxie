@@ -10,6 +10,9 @@ export interface DecisionInputs {
   currentWorkplaceAnnual?: number | null // confirmed gross annual payroll amount overrides percentage
   employeePercent: number
   otherRasAnnual?: number // existing personal/SIPP contributions, gross including provider top-up
+  employerPercent?: number | null // if set, uses the explicitly selected earnings basis
+  matchRate?: number // employer pounds per extra employee pound
+  matchCapPercent?: number // cap on total employee %, on the selected earnings basis
   employerAnnual: number
   basis: ContributionBasis
   method: ContributionMethod
@@ -29,6 +32,10 @@ export function pensionDecision(input: DecisionInputs) {
   // Base-salary schemes exclude bonus; qualifying earnings includes annual cash bonus.
   const base = input.basis === 'full' ? Math.max(0, input.salary) : pensionablePay(earnings, 'qualifying')
   const existing = input.currentWorkplaceAnnual != null ? Math.max(0, input.currentWorkplaceAnnual) : base * input.employeePercent / 100
+  const employerCurrentAnnual = input.employerPercent != null ? base * input.employerPercent / 100 : input.employerAnnual
+  const matchRoom = Math.max(0, base * Math.max(0, input.matchCapPercent ?? 0) / 100 - existing)
+  const employerExtraAnnual = Math.min(Math.max(0, input.extraMonthly) * 12, matchRoom) * Math.max(0, input.matchRate ?? 0)
+  const employerAfterAnnual = employerCurrentAnnual + employerExtraAnnual
   const giftAidGross = Math.max(0, input.giftAidNet) * 1.25
   const position = (pension: number) => {
     const salarySacrifice = input.method === 'salarySacrifice' ? pension : 0
@@ -49,12 +56,45 @@ export function pensionDecision(input: DecisionInputs) {
   const after = position(existing + Math.max(0, input.extraMonthly) * 12)
   const extraReliefAnnual = after.extraRelief - before.extraRelief
   const extraNeededFor100k = Math.max(0, before.ani - 100_000)
-  const annualPension = existing + Math.max(0, input.extraMonthly) * 12 + input.employerAnnual + Math.max(0, input.otherRasAnnual ?? 0)
+  const annualPension = existing + Math.max(0, input.extraMonthly) * 12 + employerAfterAnnual + Math.max(0, input.otherRasAnnual ?? 0)
   const issues: string[] = []
   if (earnings + input.otherIncome > 200_000) issues.push('Income above £200,000 needs a tapered-allowance assessment that this calculator does not provide.')
-  if (input.currentWorkplaceAnnual == null && input.basis === 'qualifying' && input.bonus > 0 && input.salary < 50_270) issues.push('Qualifying-earnings contributions with a lower base salary and a bonus depend on pay-period timing. Use actual payroll contribution figures; this annual model cannot give a reliable personal result for that setup.')
+  if ((input.currentWorkplaceAnnual == null || input.employerPercent != null || (input.matchRate ?? 0) > 0) && input.basis === 'qualifying' && input.bonus > 0 && input.salary < 50_270) issues.push('Qualifying-earnings contributions with a lower base salary and a bonus depend on pay-period timing. Use actual payroll contribution figures; this annual model cannot give a reliable personal result for that setup.')
   if (annualPension > 60_000) issues.push('Total pension contributions exceed the standard £60,000 annual allowance. Carry-forward and allowance charges are not modelled; contributions have not been silently capped.')
   if (existing + input.extraMonthly * 12 + Math.max(0, input.otherRasAnnual ?? 0) > earnings) issues.push('The employee pension amount exceeds the employment income entered. Check your figures and scheme limits.')
   if (giftAidGross * .2 > after.tax + .01) issues.push('Gift Aid top-ups exceed the Income Tax in this estimate. Check the donation rules; Capital Gains Tax is not modelled.')
-  return { before, after, existing, base, annualPension, extraNeededFor100k, extraReliefAnnual, cashCostMonthly: (before.cash - after.cash) / 12, finalCostMonthly: (before.finalCash - after.finalCash) / 12, issues }
+  return { before, after, existing, base, employerCurrentAnnual, employerExtraAnnual, employerAfterAnnual, totalExtraMonthly: Math.max(0, input.extraMonthly) + employerExtraAnnual / 12, incomeTaxReliefMonthly: (before.tax - after.tax) / 12, niSavingMonthly: (before.ni - after.ni) / 12, providerTopUpMonthly: input.method === 'reliefAtSource' ? Math.max(0, input.extraMonthly) * .2 : 0, annualPension, extraNeededFor100k, extraReliefAnnual, cashCostMonthly: (before.cash - after.cash) / 12, finalCostMonthly: (before.finalCash - after.finalCash) / 12, issues }
+}
+
+
+/** Reverse the calculation: maximise extra gross pension for a stated cash budget.
+ * The allowance boundary is a modelling limit, not a legal contribution ban.
+ */
+export function solveCashBudget(input: DecisionInputs, budgetMonthly: number, timing: 'payday' | 'afterRelief' = 'payday') {
+  const budget = Math.max(0, budgetMonthly)
+  const baseline = pensionDecision({ ...input, extraMonthly: 0 })
+  let lo = 0
+  let hi = Math.max(0, input.salary + input.bonus - baseline.existing - (input.otherRasAnnual ?? 0)) / 12
+  // Locate the standard-allowance boundary, including any additional employer match.
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2
+    if (pensionDecision({ ...input, extraMonthly: mid }).annualPension <= 60000) lo = mid
+    else hi = mid
+  }
+  const capacity = lo
+  lo = 0; hi = capacity
+  const cost = (extra: number) => {
+    const result = pensionDecision({ ...input, extraMonthly: extra })
+    return timing === 'payday' ? result.cashCostMonthly : result.finalCostMonthly
+  }
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2
+    if (cost(mid) <= budget) lo = mid
+    else hi = mid
+  }
+  // Round down to a penny of gross monthly pension so the cash budget is not exceeded.
+  const extraMonthly = Math.floor((lo + 1e-8) * 100) / 100
+  const decision = pensionDecision({ ...input, extraMonthly })
+  const spent = timing === 'payday' ? decision.cashCostMonthly : decision.finalCostMonthly
+  return { extraMonthly, decision, spent, unusedBudget: Math.max(0, budget - spent), limited: cost(capacity) < budget - .01 }
 }

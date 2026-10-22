@@ -33,7 +33,7 @@ try {
   assert.equal(qualifying.employeeGrossAnnual, 4403);
   const future = pensionInflow(base, 10, 3, new Date('2030-01-01T00:00:00Z'));
   assert.equal(future.intoPensionAnnual, full.intoPensionAnnual, 'The 2029 NI relief limit is not a contribution limit');
-  const { pensionDecision } = requireModel(path.join(scratch, 'calc/decision.js'));
+  const { pensionDecision, solveCashBudget } = requireModel(path.join(scratch, 'calc/decision.js'));
   const decisionBase = { salary: 110000, bonus: 0, otherIncome: 0, giftAidNet: 0, employeePercent: 0, employerAnnual: 0, basis: 'full', method: 'salarySacrifice', extraMonthly: 10000 / 12 };
   const close = (actual, expected) => assert.ok(Math.abs(actual - expected) < .001, `${actual} != ${expected}`);
   const ss = pensionDecision(decisionBase);
@@ -68,6 +68,34 @@ try {
   assert.ok(exceeds.issues.some(issue => issue.includes('£60,000')));
   assert.ok(exceeds.annualPension > 60000, 'Do not silently truncate actual contributions');
   console.log('£100k decision checks passed: sacrifice, net pay, RAS claim timing, bonus, existing pension, Gift Aid and allowance boundaries.');
+  const cashExample = { ...decisionBase, employeePercent: 5, employerPercent: 3, extraMonthly: 0 };
+  const cash200 = solveCashBudget(cashExample, 200);
+  close(cash200.extraMonthly, 474.13);
+  assert.ok(cash200.spent <= 200 && cash200.spent > 199.99);
+  const generous = solveCashBudget({ ...cashExample, employerPercent: 10, matchRate: 2, matchCapPercent: 12 }, 200);
+  close(generous.decision.totalExtraMonthly, 1422.39);
+  close(generous.decision.employerExtraAnnual / 12, 948.26);
+  const qualifyingEmployer = pensionDecision({ ...cashExample, basis: 'qualifying' });
+  close(qualifyingEmployer.employerCurrentAnnual, 1320.9);
+  close(pensionDecision(cashExample).employerCurrentAnnual, 3300);
+  close(pensionDecision({ ...cashExample, employerPercent: undefined, employerAnnual: 3300, basis: 'qualifying' }).employerCurrentAnnual, 3300);
+  const rasCash = solveCashBudget({ ...cashExample, method: 'reliefAtSource' }, 200);
+  close(rasCash.extraMonthly, 250);
+  close(rasCash.decision.finalCostMonthly, 100);
+  const existingSippCash = solveCashBudget({ ...cashExample, otherRasAnnual: 5000 }, 200);
+  assert.ok(existingSippCash.decision.extraReliefAnnual < 0);
+  assert.ok(existingSippCash.decision.finalCostMonthly > existingSippCash.decision.cashCostMonthly);
+  const rasNet = solveCashBudget({ ...cashExample, method: 'reliefAtSource' }, 200, 'afterRelief');
+  assert.ok(rasNet.decision.cashCostMonthly > 200);
+  assert.ok(rasNet.decision.finalCostMonthly <= 200);
+  const exhausted = solveCashBudget({ ...cashExample, employerAnnual: 60000, employerPercent: undefined, employeePercent: 0 }, 200);
+  assert.equal(exhausted.extraMonthly, 0);
+  assert.equal(exhausted.limited, true);
+  const noBudget = solveCashBudget(cashExample, 0);
+  close(noBudget.extraMonthly, 0);
+  const decomposition = generous.decision;
+  close(decomposition.finalCostMonthly + decomposition.incomeTaxReliefMonthly + decomposition.niSavingMonthly + decomposition.providerTopUpMonthly + decomposition.employerExtraAnnual / 12, decomposition.totalExtraMonthly);
+  console.log('Cash-budget solver: £200 → £474.13 without extra match; £1,422.39 only with explicit 2:1 matching. Employer % basis, fixed amounts, RAS timing and allowance limits verified.');
   const result = pensionIllustration();
   const gbp = value => '£' + Math.round(value).toLocaleString('en-GB');
   const shell = (title, desc, inner) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="title desc"><title id="title">${title}</title><desc id="desc">${desc}</desc><rect width="800" height="480" fill="#faf8f5"/><g font-family="Arial, sans-serif" fill="#262626">${inner}</g></svg>`;
@@ -95,6 +123,26 @@ try {
   fs.mkdirSync('public/images/pension', {recursive:true});
   fs.writeFileSync('public/images/pension/payday-tradeoff.svg', flow);
   fs.writeFileSync('public/images/pension/extra-pot-growth.svg', growth);
+  const oneToOne = solveCashBudget({ ...cashExample, employerPercent: 5, matchRate: 1, matchCapPercent: 8 }, 200);
+  close(oneToOne.decision.totalExtraMonthly, 749.13);
+  const scenarios = [
+    ['No extra match', cash200.decision.totalExtraMonthly, 0],
+    ['£1 for £1, up to 8%', oneToOne.decision.totalExtraMonthly, oneToOne.decision.employerExtraAnnual / 12],
+    ['£2 for £1, up to 12%', generous.decision.totalExtraMonthly, generous.decision.employerExtraAnnual / 12],
+  ];
+  const matchChart = shell('What a £200 monthly cash budget could put into a pension', 'Illustrative £110,000 salary, 5% current employee contribution, salary sacrifice. No extra match: £474 a month extra pension; 1:1 match to 8%: £749; 2:1 match: £1,422. The matching examples require different, explicitly assumed employer schemes.', `${head('CASH BUDGET → PENSION CONTRIBUTIONS', 'Same £200 cash budget. Different schemes.')}
+  ${scenarios.map(([label, total, employer], i) => {
+    const top = 118 + i * 83;
+    const employeeWidth = (total - employer) / 1500 * 570;
+    const employerWidth = employer / 1500 * 570;
+    return `<text x="40" y="${top}" font-size="16">${label}</text><rect x="40" y="${top+12}" width="${employeeWidth}" height="26" rx="3" fill="#a34832"/><rect x="${40+employeeWidth}" y="${top+12}" width="${employerWidth}" height="26" fill="#4d704d"/><text x="${Math.min(730, 50+employeeWidth+employerWidth)}" y="${top+32}" font-size="17" font-weight="600">${gbp(total)}</text>`;
+  }).join('')}
+  <text x="40" y="380" fill="#a34832" font-size="14">■ Extra employee pension, including tax/NI savings</text>
+  <text x="40" y="404" fill="#4d704d" font-size="14">■ Additional employer matching</text>
+  <text x="40" y="434" font-size="12" fill="#57534e">£110k salary · 5% current employee pension · 2026/27 · salary sacrifice.</text>
+  <text x="40" y="452" font-size="12" fill="#57534e">Current employer: 3% / 5% / 10% respectively. Match caps: 8% for 1:1; 12% for 2:1.</text>
+  <text x="40" y="470" font-size="12" fill="#57534e">Hypothetical schemes, not standard entitlements. Rounded extra contributions per month.</text>`);
+  fs.writeFileSync('public/images/pension/cash-budget-matching.svg', matchChart);
   fs.writeFileSync('public/images/pension/example.json', JSON.stringify(result, null, 2)+'\n');
   console.log('Pension illustration generated:', result);
 } finally { fs.rmSync(scratch, {recursive:true, force:true}); }

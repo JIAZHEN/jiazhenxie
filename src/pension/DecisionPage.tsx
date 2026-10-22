@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
-import { pensionDecision } from '../calc/decision'
+import { pensionDecision, solveCashBudget } from '../calc/decision'
 import type { ContributionBasis, ContributionMethod } from '../calc/types'
 import { formatGbp } from '../calc/format'
 import { Choice, NumberField, Section } from './Fields'
@@ -10,25 +10,30 @@ const RetirementCalculator = lazy(() => import('./PaydayToPension').then(module 
 
 interface Setup {
   salary: number | null; bonus: number; otherIncome: number; giftAidNet: number; otherRasAnnual: number
-  employeePercent: number | null; currentWorkplaceAnnual: number | null; employerAnnual: number | null; extraMonthly: number
+  employeePercent: number | null; currentWorkplaceAnnual: number | null; employerAnnual: number | null; employerPercent: number | null; employerMode: 'percent' | 'annual'; extraMonthly: number
+  cashBudget: number; inputMode: 'cash' | 'gross'; budgetTiming: 'payday' | 'afterRelief'; matchEnabled: boolean; matchRate: number; matchCapPercent: number
   basis: ContributionBasis | ''; method: ContributionMethod | ''; region: 'ewni' | 'scotland' | ''
   pensionAccessed: boolean; unsupportedIncome: boolean
 }
-const empty: Setup = { salary: null, bonus: 0, otherIncome: 0, giftAidNet: 0, otherRasAnnual: 0, employeePercent: null, currentWorkplaceAnnual: null, employerAnnual: null, extraMonthly: 500, basis: '', method: '', region: '', pensionAccessed: false, unsupportedIncome: false }
-const example: Setup = { ...empty, salary: 110000, employeePercent: 5, employerAnnual: 3300, basis: 'full', method: 'salarySacrifice', region: 'ewni' }
+const empty: Setup = { salary: null, bonus: 0, otherIncome: 0, giftAidNet: 0, otherRasAnnual: 0, employeePercent: null, currentWorkplaceAnnual: null, employerAnnual: null, employerPercent: null, employerMode: 'percent', extraMonthly: 500, cashBudget: 200, inputMode: 'cash', budgetTiming: 'payday', matchEnabled: false, matchRate: 1, matchCapPercent: 8, basis: '', method: '', region: '', pensionAccessed: false, unsupportedIncome: false }
+const example: Setup = { ...empty, salary: 110000, employeePercent: 5, employerPercent: 3, basis: 'full', method: 'salarySacrifice', region: 'ewni' }
 const storageKey = 'pension-decision-v2'
 function initial(): Setup {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) ?? 'null')
     if (!saved || saved.version !== 2) return empty
     const result = { ...empty }
-    for (const key of ['salary', 'bonus', 'otherIncome', 'giftAidNet', 'otherRasAnnual', 'employeePercent', 'currentWorkplaceAnnual', 'employerAnnual', 'extraMonthly'] as const) {
+    for (const key of ['salary', 'bonus', 'otherIncome', 'giftAidNet', 'otherRasAnnual', 'employeePercent', 'currentWorkplaceAnnual', 'employerAnnual', 'employerPercent', 'extraMonthly', 'cashBudget', 'matchRate', 'matchCapPercent'] as const) {
       const value = saved.inputs?.[key]
       if (typeof value === 'number' && Number.isFinite(value) && value >= 0) result[key] = value
     }
     if (['full', 'qualifying'].includes(saved.inputs?.basis)) result.basis = saved.inputs.basis
     if (['salarySacrifice', 'netPay', 'reliefAtSource'].includes(saved.inputs?.method)) result.method = saved.inputs.method
     if (['ewni', 'scotland'].includes(saved.inputs?.region)) result.region = saved.inputs.region
+    result.employerMode = saved.inputs?.employerMode === 'annual' || (saved.inputs?.employerMode == null && result.employerAnnual != null) ? 'annual' : 'percent'
+    result.inputMode = saved.inputs?.inputMode === 'gross' ? 'gross' : 'cash'
+    result.budgetTiming = saved.inputs?.budgetTiming === 'afterRelief' ? 'afterRelief' : 'payday'
+    result.matchEnabled = saved.inputs?.matchEnabled === true
     result.pensionAccessed = saved.inputs?.pensionAccessed === true
     result.unsupportedIncome = saved.inputs?.unsupportedIncome === true
     return result
@@ -51,34 +56,101 @@ export function PaydayToPension() {
     if (isExample) return
     try { localStorage.setItem(storageKey, JSON.stringify({ version: 2, inputs: setup })) } catch { /* Storage is optional. */ }
   }, [setup, isExample])
-  const ready = setup.salary != null && (setup.currentWorkplaceAnnual != null || (setup.employeePercent != null && setup.basis !== '')) && setup.employerAnnual != null && setup.method !== '' && setup.region !== ''
+  const employeeReady = setup.currentWorkplaceAnnual != null || (setup.employeePercent != null && setup.basis !== '')
+  const employerReady = setup.employerMode === 'annual' ? setup.employerAnnual != null : setup.employerPercent != null && setup.basis !== ''
+  const ready = setup.salary != null && employeeReady && employerReady && setup.method !== '' && setup.region !== '' && (!setup.matchEnabled || setup.basis !== '')
   const missing = [
-    setup.salary == null ? 'annual salary' : '',
-    !setup.region ? 'tax region' : '',
-    !setup.method ? 'contribution method' : '',
-    setup.currentWorkplaceAnnual == null && !setup.basis ? 'earnings basis' : '',
-    setup.currentWorkplaceAnnual == null && setup.employeePercent == null ? 'current pension %' : '',
-    setup.employerAnnual == null ? 'employer contribution' : '',
+    setup.salary == null ? 'annual salary' : '', !setup.region ? 'tax region' : '', !setup.method ? 'contribution method' : '',
+    (!setup.basis && (setup.currentWorkplaceAnnual == null || setup.employerMode === 'percent' || setup.matchEnabled)) ? 'earnings basis' : '',
+    !employeeReady ? 'current employee contribution' : '', !employerReady ? 'current employer contribution' : '',
   ].filter(Boolean)
-  const decision = ready ? pensionDecision({ ...setup, salary: setup.salary!, employeePercent: setup.employeePercent ?? 0, employerAnnual: setup.employerAnnual!, basis: (setup.basis || 'full') as ContributionBasis, method: setup.method as ContributionMethod }) : null
+  const modelInput = { ...setup, salary: setup.salary ?? 0, employeePercent: setup.employeePercent ?? 0, employerAnnual: setup.employerAnnual ?? 0, employerPercent: setup.employerMode === 'percent' ? setup.employerPercent : undefined, matchRate: setup.matchEnabled ? setup.matchRate : 0, matchCapPercent: setup.matchEnabled ? setup.matchCapPercent : 0, basis: (setup.basis || 'full') as ContributionBasis, method: setup.method as ContributionMethod }
+  const budgetResult = ready && setup.inputMode === 'cash' ? solveCashBudget(modelInput, setup.cashBudget, setup.budgetTiming) : null
+  const extraMonthly = budgetResult?.extraMonthly ?? setup.extraMonthly
+  const decision = budgetResult?.decision ?? (ready ? pensionDecision(modelInput) : null)
   const unsupported = setup.region === 'scotland' || setup.pensionAccessed || setup.unsupportedIncome
   const valid = decision != null && !unsupported && decision.issues.length === 0
-  const retirement = decision ? { ...defaultInputs, grossAnnualSalary: (setup.salary ?? 0) + setup.bonus, contributionBasis: 'full' as const, employeePercent: ((decision.existing + setup.extraMonthly * 12) / Math.max(1, (setup.salary ?? 0) + setup.bonus)) * 100, employerPercent: (setup.employerAnnual ?? 0) / Math.max(1, (setup.salary ?? 0) + setup.bonus) * 100, salarySacrifice: setup.method === 'salarySacrifice' ? 'yes' as const : 'no' as const, taxRelief: setup.method === 'netPay' ? 'netPay' as const : 'reliefAtSource' as const } : undefined
-  const demo = () => { setSetup({ ...example }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
+  const retirement = decision ? { ...defaultInputs, grossAnnualSalary: (setup.salary ?? 0) + setup.bonus, contributionBasis: 'full' as const, employeePercent: ((decision.existing + extraMonthly * 12) / Math.max(1, (setup.salary ?? 0) + setup.bonus)) * 100, employerPercent: (decision.employerAfterAnnual) / Math.max(1, (setup.salary ?? 0) + setup.bonus) * 100, salarySacrifice: setup.method === 'salarySacrifice' ? 'yes' as const : 'no' as const, taxRelief: setup.method === 'netPay' ? 'netPay' as const : 'reliefAtSource' as const } : undefined
+  const demo = (matching: 'none' | 'one' | 'two' = 'none') => { setSetup({ ...example, ...(matching !== 'none' ? { employerPercent: matching === 'two' ? 10 : 5, matchEnabled: true, matchRate: matching === 'two' ? 2 : 1, matchCapPercent: matching === 'two' ? 12 : 8 } : {}) }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
 
   return <div className="pension-tool mt-16 sm:mt-20 bg-[color:var(--pension-canvas)] p-4 text-[color:var(--pension-ink)] sm:p-6">
     <SEO title="UK Pension Contribution Calculator" description="Compare how extra pension contributions affect take-home pay and adjusted net income. A UK calculator with clearly stated assumptions." canonicalUrl="https://jiazhenxie.com/payday-to-pension" />
     <header className="mx-auto max-w-6xl py-5">
       <p className="pension-eyebrow">PAYDAY TO PENSION · 2026/27</p>
-      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">Understand your pension contributions.</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">A small calculator to connect pension contributions with take-home pay. Compare a change using your own setup, or start with an example.</p>
-      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm"><button type="button" onClick={demo} className="underline underline-offset-4">View an example</button><Link to="/blog/why-i-built-payday-to-pension" className="underline underline-offset-4">Why I built this →</Link></div>
-      {isExample && <div role="status" className="mt-4 rounded-xl border border-[color:var(--pension-border)] p-3 text-xs leading-relaxed"><strong>Example setup — hypothetical inputs.</strong> You can edit them to explore. <button type="button" className="underline underline-offset-2" onClick={() => { setSetup(initial()); setExample(false); requestAnimationFrame(() => document.getElementById('pension-setup')?.scrollIntoView({ block: 'start' })) }}>Return to my setup</button></div>}
+      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">Your cash. Your pension.</h1>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">Choose a monthly cash budget. See how tax relief and employer matching change what reaches your pension.</p>
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm"><button type="button" onClick={() => demo()} className="underline underline-offset-4">View an example</button><Link to="/blog/why-i-built-payday-to-pension" className="underline underline-offset-4">Why I built this →</Link></div>
+      {isExample && <div role="status" className="mt-4 rounded-xl border border-[color:var(--pension-border)] p-3 text-xs leading-relaxed"><strong>Illustrative inputs.</strong> Edit to explore. <button type="button" className="underline underline-offset-2" onClick={() => { setSetup(initial()); setExample(false); requestAnimationFrame(() => document.getElementById('pension-setup')?.scrollIntoView({ block: 'start' })) }}>Return to my setup</button></div>}
       <p className="mt-3 text-xs text-[color:var(--pension-muted)]">Annual estimate · England, Wales & Northern Ireland · inputs stay in this browser</p>
       <details className="mt-2 text-xs leading-relaxed text-[color:var(--pension-muted)]"><summary className="cursor-pointer underline underline-offset-2">What this estimate covers</summary><p className="mt-2">Full-year amounts are divided by 12. Bonus timing, tax codes and actual monthly National Insurance can differ. Supports employment income and optional non-savings income. Savings/dividends, shares, Scottish tax and reduced annual allowances are outside scope.</p></details>
     </header>
-    <div className="mx-auto grid max-w-6xl items-start gap-5 lg:grid-cols-2">
-      <form id="pension-setup" className="scroll-mt-24 space-y-4" onSubmit={event => event.preventDefault()}>
+    <div className="mx-auto grid max-w-6xl items-start gap-5 lg:grid-cols-[1.1fr_1fr]">
+
+      <section aria-labelledby="decision-results-title" className="order-1 space-y-4">
+        <div id="decision-results" className="scroll-mt-24 rounded-3xl border border-[color:var(--pension-border-strong)] bg-[color:var(--pension-surface)] p-5">
+          <h2 id="decision-results-title" className="font-serif text-2xl text-[color:var(--pension-accent)]">{isExample ? 'An example to explore' : 'Your comparison'}</h2>
+          {isExample && <p className="mt-2 text-xs leading-relaxed text-[color:var(--pension-muted)]">Illustration: {formatGbp(setup.salary ?? 0)} salary · {setup.employeePercent}% employee pension · {setup.matchEnabled ? `${setup.matchRate}:1 extra employer match` : 'no extra employer matching'}. Change the scheme details below to make it yours.</p>}
+          {valid && decision && (
+            <dl className="pension-tradeoff mt-4" aria-live="polite" aria-atomic="true"><div><dt>{setup.budgetTiming === 'payday' ? 'Less cash now / month' : 'Your net cost / month'}</dt><dd>{formatGbp(setup.budgetTiming === 'payday' ? decision.cashCostMonthly : decision.finalCostMonthly)}</dd><small>{setup.budgetTiming === 'payday' ? 'Before any later HMRC claim' : 'After all modelled tax relief'}</small></div><div><dt>More into your pension / month</dt><dd>+{formatGbp(decision.totalExtraMonthly)}</dd><small>Extra employee + extra employer money</small></div></dl>
+          )}
+          <div className="my-4 space-y-3 border-b border-[color:var(--pension-border)] pb-4">
+            {setup.inputMode === 'cash' ? <>
+              <NumberField id="decision-budget" label="I could take home less each month" prefix="£" value={setup.cashBudget} max={5000} step={25} onChange={cashBudget => patch({ cashBudget: cashBudget ?? 0 })} />
+              <input className="pension-salary-slider" type="range" min="0" max={Math.max(1000, setup.cashBudget)} step="25" value={setup.cashBudget} aria-label="Monthly cash budget" aria-valuetext={`${formatGbp(setup.cashBudget)} less cash a month`} onChange={event => patch({ cashBudget: Number(event.target.value) })} />
+            </> : <NumberField id="decision-extra" label="Extra gross employee pension each month" prefix="£" value={setup.extraMonthly} max={10000} step={50} onChange={value => patch({ extraMonthly: value ?? 0 })} />}
+            {(setup.method === 'reliefAtSource' || setup.otherRasAnnual > 0) && <Choice name="cash-timing" label="Cash budget means…" value={setup.budgetTiming} options={[{ value: 'payday', label: 'Cash paid now' }, { value: 'afterRelief', label: 'Cost after all relief' }]} onChange={budgetTiming => patch({ budgetTiming })} />}
+            <button type="button" className="text-xs underline underline-offset-2" onClick={() => patch({ inputMode: setup.inputMode === 'cash' ? 'gross' : 'cash' })}>{setup.inputMode === 'cash' ? 'Instead, set an extra pension amount' : 'Start with my cash budget instead'}</button>
+            <p className="text-xs text-[color:var(--pension-muted)]">Annual estimates divided by 12. Relief claimed later is shown separately; any extra employer matching must be confirmed.</p>
+          </div>
+          {!ready && <div className="mt-3 text-sm leading-relaxed"><p>Still needed: {missing.join(', ')}.</p><p className="mt-2 text-xs text-[color:var(--pension-muted)]">Use a current pension % with a confirmed earnings basis, or an annual payroll amount in optional settings.</p><a href="#pension-setup" className="mt-2 inline-block underline">Complete my setup ↑</a></div>}
+          {ready && <a href="#pension-setup" className="mt-3 inline-block text-xs underline underline-offset-2">Edit income & pension setup ↑</a>}
+          {unsupported && <p role="alert" className="mt-3 text-sm leading-relaxed">This setup is outside the supported calculation. Scottish tax, savings/dividend tax, share awards, self-employment, foreign income and reduced annual allowances need a separate assessment. We won’t show a personal tax-saving figure.</p>}
+          {decision?.issues.map(issue => <p role="alert" key={issue} className="mt-3 text-sm leading-relaxed">{issue}</p>)}
+          {valid && decision && <>
+
+            {(setup.budgetTiming === 'payday' ? decision.cashCostMonthly : decision.finalCostMonthly) > .01 && <p className="mt-3 text-sm leading-relaxed">About <strong>£{(decision.totalExtraMonthly / (setup.budgetTiming === 'payday' ? decision.cashCostMonthly : decision.finalCostMonthly)).toFixed(2)} into your pension</strong> for each £1 {setup.budgetTiming === 'payday' ? 'less cash now' : 'of eventual net cost'}, under this setup.</p>}
+            <p className="mt-3 text-sm leading-relaxed">Monthly pension payments: <strong>{formatGbp((decision.existing + decision.employerCurrentAnnual + setup.otherRasAnnual) / 12)} → {formatGbp(decision.annualPension / 12)}</strong>. These are contributions, before investment growth.</p>
+            {budgetResult?.limited && <p className="mt-3 text-sm" role="status">Only {formatGbp(budgetResult.spent)} of your {formatGbp(setup.cashBudget)} budget is used. This calculator stops at its standard-allowance or earnings boundary; carry-forward is not modelled.</p>}
+            {(setup.method === 'reliefAtSource' || setup.otherRasAnnual > 0) && <p className="mt-3 rounded-xl bg-[color:var(--pension-tint)] p-3 text-sm leading-relaxed">Cash paid before extra HMRC relief: <strong>{formatGbp(decision.cashCostMonthly)} / month</strong>. Eventual cost after all relief: <strong>{formatGbp(decision.finalCostMonthly)} / month</strong>. {decision.extraReliefAnnual >= 0 ? `Additional relief attributable to this change: ${formatGbp(decision.extraReliefAnnual)} a year. A claim or tax-code adjustment may be required.` : `This change reduces later tax relief by ${formatGbp(-decision.extraReliefAnnual)} a year, so the eventual cost is higher than the immediate cash reduction. Check any existing tax-code adjustment.`}</p>}
+            <h3 className="mt-5 font-medium">Where the extra pension comes from</h3>
+            <div className="mt-3 flex h-5 overflow-hidden rounded" aria-hidden="true">
+              {[
+                [decision.finalCostMonthly, 'var(--pension-accent)'],
+                [decision.incomeTaxReliefMonthly + decision.providerTopUpMonthly, 'var(--pension-positive)'],
+                [decision.niSavingMonthly, 'var(--pension-gold)'],
+                [decision.employerExtraAnnual / 12, 'var(--pension-chart-neutral)'],
+              ].map(([amount, color], index) => <span key={index} style={{ width: `${decision.totalExtraMonthly > 0 ? Number(amount) / decision.totalExtraMonthly * 100 : 0}%`, background: String(color) }} />)}
+            </div>
+            <dl className="mt-3 space-y-2 text-sm">
+              <div className="flex justify-between gap-3"><dt>Your eventual cash cost</dt><dd>{formatGbp(decision.finalCostMonthly)}</dd></div>
+              {decision.providerTopUpMonthly > .01 && <div className="flex justify-between gap-3"><dt>Provider’s basic-rate top-up</dt><dd>+{formatGbp(decision.providerTopUpMonthly)}</dd></div>}
+              <div className="flex justify-between gap-3"><dt>{setup.method === 'reliefAtSource' ? 'Additional Income Tax relief' : 'Income Tax saved'}</dt><dd>+{formatGbp(decision.incomeTaxReliefMonthly)}</dd></div>
+              {decision.niSavingMonthly > .01 && <div className="flex justify-between gap-3"><dt>Employee National Insurance saved</dt><dd>+{formatGbp(decision.niSavingMonthly)}</dd></div>}
+              <div className="flex justify-between gap-3"><dt>Additional employer matching</dt><dd>+{formatGbp(decision.employerExtraAnnual / 12)}</dd></div>
+            </dl>
+            <p className="mt-3 text-xs text-[color:var(--pension-muted)]">Breakdown uses the cost after all tax relief. Amounts are rounded. Extra employer matching uses only the rule entered below. Employer NI recycling is not included.</p>
+            {isExample && <details className="mt-4 text-sm"><summary className="cursor-pointer underline underline-offset-4">What could employer matching change?</summary><div className="mt-3 flex flex-col items-start gap-3"><button type="button" className="underline" onClick={() => demo('one')}>Hypothetical £1-for-£1 match, up to 8% employee contributions</button><button type="button" className="underline" onClick={() => demo('two')}>Hypothetical £2-for-£1 match, up to 12% employee contributions</button><button type="button" className="underline" onClick={() => demo()}>Return to the example without extra matching</button></div></details>}
+            {isExample && setup.matchEnabled && <p className="mt-2 text-xs leading-relaxed text-[color:var(--pension-muted)]">This hypothetical scheme adds £{setup.matchRate} per extra employee £1, up to {setup.matchCapPercent}% employee contributions. The current employer contribution is entered separately. The extra money depends on that scheme; it is not a standard entitlement.</p>}
+            {isExample && <button type="button" className="mt-3 block text-xs underline" onClick={() => setExample(false)}>I’ve checked the inputs — save as my setup</button>}
+            <details className="mt-5"><summary className="cursor-pointer text-sm font-medium">What changes in your tax position?</summary>
+            <h3 className="mt-5 font-medium">Income & allowances</h3>
+            {decision.before.ani >= 90000 && <div className="mt-4 space-y-2 text-xs" aria-hidden="true">
+              {([['Now', decision.before.ani], ['After', decision.after.ani]] as const).map(([label, income]) => {
+                const scale = Math.max(110000, Math.ceil(decision.before.ani / 10000) * 10000)
+                return <div key={label} className="flex items-center gap-2"><span className="w-10">{label}</span><div className="relative h-4 flex-1 rounded bg-[color:var(--pension-border)]"><div className="h-4 rounded" style={{ width: `${Math.max(0, income) / scale * 100}%`, background: label === 'After' ? 'var(--pension-positive)' : 'var(--pension-accent)' }} /><span className="absolute -top-1 bottom-[-4px] border-l-2 border-dashed border-[color:var(--pension-ink)]" style={{ left: `${100000 / scale * 100}%` }} /></div></div>
+              })}
+              <p className="text-right text-[color:var(--pension-muted)]">Dashed marker: £100,000 adjusted net income · bars start at £0</p>
+            </div>}
+            <dl className="mt-3 grid grid-cols-2 gap-4 text-sm"><div><dt>Adjusted net income now</dt><dd className="mt-1 text-xl">{formatGbp(decision.before.ani)}</dd></div><div><dt>After the change</dt><dd className="mt-1 text-xl">{formatGbp(decision.after.ani)}</dd></div><div><dt>Personal Allowance now</dt><dd>{formatGbp(decision.before.allowance)}</dd></div><div><dt>After the change</dt><dd>{formatGbp(decision.after.allowance)}</dd></div></dl>
+            {decision.before.ani >= 90000 && <p className="mt-3 text-sm leading-relaxed">{decision.before.ani <= 100000 ? 'You are already at or below £100,000 on these inputs.' : decision.after.ani <= 100000 ? 'This change brings your estimated adjusted net income to £100,000 or below.' : `You would still be ${formatGbp(decision.after.ani - 100000)} above £100,000.`}</p>}
+            {decision.extraNeededFor100k > 0 && <button type="button" className="mt-3 rounded-xl border border-[color:var(--pension-accent)] px-3 py-2 text-sm" onClick={() => patch({ inputMode: 'gross', extraMonthly: Math.ceil(decision.extraNeededFor100k / 12 * 100) / 100 })}>Compare a £100,000 adjusted-income scenario ({formatGbp(decision.extraNeededFor100k)} / year)</button>}
+            </details>
+            <p className="mt-4 text-xs leading-relaxed text-[color:var(--pension-muted)]">Total projected pension contributions this year, including employer: {formatGbp(decision.annualPension)}. Employer matching is included only as configured above. Salary sacrifice must also satisfy your employer’s rules and minimum-wage requirements.</p>
+            <details className="mt-4 text-xs leading-relaxed text-[color:var(--pension-muted)]"><summary className="cursor-pointer underline">Childcare & calculation details</summary><p className="mt-2">The £100k test uses adjusted net income, not salary alone. Childcare eligibility can change for you or your partner; other conditions apply. No childcare savings are included. The estimate covers a full 2026/27 tax year, not a part-year payroll change. Net pay and sacrifice tax relief are reflected immediately in the annual model; relief at source separates the initial payment from additional relief. NI uses annual employment earnings for a standard category A employee below State Pension age; actual bonus-month NI can differ. Student loan repayments and benefits are not included. Carry-forward, tax charges and multiple-pension allowances are not calculated.</p><p className="mt-2"><a className="underline" href="https://www.gov.uk/guidance/adjusted-net-income">HMRC adjusted net income</a> · <a className="underline" href="https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief">Pension tax relief</a> · <a className="underline" href="https://www.gov.uk/tax-free-childcare">Childcare eligibility</a></p></details>
+          </>}
+        </div>
+      </section>
+      <form id="pension-setup" className="order-2 scroll-mt-24 space-y-4" onSubmit={event => event.preventDefault()}>
         <Section title="1. This tax year’s income">
           <Choice name="decision-region" label="Which income tax rates apply?" value={setup.region} options={[{ value: 'ewni', label: 'England / Wales / NI' }, { value: 'scotland', label: 'Scotland' }]} onChange={region => patch({ region })} />
           <NumberField id="decision-salary" label="Annual base salary before pension sacrifice" prefix="£" value={setup.salary} onChange={salary => patch({ salary })} />
@@ -90,8 +162,15 @@ export function PaydayToPension() {
           <Choice name="decision-basis" label="Your current % is based on…" value={setup.basis} options={[{ value: 'full', label: 'Base salary before sacrifice' }, { value: 'qualifying', label: 'Qualifying earnings' }]} onChange={basis => patch({ basis })} />
           <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Base salary excludes bonus here. Qualifying earnings includes cash bonus in the annual £6,240–£50,270 band. Schemes based on a different pay definition need payroll figures instead.</p>
           <NumberField id="decision-percent" label="Your current gross pension %" hint="For relief at source, include the provider’s basic-rate top-up; this is not just the net amount deducted from your bank or pay." suffix="%" value={setup.employeePercent} max={100} step={.5} onChange={employeePercent => patch({ employeePercent })} />
-          <NumberField id="decision-employer" label="Employer pension contribution this tax year" hint="Annual pounds, excluding your salary sacrifice. Keep it unchanged in this comparison; include any matching you already receive. Enter 0 explicitly if none." prefix="£" value={setup.employerAnnual} onChange={employerAnnual => patch({ employerAnnual })} />
-          {decision && <p className="rounded-xl bg-[color:var(--pension-tint)] p-3 text-xs leading-relaxed">Current employee contribution: {setup.currentWorkplaceAnnual != null ? 'confirmed payroll amount' : `${setup.employeePercent}% × ${formatGbp(decision.base)}`} = {formatGbp(decision.existing)} gross / year. Employer: {formatGbp(setup.employerAnnual ?? 0)} / year.</p>}
+          <Choice name="employer-entry" label="How is your current employer contribution quoted?" value={setup.employerMode} options={[{ value: 'percent', label: 'Percentage' }, { value: 'annual', label: 'Annual pounds' }]} onChange={employerMode => patch({ employerMode })} />
+          {setup.employerMode === 'percent'
+            ? <><NumberField id="decision-employer-percent" label="Current employer %" suffix="%" value={setup.employerPercent} max={100} step={.5} onChange={employerPercent => patch({ employerPercent })} /><p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Uses the same earnings basis as your employee %. Changing that basis updates both amounts. If your employer uses a different basis, enter their actual annual amount instead.</p></>
+            : <><NumberField id="decision-employer" label="Current employer contribution per year" hint="Exclude your salary sacrifice; include matching already received. Enter 0 if none." prefix="£" value={setup.employerAnnual} onChange={employerAnnual => patch({ employerAnnual })} /><p className="text-xs text-[color:var(--pension-muted)]">Fixed payroll amount: changing the percentage basis above does not change this figure.</p></>}
+          <details className="rounded-xl border border-[color:var(--pension-border)] p-3"><summary className="cursor-pointer text-sm">Could your employer match more?</summary><div className="mt-3 space-y-3">
+            <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={setup.matchEnabled} onChange={event => patch({ matchEnabled: event.target.checked })} />My scheme matches additional employee contributions</label>
+            {setup.matchEnabled && <><NumberField id="match-ratio" label="Employer adds this many £ for each extra £1 you contribute" value={setup.matchRate} min={0} max={5} step={.5} onChange={matchRate => patch({ matchRate: matchRate ?? 0 })} /><NumberField id="match-employee-cap" label="Matching stops when my total employee contribution reaches" suffix="%" value={setup.matchCapPercent} max={100} step={.5} onChange={matchCapPercent => patch({ matchCapPercent: matchCapPercent ?? 0 })} /><p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">The cap uses the selected earnings basis. Only matching above your current contribution is added; matching you already receive belongs in the current employer figure. Check your scheme — extra matching is not automatic.</p></>}
+          </div></details>
+          {decision && <p className="rounded-xl bg-[color:var(--pension-tint)] p-3 text-xs leading-relaxed">Current employee contribution: {setup.currentWorkplaceAnnual != null ? 'confirmed payroll amount' : `${setup.employeePercent}% × ${formatGbp(decision.base)}`} = {formatGbp(decision.existing)} gross / year. Employer: {formatGbp(decision.employerCurrentAnnual)} / year.</p>}
         </Section>
         <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4"><summary className="cursor-pointer text-sm">Other income, personal pensions & scope checks</summary><div className="mt-4 space-y-4">
           <NumberField id="decision-payroll-override" label="Confirmed gross workplace pension this year (optional override)" hint="Use the annual payroll figure for your own contribution or salary exchange, including provider top-up where applicable. Exclude employer pension and personal/SIPP contributions. If entered, this replaces the current percentage calculation above; the earnings-basis choice is then unnecessary." prefix="£" optional value={setup.currentWorkplaceAnnual} onChange={currentWorkplaceAnnual => patch({ currentWorkplaceAnnual })} />
@@ -104,37 +183,6 @@ export function PaydayToPension() {
         {ready && <a href="#decision-results" className="inline-block rounded-xl bg-[color:var(--pension-accent)] px-4 py-3 text-sm text-[color:var(--pension-on-accent)]">See my comparison ↓</a>}
         <button type="button" className="ml-3 text-xs underline" onClick={() => { setSetup(empty); setExample(false); setRetirement(false) }}>Clear my setup</button>
       </form>
-      <section aria-labelledby="decision-results-title" className="space-y-4 lg:sticky lg:top-24">
-        <div id="decision-results" className="scroll-mt-24 rounded-3xl border border-[color:var(--pension-border-strong)] bg-[color:var(--pension-surface)] p-5">
-          <h2 id="decision-results-title" className="font-serif text-2xl text-[color:var(--pension-accent)]">{isExample ? 'Example — not your forecast' : 'Your comparison'}</h2>
-          {isExample && <div className="mt-3 text-xs leading-relaxed"><p>These are example scheme choices, even if you edit a number. Check every input against your own setup.</p><button type="button" className="mt-2 underline" onClick={() => setExample(false)}>I’ve checked the inputs — use as my setup</button></div>}
-          <div className="my-4 space-y-2 border-b border-[color:var(--pension-border)] pb-4">
-          <NumberField id="decision-extra" label="Extra gross pension each month" prefix="£" value={setup.extraMonthly} max={10000} step={50} onChange={extraMonthly => patch({ extraMonthly: extraMonthly ?? 0 })} />
-          <p className="text-xs text-[color:var(--pension-muted)]">This is extra money into the pension, not your reduction in take-home pay. Annualised over 12 months; employer contribution held fixed.</p>
-          </div>
-          {!ready && <div className="mt-3 text-sm leading-relaxed"><p>Still needed: {missing.join(', ')}.</p><p className="mt-2 text-xs text-[color:var(--pension-muted)]">Use a current pension % with a confirmed earnings basis, or an annual payroll amount in optional settings.</p><a href="#pension-setup" className="mt-2 inline-block underline">Complete my setup ↑</a></div>}
-          {ready && <a href="#pension-setup" className="mt-3 inline-block text-xs underline underline-offset-2">Edit income & pension setup ↑</a>}
-          {unsupported && <p role="alert" className="mt-3 text-sm leading-relaxed">This setup is outside the supported calculation. Scottish tax, savings/dividend tax, share awards, self-employment, foreign income and reduced annual allowances need a separate assessment. We won’t show a personal tax-saving figure.</p>}
-          {decision?.issues.map(issue => <p role="alert" key={issue} className="mt-3 text-sm leading-relaxed">{issue}</p>)}
-          {valid && decision && <>
-            <dl className="pension-tradeoff mt-4" aria-live="polite" aria-atomic="true"><div><dt>Less cash / month, after tax relief</dt><dd>{formatGbp(decision.finalCostMonthly)}</dd><small>Annual net cost ÷ 12</small></div><div><dt>Extra pension / month</dt><dd>{formatGbp(setup.extraMonthly)}</dd><small>Gross contribution</small></div></dl>
-            {(setup.method === 'reliefAtSource' || setup.otherRasAnnual > 0) && <div className="mt-4 rounded-xl bg-[color:var(--pension-tint)] p-3 text-sm leading-relaxed"><strong>Cash before extra HMRC relief:</strong> {formatGbp(decision.cashCostMonthly)} more cash paid / month. Additional tax relief from this change: {formatGbp(decision.extraReliefAnnual)} / year, equivalent to {formatGbp(decision.extraReliefAnnual / 12)} / month. A claim or tax-code change may be needed; it is not assumed already on your payslip.</div>}
-            <h3 className="mt-5 font-medium">Income & allowances</h3>
-            {decision.before.ani >= 90000 && <div className="mt-4 space-y-2 text-xs" aria-hidden="true">
-              {([['Now', decision.before.ani], ['After', decision.after.ani]] as const).map(([label, income]) => {
-                const scale = Math.max(110000, Math.ceil(decision.before.ani / 10000) * 10000)
-                return <div key={label} className="flex items-center gap-2"><span className="w-10">{label}</span><div className="relative h-4 flex-1 rounded bg-[color:var(--pension-border)]"><div className="h-4 rounded" style={{ width: `${Math.max(0, income) / scale * 100}%`, background: label === 'After' ? 'var(--pension-positive)' : 'var(--pension-accent)' }} /><span className="absolute -top-1 bottom-[-4px] border-l-2 border-dashed border-[color:var(--pension-ink)]" style={{ left: `${100000 / scale * 100}%` }} /></div></div>
-              })}
-              <p className="text-right text-[color:var(--pension-muted)]">Dashed marker: £100,000 adjusted net income · bars start at £0</p>
-            </div>}
-            <dl className="mt-3 grid grid-cols-2 gap-4 text-sm"><div><dt>Adjusted net income now</dt><dd className="mt-1 text-xl">{formatGbp(decision.before.ani)}</dd></div><div><dt>After the change</dt><dd className="mt-1 text-xl">{formatGbp(decision.after.ani)}</dd></div><div><dt>Personal Allowance now</dt><dd>{formatGbp(decision.before.allowance)}</dd></div><div><dt>After the change</dt><dd>{formatGbp(decision.after.allowance)}</dd></div></dl>
-            {decision.before.ani >= 90000 && <p className="mt-3 text-sm leading-relaxed">{decision.before.ani <= 100000 ? 'You are already at or below £100,000 on these inputs.' : decision.after.ani <= 100000 ? 'This change brings your estimated adjusted net income to £100,000 or below.' : `You would still be ${formatGbp(decision.after.ani - 100000)} above £100,000.`}</p>}
-            {decision.extraNeededFor100k > 0 && <button type="button" className="mt-3 rounded-xl border border-[color:var(--pension-accent)] px-3 py-2 text-sm" onClick={() => patch({ extraMonthly: Math.ceil(decision.extraNeededFor100k / 12 * 100) / 100 })}>Compare a £100,000 adjusted-income scenario ({formatGbp(decision.extraNeededFor100k)} / year)</button>}
-            <p className="mt-4 text-xs leading-relaxed text-[color:var(--pension-muted)]">Total projected pension contributions this year, including employer: {formatGbp(decision.annualPension)}. No extra employer matching is assumed. Salary sacrifice must also satisfy your employer’s rules and minimum-wage requirements.</p>
-            <details className="mt-4 text-xs leading-relaxed text-[color:var(--pension-muted)]"><summary className="cursor-pointer underline">Childcare & calculation details</summary><p className="mt-2">The £100k test uses adjusted net income, not salary alone. Childcare eligibility can change for you or your partner; other conditions apply. No childcare savings are included. The estimate covers a full 2026/27 tax year, not a part-year payroll change. Net pay and sacrifice tax relief are reflected immediately in the annual model; relief at source separates the initial payment from additional relief. NI uses annual employment earnings for a standard category A employee below State Pension age; actual bonus-month NI can differ. Student loan repayments and benefits are not included. Carry-forward, tax charges and multiple-pension allowances are not calculated.</p><p className="mt-2"><a className="underline" href="https://www.gov.uk/guidance/adjusted-net-income">HMRC adjusted net income</a> · <a className="underline" href="https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief">Pension tax relief</a> · <a className="underline" href="https://www.gov.uk/tax-free-childcare">Childcare eligibility</a></p></details>
-          </>}
-        </div>
-      </section>
     </div>
     <details className="mx-auto mt-8 max-w-6xl rounded-2xl border border-[color:var(--pension-border)] p-4" open={showRetirement} onToggle={event => setRetirement(event.currentTarget.open)}><summary className="cursor-pointer font-serif text-xl">Then explore the long-term retirement picture</summary>
       <p className="mt-3 text-xs leading-relaxed text-[color:var(--pension-muted)]">Separate illustrative projection: adjust the starting age, retirement age and existing pot. This year’s salary plus bonus and pension contributions repeat every year; other income, personal/SIPP contributions and Gift Aid are not carried into the projection. Future tax rules and bonus income may change.</p>

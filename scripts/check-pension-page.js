@@ -22,7 +22,7 @@ assert.ok(article);
 assert.equal(article.url, canonical);
 assert.equal(article.author.name, 'Jiazhen Xie');
 assert.ok(article.datePublished);
-for (const name of ['payday-tradeoff', 'extra-pot-growth']) {
+for (const name of ['payday-tradeoff', 'extra-pot-growth', 'cash-budget-matching']) {
   assert.ok(html.includes(`/images/pension/${name}.svg`));
   assert.ok(fs.existsSync(`dist/images/pension/${name}.svg`));
 }
