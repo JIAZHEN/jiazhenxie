@@ -7,7 +7,7 @@ export function Hint({ text }: { text: string }) {
     <span className="relative inline-flex align-middle">
       <button
         type="button"
-        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#a34832] text-xs font-semibold text-[#a34832] hover:bg-[#a34832] hover:text-[#faf8f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:var(--pension-accent)] text-xs font-semibold text-[color:var(--pension-accent)] hover:bg-[color:var(--pension-accent)] hover:text-[color:var(--pension-canvas)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
         aria-expanded={open}
         aria-describedby={open ? id : undefined}
         onClick={() => setOpen(value => !value)}
@@ -23,7 +23,7 @@ export function Hint({ text }: { text: string }) {
         <span
           role="tooltip"
           id={id}
-          className="absolute left-0 top-8 z-30 w-64 max-w-[min(18rem,calc(100vw-2.5rem))] rounded-xl bg-[#262626] px-3 py-2 text-left text-sm font-normal leading-snug text-[#faf8f5] shadow-lg"
+          className="absolute left-0 top-8 z-30 w-64 max-w-[min(18rem,calc(100vw-2.5rem))] rounded-xl bg-[color:var(--pension-ink)] px-3 py-2 text-left text-sm font-normal leading-snug text-[color:var(--pension-canvas)] shadow-lg"
         >
           {text}
         </span>

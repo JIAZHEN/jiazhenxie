@@ -94,18 +94,18 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
   }
 
   return (
-    <div className="pension-tool min-h-screen bg-[#faf8f5] pb-8 text-[#262626]">
+    <div className="pension-tool min-h-screen bg-[color:var(--pension-canvas)] pb-8 text-[color:var(--pension-ink)]">
       <a
         href="#results"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[color:var(--pension-input)] focus:px-3 focus:py-2"
       >
         Skip to your results
       </a>
 
       <div id="your-numbers" className="mx-auto max-w-6xl px-4 pt-6 pb-2">
         <p className="pension-eyebrow">YOUR TURN</p>
-        <h2 className="font-serif text-3xl text-[#a34832]">What could your pension pay you?</h2>
-        <p className="mt-3 text-sm text-[#57534e]">Use your own numbers below. Change one thing at a time and see what happens.</p>
+        <h2 className="font-serif text-3xl text-[color:var(--pension-accent)]">What could your pension pay you?</h2>
+        <p className="mt-3 text-sm text-[color:var(--pension-muted)]">Use your own numbers below. Change one thing at a time and see what happens.</p>
       </div>
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
@@ -157,7 +157,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               ]}
               onChange={value => patch({ contributionBasis: value })}
             />
-            <p className="text-xs leading-relaxed text-[#57534e]">Use pay before sacrifice. Full salary has no qualifying-earnings cap; the band option uses £6,240–£50,270 only. Check your employer’s scheme. For a basic-salary scheme, enter basic salary above.</p>
+            <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Use pay before sacrifice. Full salary has no qualifying-earnings cap; the band option uses £6,240–£50,270 only. Check your employer’s scheme. For a basic-salary scheme, enter basic salary above.</p>
             <div className="grid grid-cols-2 gap-3">
               <NumberField
                 id="employee-percent"
@@ -181,7 +181,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                 onChange={value => patch({ employerPercent: value ?? 0 })}
               />
             </div>
-            <p className="rounded-xl bg-[#f3e4de] p-3 text-sm leading-relaxed" aria-live="polite">
+            <p className="rounded-xl bg-[color:var(--pension-tint)] p-3 text-sm leading-relaxed" aria-live="polite">
               {inputs.employeePercent}% × {formatGbp(pensionablePay(inputs.grossAnnualSalary, inputs.contributionBasis))} a year = <strong>{formatGbp(pensionablePay(inputs.grossAnnualSalary, inputs.contributionBasis) * inputs.employeePercent / 100 / 12)} gross into your pension each month</strong> from your contribution. Based on pay before sacrifice.
             </p>
               <Choice
@@ -209,7 +209,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                   onChange={value => patch({ taxRelief: value })}
                 />
               ) : null}
-            {inputs.salarySacrifice === 'unknown' ? <p className="text-xs leading-relaxed text-[#57534e]">Not sure? Keep going. We assume relief at source: you pay 80% of the gross contribution and the provider adds 20%. Check payroll before relying on the take-home figure.</p> : null}
+            {inputs.salarySacrifice === 'unknown' ? <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Not sure? Keep going. We assume relief at source: you pay 80% of the gross contribution and the provider adds 20%. Check payroll before relying on the take-home figure.</p> : null}
               <NumberField
                 id="pot"
                 label="Pension pot today (estimate is fine)"
@@ -238,11 +238,11 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
 
 
           <div className="space-y-3">
-            <p className="px-1 text-xs text-[#57534e]">Optional — leave these closed for a first estimate.</p>
-          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
-            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">Employer matching & payroll extras</summary>
+            <p className="px-1 text-xs text-[color:var(--pension-muted)]">Optional — leave these closed for a first estimate.</p>
+          <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[color:var(--pension-accent)]">Employer matching & payroll extras</summary>
             <div className="mt-4 space-y-4">
-              <p className="text-xs leading-relaxed text-[#57534e]">Both percentages use the selected earnings basis here. If your employer uses a different basis or reduced pay after sacrifice, this simplified setup will not exactly match your scheme. Salary sacrifice has no £50,270 contribution cap. The qualifying-earnings band is a separate scheme rule. You must keep cash pay above minimum wage; annual allowances affect tax, and employer rules can set further limits. <a className="underline" href="https://www.gov.uk/guidance/salary-sacrifice-and-the-effects-on-paye">HMRC scheme guidance</a> · <a className="underline" href="https://www.gov.uk/tax-on-your-private-pension/annual-allowance">Annual allowance</a></p>
+              <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Both percentages use the selected earnings basis here. If your employer uses a different basis or reduced pay after sacrifice, this simplified setup will not exactly match your scheme. Salary sacrifice has no £50,270 contribution cap. The qualifying-earnings band is a separate scheme rule. You must keep cash pay above minimum wage; annual allowances affect tax, and employer rules can set further limits. <a className="underline" href="https://www.gov.uk/guidance/salary-sacrifice-and-the-effects-on-paye">HMRC scheme guidance</a> · <a className="underline" href="https://www.gov.uk/tax-on-your-private-pension/annual-allowance">Annual allowance</a></p>
               <Choice
                 name="match"
                 label="Does your employer pay more if you do?"
@@ -268,7 +268,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                 />
               ) : null}
               {inputs.matchRule === 'other' ? (
-                <p className="text-sm text-[#57534e]">
+                <p className="text-sm text-[color:var(--pension-muted)]">
                   Employer stays at the percent you typed.
                 </p>
               ) : null}
@@ -276,7 +276,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                 <label className="flex items-start gap-3 text-sm leading-snug">
                   <input
                     type="checkbox"
-                    className="mt-1 h-5 w-5 accent-[#a34832]"
+                    className="mt-1 h-5 w-5 accent-[var(--pension-accent)]"
                     checked={inputs.employerPassesOnNiSaving}
                     onChange={event =>
                       patch({ employerPassesOnNiSaving: event.target.checked })
@@ -289,9 +289,9 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                 </label>
               ) : null}
               {inputs.salarySacrifice === 'yes' ? (
-                <details className="rounded-xl border border-[#e5e0d9] p-3">
+                <details className="rounded-xl border border-[color:var(--pension-border)] p-3">
                   <summary className="cursor-pointer text-sm">Optional: check the minimum-wage limit</summary>
-                  <p className="my-3 text-xs leading-relaxed text-[#57534e]">Skip this for a first estimate. Hours only check whether sacrifice could take cash pay below minimum wage; they do not change the pension percentage or its earnings basis.</p>
+                  <p className="my-3 text-xs leading-relaxed text-[color:var(--pension-muted)]">Skip this for a first estimate. Hours only check whether sacrifice could take cash pay below minimum wage; they do not change the pension percentage or its earnings basis.</p>
                 <NumberField
                   id="hours"
                   label="Contracted hours per week (optional)"
@@ -307,10 +307,10 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               ) : null}
             </div>
           </details>
-          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
-            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">State Pension — check your entitlement</summary>
+          <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[color:var(--pension-accent)]">State Pension — check your entitlement</summary>
             <div className="mt-4 space-y-4">
-              <p className="text-xs leading-relaxed text-[#57534e]">The starting estimate assumes the full new State Pension. Yours may be lower; check your forecast.</p>
+              <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">The starting estimate assumes the full new State Pension. Yours may be lower; check your forecast.</p>
               <NumberField
                 id="state-weekly"
                 label="State pension per week"
@@ -339,8 +339,8 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               />
             </div>
           </details>
-          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
-            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">ISA & other savings</summary>
+          <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[color:var(--pension-accent)]">ISA & other savings</summary>
             <div className="mt-4 space-y-4">
               <NumberField
                 id="other-balance"
@@ -360,10 +360,10 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               />
             </div>
           </details>
-          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
-            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">Growth & withdrawal assumptions</summary>
+          <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[color:var(--pension-accent)]">Growth & withdrawal assumptions</summary>
             <div className="mt-4 space-y-4">
-              <p className="text-xs leading-relaxed text-[#57534e]">These are modelling assumptions, not guaranteed returns. You can leave the defaults unchanged.</p>
+              <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">These are modelling assumptions, not guaranteed returns. You can leave the defaults unchanged.</p>
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   Growth before you stop, after inflation
@@ -383,8 +383,8 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
                         aria-pressed={selected}
                         className={`min-h-[2.75rem] rounded-xl border text-sm ${
                           selected
-                            ? 'border-[#a34832] bg-[#a34832] text-[#faf8f5]'
-                            : 'border-[#d4cec4] bg-white'
+                            ? 'border-[color:var(--pension-accent)] bg-[color:var(--pension-accent)] text-[color:var(--pension-canvas)]'
+                            : 'border-[color:var(--pension-border-strong)] bg-[color:var(--pension-input)]'
                         }`}
                         onClick={() =>
                           patch({ realReturnBeforePercent: Number(value) })
@@ -436,14 +436,14 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
-              className="min-h-[2.75rem] rounded-xl bg-[#a34832] px-4 py-3 text-sm font-medium text-[#faf8f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+              className="min-h-[2.75rem] rounded-xl bg-[color:var(--pension-accent)] px-4 py-3 text-sm font-medium text-[color:var(--pension-canvas)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
               onClick={() => void share()}
             >
               Copy a link to these numbers
             </button>
             <button
               type="button"
-              className="min-h-[2.75rem] rounded-xl border border-[#a34832] bg-white px-4 py-3 text-sm font-medium text-[#a34832] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+              className="min-h-[2.75rem] rounded-xl border border-[color:var(--pension-accent)] bg-[color:var(--pension-input)] px-4 py-3 text-sm font-medium text-[color:var(--pension-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
               onClick={clearData}
             >
               Clear my data
@@ -454,7 +454,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
               {shareNote}
             </p>
           ) : (
-            <p className="text-sm text-[#57534e]">
+            <p className="text-sm text-[color:var(--pension-muted)]">
               Stays on this phone. Nothing is sent to a server.
             </p>
           )}
@@ -479,7 +479,7 @@ export function RetirementCalculator({ initialInputs }: { initialInputs?: Calcul
       </div>
 
       <footer
-        className="mx-auto mt-8 max-w-6xl border-t border-[#e5e0d9] px-4 py-6 text-xs leading-relaxed text-[#57534e]"
+        className="mx-auto mt-8 max-w-6xl border-t border-[color:var(--pension-border)] px-4 py-6 text-xs leading-relaxed text-[color:var(--pension-muted)]"
       >
         <p className="mx-auto max-w-6xl">
           {DISCLAIMER.split('MoneyHelper')[0]}

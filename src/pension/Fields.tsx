@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Hint } from './Hint'
 
 const fieldClass =
-  'mt-1 w-full scroll-mb-28 rounded-xl border border-[#d4cec4] bg-white px-3 py-3 text-base text-[#262626] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]'
+  'mt-1 w-full scroll-mb-28 rounded-xl border border-[color:var(--pension-border-strong)] bg-[color:var(--pension-input)] px-3 py-3 text-base text-[color:var(--pension-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]'
 
 function parseNumber(text: string): number | null {
   const trimmed = text.trim().replace(/,/g, '')
@@ -52,7 +52,7 @@ export function NumberField({
           htmlFor={id}
           className={
             primary
-              ? 'font-serif text-xl text-[#a34832]'
+              ? 'font-serif text-xl text-[color:var(--pension-accent)]'
               : 'text-sm font-medium'
           }
         >
@@ -63,7 +63,7 @@ export function NumberField({
       <div className="relative">
         {prefix ? (
           <span
-            className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#57534e] ${
+            className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--pension-muted)] ${
               primary ? 'text-2xl' : ''
             }`}
             aria-hidden="true"
@@ -108,7 +108,7 @@ export function NumberField({
           }}
         />
         {suffix ? (
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#57534e]">
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[color:var(--pension-muted)]">
             {suffix}
           </span>
         ) : null}
@@ -151,9 +151,9 @@ export function Choice<T extends string>({
               key={option.value}
               className={`flex min-h-[2.75rem] cursor-pointer items-center justify-center rounded-xl border px-2 py-2 text-center text-sm leading-snug ${
                 selected
-                  ? 'border-[#a34832] bg-[#a34832] text-[#faf8f5]'
-                  : 'border-[#d4cec4] bg-white text-[#262626]'
-              } focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#a34832]`}
+                  ? 'border-[color:var(--pension-accent)] bg-[color:var(--pension-accent)] text-[color:var(--pension-canvas)]'
+                  : 'border-[color:var(--pension-border-strong)] bg-[color:var(--pension-input)] text-[color:var(--pension-ink)]'
+              } focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--pension-accent)]`}
             >
               <input
                 className="sr-only"
@@ -182,10 +182,10 @@ export function Section({
   children: ReactNode
 }) {
   return (
-    <section className="rounded-3xl border border-[#e5e0d9] bg-[#fdfcfa] p-4 sm:p-5">
-      <h2 className="font-serif text-2xl text-[#a34832]">{title}</h2>
+    <section className="rounded-3xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4 sm:p-5">
+      <h2 className="font-serif text-2xl text-[color:var(--pension-accent)]">{title}</h2>
       {intro ? (
-        <p className="mt-1 text-sm leading-relaxed text-[#57534e]">{intro}</p>
+        <p className="mt-1 text-sm leading-relaxed text-[color:var(--pension-muted)]">{intro}</p>
       ) : null}
       <div className="mt-4 space-y-4">{children}</div>
     </section>

@@ -16,14 +16,14 @@ function payslipPercent(percent: number): number {
 
 function signed(delta: number): { text: string; className: string } {
   if (Math.abs(delta) < 0.5) {
-    return { text: 'Same', className: 'text-[#57534e]' }
+    return { text: 'Same', className: 'text-[color:var(--pension-muted)]' }
   }
   if (delta > 0) {
-    return { text: `+${formatGbp(delta)}`, className: 'text-[#a34832]' }
+    return { text: `+${formatGbp(delta)}`, className: 'text-[color:var(--pension-accent)]' }
   }
   return {
     text: `−${formatGbp(Math.abs(delta))}`,
-    className: 'text-[#9a3412]',
+    className: 'text-[color:var(--pension-danger)]',
   }
 }
 
@@ -38,7 +38,7 @@ function MoneyCell({ now, next }: { now: number; next: number | null }) {
   const delta = signed(next - now)
   return (
     <>
-      <td className="py-2 text-right tabular-nums text-[#57534e]">
+      <td className="py-2 text-right tabular-nums text-[color:var(--pension-muted)]">
         {formatGbp(now)}
       </td>
       <td className="py-2 text-right">
@@ -67,7 +67,7 @@ function Row({
   >
 }) {
   return (
-    <tr className="border-t border-[#efe6d6]">
+    <tr className="border-t border-[color:var(--pension-subtle)]">
       <th scope="row" className="py-2 pr-2 text-left font-normal">
         {label}
       </th>
@@ -119,9 +119,9 @@ export function PayslipStory({
 
   return (
     <div className="space-y-4">
-      <article className="overflow-hidden rounded-3xl border border-[#262626] bg-[#fdfcfa] shadow-[0_1px_0_#262626]">
-        <header className="border-b border-dashed border-[#d4cec4] px-4 py-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a34832]">
+      <article className="overflow-hidden rounded-3xl border border-[color:var(--pension-ink)] bg-[color:var(--pension-surface)] shadow-[0_1px_0_var(--pension-ink)]">
+        <header className="border-b border-dashed border-[color:var(--pension-border-strong)] px-4 py-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--pension-accent)]">
             This month’s payslip
           </p>
           <div className="mt-3">
@@ -136,7 +136,7 @@ export function PayslipStory({
               onChange={value => onPatch({ targetMonthlyIncome: value ?? 0 })}
             />
           </div>
-          <h2 className="mt-3 font-serif text-2xl leading-tight text-[#262626]">
+          <h2 className="mt-3 font-serif text-2xl leading-tight text-[color:var(--pension-ink)]">
             {title}
           </h2>
           <p className="mt-1 text-sm leading-snug">{subtitle}</p>
@@ -149,7 +149,7 @@ export function PayslipStory({
               : ''}
           </caption>
           <thead>
-            <tr className="text-xs uppercase tracking-wide text-[#57534e]">
+            <tr className="text-xs uppercase tracking-wide text-[color:var(--pension-muted)]">
               <th className="px-4 py-2 text-left font-medium" />
               <th className="px-2 py-2 text-right font-medium">Now</th>
               {next ? (
@@ -187,7 +187,7 @@ export function PayslipStory({
           </tbody>
         </table>
         <div
-          className={`mt-2 grid items-end gap-2 bg-[#a34832] px-4 py-3 text-[#faf8f5] ${
+          className={`mt-2 grid items-end gap-2 bg-[color:var(--pension-accent)] px-4 py-3 text-[color:var(--pension-canvas)] ${
             next ? 'grid-cols-[1.3fr_1fr_1fr]' : 'grid-cols-[1.4fr_1fr]'
           }`}
         >
@@ -205,7 +205,7 @@ export function PayslipStory({
           <div className="px-4 py-3">
             <button
               type="button"
-              className="min-h-[2.75rem] w-full rounded-xl bg-[#a34832] px-4 text-sm font-medium text-[#faf8f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+              className="min-h-[2.75rem] w-full rounded-xl bg-[color:var(--pension-accent)] px-4 text-sm font-medium text-[color:var(--pension-canvas)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
               onClick={() =>
                 onPatch({
                   employeePercent: payslipPercent(next.employeePercent),
@@ -218,13 +218,13 @@ export function PayslipStory({
           </div>
         ) : null}
         {levers.some(lever => lever.id === 'salary' && lever.amount === 0) ? (
-          <p className="border-t border-[#efe6d6] bg-[#f8efd4] px-4 py-3 text-sm leading-snug">
+          <p className="border-t border-[color:var(--pension-subtle)] bg-[color:var(--pension-warning)] px-4 py-3 text-sm leading-snug">
             {formatGbp(SALARY_STEP)} more salary changes the retirement figure
             by £0. Pay above £50,270 is ignored.{' '}
             {inputs.contributionBasis === 'qualifying' ? (
               <button
                 type="button"
-                className="font-medium text-[#a34832] underline"
+                className="font-medium text-[color:var(--pension-accent)] underline"
                 onClick={() => onBasis('full')}
               >
                 Count the whole salary
@@ -236,7 +236,7 @@ export function PayslipStory({
           </p>
         ) : null}
         {analysis.freeMoney && hero.mode !== 'already' ? (
-          <p className="border-t border-[#efe6d6] bg-[#f8efd4] px-4 py-3 text-sm leading-snug">
+          <p className="border-t border-[color:var(--pension-subtle)] bg-[color:var(--pension-warning)] px-4 py-3 text-sm leading-snug">
             Employer money still sitting there:{' '}
             {formatGbp(analysis.freeMoney.extraEmployerMonthly)} a month if you
             pay {formatPercent(analysis.freeMoney.toPercent)} instead of{' '}
@@ -246,11 +246,11 @@ export function PayslipStory({
         ) : null}
       </article>
 
-      <section className="rounded-3xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
-        <h2 className="font-serif text-2xl text-[#a34832]">
+      <section className="rounded-3xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] p-4">
+        <h2 className="font-serif text-2xl text-[color:var(--pension-accent)]">
           What actually moves it
         </h2>
-        <p className="mt-1 text-sm text-[#57534e]">
+        <p className="mt-1 text-sm text-[color:var(--pension-muted)]">
           Ranked by pounds a month when you stop. Salary is smaller than it
           looks.
         </p>
@@ -303,19 +303,19 @@ export function PayslipStory({
                     {formatGbp(lever.amount)}
                   </span>
                 </div>
-                <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#efe6d6]">
+                <div className="mt-1 h-2 overflow-hidden rounded-full bg-[color:var(--pension-subtle)]">
                   <div
-                    className="h-full rounded-full bg-[#a34832]"
+                    className="h-full rounded-full bg-[color:var(--pension-accent)]"
                     style={{ width: `${width}%` }}
                   />
                 </div>
-                <p className="mt-1 text-xs leading-snug text-[#57534e]">
+                <p className="mt-1 text-xs leading-snug text-[color:var(--pension-muted)]">
                   {lever.note}
                 </p>
                 {onClick && action ? (
                   <button
                     type="button"
-                    className="mt-1 text-sm font-medium text-[#a34832] underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+                    className="mt-1 text-sm font-medium text-[color:var(--pension-accent)] underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
                     onClick={onClick}
                   >
                     {action}
@@ -327,8 +327,8 @@ export function PayslipStory({
         </ol>
       </section>
 
-      <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] px-4 py-3">
-        <summary className="cursor-pointer text-sm font-medium text-[#a34832]">
+      <details className="rounded-2xl border border-[color:var(--pension-border)] bg-[color:var(--pension-surface)] px-4 py-3">
+        <summary className="cursor-pointer text-sm font-medium text-[color:var(--pension-accent)]">
           Show the working
         </summary>
         <div className="mt-3">

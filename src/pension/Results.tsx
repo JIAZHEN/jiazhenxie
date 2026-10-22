@@ -25,7 +25,7 @@ function Future({
   if (!inputs.showNominal || years == null || years <= 0) return null
   const future = nominalFromReal(value, years, inputs.inflationPercent / 100)
   return (
-    <span className="font-normal text-[#57534e]">
+    <span className="font-normal text-[color:var(--pension-muted)]">
       {' '}
       ({formatGbp(future)} in future money)
     </span>
@@ -43,7 +43,7 @@ function Line({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3 py-1.5">
-      <dt className="flex items-center gap-1.5 text-sm text-[#57534e]">
+      <dt className="flex items-center gap-1.5 text-sm text-[color:var(--pension-muted)]">
         <span>{label}</span>
         {hint ? <Hint text={hint} /> : null}
       </dt>
@@ -78,21 +78,21 @@ function Shape({
       ? `Nothing extra goes into ${gainNoun} each month.`
       : `${gainNoun.charAt(0).toUpperCase()}${gainNoun.slice(1)} gains ${formatGbp(gainMonthly)} a month.`
   return (
-    <dl className="mt-3 grid gap-2 border-t border-[#e5e0d9] pt-3 sm:grid-cols-3">
+    <dl className="mt-3 grid gap-2 border-t border-[color:var(--pension-border)] pt-3 sm:grid-cols-3">
       <div>
-        <dt className="text-xs font-semibold uppercase tracking-wide text-[#57534e]">
+        <dt className="text-xs font-semibold uppercase tracking-wide text-[color:var(--pension-muted)]">
           On payday
         </dt>
         <dd className="mt-1">{takeHome}</dd>
       </div>
       <div>
-        <dt className="text-xs font-semibold uppercase tracking-wide text-[#57534e]">
+        <dt className="text-xs font-semibold uppercase tracking-wide text-[color:var(--pension-muted)]">
           Going in
         </dt>
         <dd className="mt-1">{gain}</dd>
       </div>
       <div>
-        <dt className="text-xs font-semibold uppercase tracking-wide text-[#57534e]">
+        <dt className="text-xs font-semibold uppercase tracking-wide text-[color:var(--pension-muted)]">
           In retirement
         </dt>
         <dd className="mt-1">
@@ -115,13 +115,13 @@ function Card({
 }) {
   const toneClass =
     tone === 'gold'
-      ? 'border-[#c4a15a] bg-[#f8efd4]'
+      ? 'border-[color:var(--pension-amber)] bg-[color:var(--pension-warning)]'
       : tone === 'honest'
-        ? 'border-[#d7c4b0] bg-[#f6efe6]'
-        : 'border-[#e5e0d9] bg-[#fdfcfa]'
+        ? 'border-[color:var(--pension-chart-neutral)] bg-[color:var(--pension-faint)]'
+        : 'border-[color:var(--pension-border)] bg-[color:var(--pension-surface)]'
   return (
     <article className={`rounded-3xl border p-4 ${toneClass}`}>
-      <h3 className="font-serif text-xl text-[#262626]">{title}</h3>
+      <h3 className="font-serif text-xl text-[color:var(--pension-ink)]">{title}</h3>
       <div className="mt-2 text-[0.98rem] leading-snug">{children}</div>
     </article>
   )
@@ -158,15 +158,15 @@ export function Receipt({
   const ignored = Math.max(0, salary - QUALIFYING_EARNINGS_UPPER)
   const showAlternate = Math.abs(alternateMonthly - income) >= 20
   const parts = [
-    { label: 'State pension', value: state, color: '#a34832' },
-    { label: 'Workplace pension', value: workplace, color: '#2d6a4f' },
-    { label: 'Other savings', value: other, color: '#9a7b2f' },
+    { label: 'State pension', value: state, color: 'var(--pension-accent)' },
+    { label: 'Workplace pension', value: workplace, color: 'var(--pension-positive-strong)' },
+    { label: 'Other savings', value: other, color: 'var(--pension-gold)' },
   ]
 
   return (
     <div>
       <p
-        className="font-serif text-4xl leading-none text-[#a34832]"
+        className="font-serif text-4xl leading-none text-[color:var(--pension-accent)]"
         aria-live="polite"
       >
         About {formatGbp(income)} a month
@@ -180,7 +180,7 @@ export function Receipt({
             : `Meets your target of ${formatGbp(analysis.targetMonthly)}.`}
       </p>
       <div
-        className="mt-3 flex h-3 overflow-hidden rounded-full bg-[#efe6d6]"
+        className="mt-3 flex h-3 overflow-hidden rounded-full bg-[color:var(--pension-subtle)]"
         role="img"
         aria-label={parts
           .filter(part => part.value > 1)
@@ -202,7 +202,7 @@ export function Receipt({
         {gapWidth > 1 ? (
           <span
             style={{ width: `${(gapWidth / scale) * 100}%` }}
-            className="bg-[repeating-linear-gradient(135deg,#e7d7c4,#e7d7c4_4px,#f6efe6_4px,#f6efe6_8px)]"
+            className="bg-[repeating-linear-gradient(135deg,var(--pension-neutral),var(--pension-neutral)_4px,var(--pension-faint)_4px,var(--pension-faint)_8px)]"
           />
         ) : null}
       </div>
@@ -218,7 +218,7 @@ export function Receipt({
         ) : null}
       </dl>
 
-      <dl className="mt-2 rounded-2xl bg-white px-3 py-1">
+      <dl className="mt-2 rounded-2xl bg-[color:var(--pension-input)] px-3 py-1">
         <Line
           label="Pay this percent applies to"
           value={formatGbp(base)}
@@ -253,7 +253,7 @@ export function Receipt({
       </dl>
 
       {aboveBand ? (
-        <div className="mt-3 rounded-2xl border border-[#c4a15a] bg-[#f8efd4] p-3">
+        <div className="mt-3 rounded-2xl border border-[color:var(--pension-amber)] bg-[color:var(--pension-warning)] p-3">
           <p className="text-sm leading-snug">
             {formatGbp(ignored)} of this salary is above{' '}
             {formatGbp(QUALIFYING_EARNINGS_UPPER)}, so it is left out. The state
@@ -266,7 +266,7 @@ export function Receipt({
           ) : null}
           <button
             type="button"
-            className="mt-3 min-h-[2.75rem] rounded-xl bg-[#a34832] px-4 py-2 text-sm font-medium text-[#faf8f5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+            className="mt-3 min-h-[2.75rem] rounded-xl bg-[color:var(--pension-accent)] px-4 py-2 text-sm font-medium text-[color:var(--pension-canvas)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
             onClick={() => onBasis('full')}
           >
             Count my whole salary
@@ -275,7 +275,7 @@ export function Receipt({
       ) : showAlternate ? (
         <button
           type="button"
-          className="mt-3 text-left text-sm font-medium text-[#a34832] underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]"
+          className="mt-3 text-left text-sm font-medium text-[color:var(--pension-accent)] underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)]"
           onClick={() =>
             onBasis(inputs.contributionBasis === 'full' ? 'qualifying' : 'full')
           }
@@ -304,13 +304,13 @@ export function Receipt({
           role="switch"
           aria-checked={inputs.showNominal}
           aria-labelledby={nominalId}
-          className={`relative h-8 w-14 shrink-0 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832] ${
-            inputs.showNominal ? 'bg-[#a34832]' : 'bg-[#d4cec4]'
+          className={`relative h-8 w-14 shrink-0 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--pension-accent)] ${
+            inputs.showNominal ? 'bg-[color:var(--pension-accent)]' : 'bg-[color:var(--pension-border-strong)]'
           }`}
           onClick={() => onToggleNominal(!inputs.showNominal)}
         >
           <span
-            className={`absolute top-1 h-6 w-6 rounded-full bg-white transition-transform ${
+            className={`absolute top-1 h-6 w-6 rounded-full bg-[color:var(--pension-input)] transition-transform ${
               inputs.showNominal ? 'left-7' : 'left-1'
             }`}
           />
@@ -346,7 +346,7 @@ export function Results({
     <div id="results" className="space-y-4 scroll-mt-24">
       {showOptions ? (
         <div className="space-y-3">
-          <h2 className="font-serif text-2xl text-[#a34832]">Other ways</h2>
+          <h2 className="font-serif text-2xl text-[color:var(--pension-accent)]">Other ways</h2>
 
           {analysis.match && matchIsSeparate ? (
             <Card title="Take the full employer match">
@@ -439,7 +439,7 @@ export function Results({
           ) : null}
 
           {analysis.isBasicRateTaxpayer ? (
-            <p className="text-sm leading-snug text-[#57534e]">
+            <p className="text-sm leading-snug text-[color:var(--pension-muted)]">
               On basic-rate tax, a pension gets 20% relief on the way in. A
               Lifetime ISA gets a 25% bonus and is locked until 60. An ISA has
               neither. This is the shape of the rules, not a suggestion.
@@ -472,7 +472,7 @@ export function Results({
         </Card>
       ) : null}
 
-      <ul className="space-y-1 text-sm leading-snug text-[#57534e]">
+      <ul className="space-y-1 text-sm leading-snug text-[color:var(--pension-muted)]">
         {analysis.salarySacrificeAssumed ? (
           <li>
             Salary sacrifice is unknown, so these figures assume it is not.
