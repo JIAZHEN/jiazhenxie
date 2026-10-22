@@ -481,8 +481,7 @@ export function Results({
         {analysis.minimumWage === 'generic' ? (
           <li>
             Salary sacrifice can't drop pay under £
-            {MINIMUM_WAGE_HOURLY.toFixed(2)} an hour. Hours are blank, so check
-            with HR.
+            {MINIMUM_WAGE_HOURLY.toFixed(2)} an hour. This optional check needs your contracted hours; ask payroll if you are close to the limit.
           </li>
         ) : null}
         {analysis.minimumWage === 'breach' ? (
@@ -504,7 +503,7 @@ export function Results({
           </li>
         ) : null}
         {analysis.current.allowanceCapped ? (
-          <li>Pension contributions above £60,000 a year are capped here.</li>
+          <li>This calculator stops projected contributions at £60,000 a year. The annual allowance is a tax threshold, not a legal contribution ban; tapering and carry-forward are not modelled.</li>
         ) : null}
         {years <= 0 ? (
           <li>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import SEO from '../components/SEO'
 import { analyse } from '../calc/analyse'
+import { pensionablePay } from '../calc/contributions'
+import { formatGbp } from '../calc/format'
 import type { CalculatorInputs } from '../calc/types'
 import { DISCLAIMER, MONEYHELPER_URL, STATE_PENSION_FORECAST_URL } from './copy'
 import { defaultInputs, STORAGE_KEY } from './defaults'
@@ -9,7 +10,6 @@ import { decodeInputs, encodeInputs } from './hash'
 import { Hint } from './Hint'
 import { PayslipStory } from './Payslip'
 import { Results } from './Results'
-import { PensionIntro } from './PensionIntro'
 
 function loadInitial(): CalculatorInputs {
   if (typeof window === 'undefined') return defaultInputs
@@ -27,8 +27,8 @@ function loadInitial(): CalculatorInputs {
   return defaultInputs
 }
 
-export function PaydayToPension() {
-  const [inputs, setInputs] = useState<CalculatorInputs>(loadInitial)
+export function RetirementCalculator({ initialInputs }: { initialInputs?: CalculatorInputs }) {
+  const [inputs, setInputs] = useState<CalculatorInputs>(() => initialInputs ?? loadInitial())
   const [shareNote, setShareNote] = useState('')
   const shareHash = useRef(
     typeof window !== 'undefined' && window.location.hash.length > 1
@@ -94,19 +94,14 @@ export function PaydayToPension() {
   }
 
   return (
-    <div className="pension-tool mt-16 sm:mt-20 min-h-screen bg-[#faf8f5] pb-8 text-[#262626]">
-      <SEO
-        title="Payday to Pension — UK Pension Calculator"
-        description="Work backwards from the monthly retirement income you want, in today's money. Explore pension contributions and their effect on take-home pay."
-        canonicalUrl="https://jiazhenxie.com/payday-to-pension"
-      />
+    <div className="pension-tool min-h-screen bg-[#faf8f5] pb-8 text-[#262626]">
       <a
         href="#results"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2"
       >
         Skip to your results
       </a>
-      <PensionIntro />
+
       <div id="your-numbers" className="mx-auto max-w-6xl px-4 pt-6 pb-2">
         <p className="pension-eyebrow">YOUR TURN</p>
         <h2 className="font-serif text-3xl text-[#a34832]">What could your pension pay you?</h2>
@@ -142,13 +137,88 @@ export function PaydayToPension() {
             </div>
             <NumberField
               id="salary"
-              label="Gross annual salary"
-              hint="Gross means before tax and National Insurance."
+              label="Annual salary before pension sacrifice"
+              hint="Use your gross reference salary before pension sacrifice, tax and National Insurance. Do not enter the reduced taxable salary from your payslip."
               prefix="£"
               value={inputs.grossAnnualSalary}
               step={500}
               onChange={value => patch({ grossAnnualSalary: value ?? 0 })}
             />
+          </Section>
+
+          <Section title="Your pension setup">
+            <Choice
+              name="contribution-basis"
+              label="What pay are these percentages based on?"
+              value={inputs.contributionBasis}
+              options={[
+                { value: 'full', label: 'Full salary entered' },
+                { value: 'qualifying', label: 'Qualifying earnings' },
+              ]}
+              onChange={value => patch({ contributionBasis: value })}
+            />
+            <p className="text-xs leading-relaxed text-[#57534e]">Use pay before sacrifice. Full salary has no qualifying-earnings cap; the band option uses £6,240–£50,270 only. Check your employer’s scheme. For a basic-salary scheme, enter basic salary above.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <NumberField
+                id="employee-percent"
+                label="Your pension %"
+                hint="Gross pension contribution, before any tax relief. With salary sacrifice, this is the percentage of the selected pre-sacrifice pay that you exchange for pension."
+                suffix="%"
+                value={inputs.employeePercent}
+                min={0}
+                max={100}
+                step={0.5}
+                onChange={value => patch({ employeePercent: value ?? 0 })}
+              />
+              <NumberField
+                id="employer-percent"
+                label="Employer %"
+                suffix="%"
+                value={inputs.employerPercent}
+                min={0}
+                max={100}
+                step={0.5}
+                onChange={value => patch({ employerPercent: value ?? 0 })}
+              />
+            </div>
+            <p className="rounded-xl bg-[#f3e4de] p-3 text-sm leading-relaxed" aria-live="polite">
+              {inputs.employeePercent}% × {formatGbp(pensionablePay(inputs.grossAnnualSalary, inputs.contributionBasis))} a year = <strong>{formatGbp(pensionablePay(inputs.grossAnnualSalary, inputs.contributionBasis) * inputs.employeePercent / 100 / 12)} gross into your pension each month</strong> from your contribution. Based on pay before sacrifice.
+            </p>
+              <Choice
+                name="sacrifice"
+                label="Do you use salary sacrifice?"
+                hint="You give up gross salary and your employer pays that amount into your pension. Tax and National Insurance use the reduced pay; the percentages here still use the selected pre-sacrifice earnings."
+                value={inputs.salarySacrifice}
+                options={[
+                  { value: 'unknown', label: "Don't know" },
+                  { value: 'yes', label: 'Yes' },
+                  { value: 'no', label: 'No' },
+                ]}
+                onChange={value => patch({ salarySacrifice: value })}
+              />
+              {inputs.salarySacrifice === 'no' ? (
+                <Choice
+                  name="relief"
+                  label="Tax relief"
+                  hint="Provider adds 20% means you pay 80%. Net pay takes it before income tax. The pot ends up in the same place."
+                  value={inputs.taxRelief}
+                  options={[
+                    { value: 'reliefAtSource', label: 'Provider adds 20%' },
+                    { value: 'netPay', label: 'Net pay' },
+                  ]}
+                  onChange={value => patch({ taxRelief: value })}
+                />
+              ) : null}
+            {inputs.salarySacrifice === 'unknown' ? <p className="text-xs leading-relaxed text-[#57534e]">Not sure? Keep going. We assume relief at source: you pay 80% of the gross contribution and the provider adds 20%. Check payroll before relying on the take-home figure.</p> : null}
+              <NumberField
+                id="pot"
+                label="Pension pot today (estimate is fine)"
+                hint="Use your latest balance. Leaving 0 out of uncertainty will underestimate any pension you already have."
+                prefix="£"
+                value={inputs.currentPensionPot}
+                step={500}
+                onChange={value => patch({ currentPensionPot: value ?? 0 })}
+              />
           </Section>
 
           <div className="lg:hidden">
@@ -165,48 +235,14 @@ export function PaydayToPension() {
             />
           </div>
 
-          <Section title="Pension percent">
-            <div className="grid grid-cols-2 gap-3">
-              <NumberField
-                id="employee-percent"
-                label="You pay in"
-                hint="Percent of the pay that counts. The payslip uses this."
-                suffix="%"
-                value={inputs.employeePercent}
-                min={0}
-                max={100}
-                step={0.5}
-                onChange={value => patch({ employeePercent: value ?? 0 })}
-              />
-              <NumberField
-                id="employer-percent"
-                label="Employer pays in"
-                suffix="%"
-                value={inputs.employerPercent}
-                min={0}
-                max={100}
-                step={0.5}
-                onChange={value => patch({ employerPercent: value ?? 0 })}
-              />
-            </div>
-          </Section>
 
-          <details className="group rounded-3xl border border-[#e5e0d9] bg-[#fdfcfa] p-4 sm:p-5">
-            <summary className="ptp-summary flex cursor-pointer list-none items-center justify-between gap-3 font-medium text-[#a34832] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a34832]">
-              More detail
-              <span className="text-sm group-open:hidden">Show</span>
-              <span className="hidden text-sm group-open:inline">Hide</span>
-            </summary>
+
+          <div className="space-y-3">
+            <p className="px-1 text-xs text-[#57534e]">Optional — leave these closed for a first estimate.</p>
+          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">Employer matching & payroll extras</summary>
             <div className="mt-4 space-y-4">
-              <NumberField
-                id="pot"
-                label="Pension pot today"
-                hint="Use 0 if you're not sure. A small pot is a starting point."
-                prefix="£"
-                value={inputs.currentPensionPot}
-                step={500}
-                onChange={value => patch({ currentPensionPot: value ?? 0 })}
-              />
+              <p className="text-xs leading-relaxed text-[#57534e]">Both percentages use the selected earnings basis here. If your employer uses a different basis or reduced pay after sacrifice, this simplified setup will not exactly match your scheme. Salary sacrifice has no £50,270 contribution cap. The qualifying-earnings band is a separate scheme rule. You must keep cash pay above minimum wage; annual allowances affect tax, and employer rules can set further limits. <a className="underline" href="https://www.gov.uk/guidance/salary-sacrifice-and-the-effects-on-paye">HMRC scheme guidance</a> · <a className="underline" href="https://www.gov.uk/tax-on-your-private-pension/annual-allowance">Annual allowance</a></p>
               <Choice
                 name="match"
                 label="Does your employer pay more if you do?"
@@ -236,31 +272,6 @@ export function PaydayToPension() {
                   Employer stays at the percent you typed.
                 </p>
               ) : null}
-              <Choice
-                name="sacrifice"
-                label="Salary sacrifice?"
-                hint="Your employer pays your contribution from your salary, so you pay less National Insurance. It can't take you below minimum wage."
-                value={inputs.salarySacrifice}
-                options={[
-                  { value: 'unknown', label: "Don't know" },
-                  { value: 'yes', label: 'Yes' },
-                  { value: 'no', label: 'No' },
-                ]}
-                onChange={value => patch({ salarySacrifice: value })}
-              />
-              {inputs.salarySacrifice === 'no' ? (
-                <Choice
-                  name="relief"
-                  label="Tax relief"
-                  hint="Provider adds 20% means you pay 80%. Net pay takes it before income tax. The pot ends up in the same place."
-                  value={inputs.taxRelief}
-                  options={[
-                    { value: 'reliefAtSource', label: 'Provider adds 20%' },
-                    { value: 'netPay', label: 'Net pay' },
-                  ]}
-                  onChange={value => patch({ taxRelief: value })}
-                />
-              ) : null}
               {inputs.salarySacrifice === 'yes' ? (
                 <label className="flex items-start gap-3 text-sm leading-snug">
                   <input
@@ -278,9 +289,12 @@ export function PaydayToPension() {
                 </label>
               ) : null}
               {inputs.salarySacrifice === 'yes' ? (
+                <details className="rounded-xl border border-[#e5e0d9] p-3">
+                  <summary className="cursor-pointer text-sm">Optional: check the minimum-wage limit</summary>
+                  <p className="my-3 text-xs leading-relaxed text-[#57534e]">Skip this for a first estimate. Hours only check whether sacrifice could take cash pay below minimum wage; they do not change the pension percentage or its earnings basis.</p>
                 <NumberField
                   id="hours"
-                  label="Hours each week"
+                  label="Contracted hours per week (optional)"
                   hint="Optional. Used only to warn if salary sacrifice would drop you under the minimum wage."
                   optional
                   value={inputs.hoursPerWeek}
@@ -289,7 +303,14 @@ export function PaydayToPension() {
                   step={0.5}
                   onChange={value => patch({ hoursPerWeek: value })}
                 />
+                </details>
               ) : null}
+            </div>
+          </details>
+          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">State Pension — check your entitlement</summary>
+            <div className="mt-4 space-y-4">
+              <p className="text-xs leading-relaxed text-[#57534e]">The starting estimate assumes the full new State Pension. Yours may be lower; check your forecast.</p>
               <NumberField
                 id="state-weekly"
                 label="State pension per week"
@@ -316,6 +337,11 @@ export function PaydayToPension() {
                   patch({ statePensionAge: value ?? inputs.statePensionAge })
                 }
               />
+            </div>
+          </details>
+          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">ISA & other savings</summary>
+            <div className="mt-4 space-y-4">
               <NumberField
                 id="other-balance"
                 label="ISA and other savings today"
@@ -332,6 +358,12 @@ export function PaydayToPension() {
                 step={10}
                 onChange={value => patch({ otherMonthlySaving: value ?? 0 })}
               />
+            </div>
+          </details>
+          <details className="rounded-2xl border border-[#e5e0d9] bg-[#fdfcfa] p-4">
+            <summary className="cursor-pointer text-sm font-medium text-[#a34832]">Growth & withdrawal assumptions</summary>
+            <div className="mt-4 space-y-4">
+              <p className="text-xs leading-relaxed text-[#57534e]">These are modelling assumptions, not guaranteed returns. You can leave the defaults unchanged.</p>
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   Growth before you stop, after inflation
@@ -399,6 +431,7 @@ export function PaydayToPension() {
               />
             </div>
           </details>
+          </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <button

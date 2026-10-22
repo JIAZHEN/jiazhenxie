@@ -115,3 +115,9 @@ Run `npm run dev` and open `/payday-to-pension`, or `npm run build` for the prod
 ### Pension article and visual checks
 
 `npm run build` generates the article charts from the same pension model as the interactive example. The pension article gets full visible HTML in its static entry, including chart images and tool links. `npm run check:pension` validates the built article metadata, schema, assets, sitemap and illustrative amounts. Charts use a fixed, labelled example dated 22 October 2026.
+
+### £100k decision flow
+
+`src/pension/DecisionPage.tsx` is the primary route. It requires explicit contribution method, tax region and employer amount, plus either a confirmed annual payroll amount or a current percentage with explicit scheme basis; v1 retirement defaults never populate that flow. Labelled demos are not persisted until explicitly confirmed. Version 2 local inputs use a separate storage key. Old retirement hash links remain available in a separate disclosure.
+
+`src/calc/decision.ts` compares a full 2026/27 year of extra gross contributions. It handles cash bonus, non-savings income, grossed-up Gift Aid and existing RAS personal/SIPP contributions. RAS band extension and Personal Allowance restoration are calculated separately from initial payment. Unsupported tax regions/income types, reduced allowances, income above £200k and contributions over the standard allowance suppress personal tax-saving results rather than silently capping contributions. The build runs numerical regression cases alongside the article visual generation.

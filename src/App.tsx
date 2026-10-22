@@ -8,7 +8,7 @@ import Projects from "./pages/Projects";
 import BlogPost from "./pages/BlogPost";
 import Solutions from "./pages/Solutions";
 import { lazy, Suspense } from "react";
-const PaydayToPension = lazy(() => import("./pension/PaydayToPension").then(module => ({ default: module.PaydayToPension })));
+const PaydayToPension = lazy(() => import("./pension/DecisionPage").then(module => ({ default: module.PaydayToPension })));
 
 import PageTracker from "./components/PageTracker";
 

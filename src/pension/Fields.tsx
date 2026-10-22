@@ -99,7 +99,7 @@ export function NumberField({
           onChange={event => {
             const nextText = event.target.value
             setDraft(nextText)
-            if (optional && nextText.trim() === '') {
+            if (nextText.trim() === '') {
               onChange(null)
               return
             }

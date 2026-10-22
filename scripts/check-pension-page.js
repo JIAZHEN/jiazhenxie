@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+const calculatorHtml = fs.readFileSync('dist/payday-to-pension/index.html', 'utf8');
+assert.ok(calculatorHtml.includes('UK Pension Contribution Calculator'));
+assert.equal((calculatorHtml.match(/<title>/g) || []).length, 1);
 const slug = 'why-i-built-payday-to-pension';
 const canonical = `https://jiazhenxie.com/blog/${slug}`;
 const html = fs.readFileSync(`dist/blog/${slug}/index.html`, 'utf8');

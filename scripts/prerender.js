@@ -29,8 +29,8 @@ const siteConfig = {
 const staticPages = [
   {
     path: '/payday-to-pension',
-    title: 'Payday to Pension — UK Pension Calculator | Jiazhen Xie',
-    description: "Work backwards from the monthly retirement income you want, in today's money. Explore pension contributions and their effect on take-home pay.",
+    title: 'UK Pension Contribution Calculator | Jiazhen Xie',
+    description: "Compare how extra pension contributions affect take-home pay and adjusted net income. A UK calculator with clearly stated assumptions.",
     keywords: ['UK pension calculator', 'retirement income', 'salary sacrifice'],
     type: 'website',
   },
