@@ -1,0 +1,28 @@
+{
+  "extraGrossMonthly": 500,
+  "cashCostMonthly": 290,
+  "extraPot": 319324.9119324741,
+  "extraIncomeMonthly": 904.7539171420099,
+  "points": [
+    {
+      "years": 0,
+      "pot": 0
+    },
+    {
+      "years": 8,
+      "pot": 54083.718736584466
+    },
+    {
+      "years": 16,
+      "pot": 122595.35552227453
+    },
+    {
+      "years": 24,
+      "pot": 209383.8472292783
+    },
+    {
+      "years": 32,
+      "pot": 319324.9119324741
+    }
+  ]
+}
