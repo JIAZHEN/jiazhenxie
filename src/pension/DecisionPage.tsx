@@ -6,6 +6,7 @@ import type { ContributionBasis, ContributionMethod } from '../calc/types'
 import { formatGbp } from '../calc/format'
 import { Choice, NumberField, Section } from './Fields'
 import { defaultInputs } from './defaults'
+import { SchemeSwitch } from './SchemeSwitch'
 const RetirementCalculator = lazy(() => import('./PaydayToPension').then(module => ({ default: module.RetirementCalculator })))
 
 interface Setup {
@@ -48,6 +49,7 @@ export function PaydayToPension() {
   })
   const [setup, setSetup] = useState<Setup>(opening.setup)
   const [isExample, setExample] = useState(opening.isExample)
+  const [view, setView] = useState<'switch' | 'extra'>('switch')
   const [showRetirement, setRetirement] = useState(false)
   const [showLegacy, setLegacy] = useState(false)
   const legacy = typeof window !== 'undefined' && window.location.hash.startsWith('#v=1&')
@@ -72,19 +74,24 @@ export function PaydayToPension() {
   const unsupported = setup.region === 'scotland' || setup.pensionAccessed || setup.unsupportedIncome
   const valid = decision != null && !unsupported && decision.issues.length === 0
   const retirement = decision ? { ...defaultInputs, grossAnnualSalary: (setup.salary ?? 0) + setup.bonus, contributionBasis: 'full' as const, employeePercent: ((decision.existing + extraMonthly * 12) / Math.max(1, (setup.salary ?? 0) + setup.bonus)) * 100, employerPercent: (decision.employerAfterAnnual) / Math.max(1, (setup.salary ?? 0) + setup.bonus) * 100, salarySacrifice: setup.method === 'salarySacrifice' ? 'yes' as const : 'no' as const, taxRelief: setup.method === 'netPay' ? 'netPay' as const : 'reliefAtSource' as const } : undefined
-  const demo = (matching: 'none' | 'one' | 'two' = 'none') => { setSetup({ ...example, ...(matching !== 'none' ? { employerPercent: matching === 'two' ? 10 : 5, matchEnabled: true, matchRate: matching === 'two' ? 2 : 1, matchCapPercent: matching === 'two' ? 12 : 8 } : {}) }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
+  const demo = (matching: 'none' | 'one' | 'two' = 'none') => { setView('extra'); setSetup({ ...example, ...(matching !== 'none' ? { employerPercent: matching === 'two' ? 10 : 5, matchEnabled: true, matchRate: matching === 'two' ? 2 : 1, matchCapPercent: matching === 'two' ? 12 : 8 } : {}) }); setExample(true); requestAnimationFrame(() => document.getElementById('decision-results')?.scrollIntoView({ block: 'start' })) }
 
   return <div className="pension-tool mt-16 sm:mt-20 bg-[color:var(--pension-canvas)] p-4 text-[color:var(--pension-ink)] sm:p-6">
     <SEO title="UK Pension Contribution Calculator" description="Compare how extra pension contributions affect take-home pay and adjusted net income. A UK calculator with clearly stated assumptions." canonicalUrl="https://jiazhenxie.com/payday-to-pension" />
     <header className="mx-auto max-w-6xl py-5">
       <p className="pension-eyebrow">PAYDAY TO PENSION · 2026/27</p>
-      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">Your cash. Your pension.</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">Choose a monthly cash budget. See how tax relief and employer matching change what reaches your pension.</p>
-      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm"><button type="button" onClick={() => demo()} className="underline underline-offset-4">View an example</button><Link to="/blog/why-i-built-payday-to-pension" className="underline underline-offset-4">Why I built this →</Link></div>
-      {isExample && <div role="status" className="mt-4 rounded-xl border border-[color:var(--pension-border)] p-3 text-xs leading-relaxed"><strong>Illustrative inputs.</strong> Edit to explore. <button type="button" className="underline underline-offset-2" onClick={() => { setSetup(initial()); setExample(false); requestAnimationFrame(() => document.getElementById('pension-setup')?.scrollIntoView({ block: 'start' })) }}>Return to my setup</button></div>}
+      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">More pension. What does it cost you?</h1>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">A bigger pension does not mean losing the same amount of take-home pay. See the monthly difference before you change your contribution.</p>
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm"><a href="#switch-inputs" className="underline underline-offset-4">Try the calculator ↓</a><Link to="/blog/why-i-built-payday-to-pension" className="underline underline-offset-4">Why I built this →</Link></div>
+
       <p className="mt-3 text-xs text-[color:var(--pension-muted)]">Annual estimate · England, Wales & Northern Ireland · inputs stay in this browser</p>
       <details className="mt-2 text-xs leading-relaxed text-[color:var(--pension-muted)]"><summary className="cursor-pointer underline underline-offset-2">What this estimate covers</summary><p className="mt-2">Full-year amounts are divided by 12. Bonus timing, tax codes and actual monthly National Insurance can differ. Supports employment income and optional non-savings income. Savings/dividends, shares, Scottish tax and reduced annual allowances are outside scope.</p></details>
     </header>
+    <SchemeSwitch />
+    <details className="mx-auto mt-8 max-w-6xl rounded-3xl border border-[color:var(--pension-border)] p-5" open={view === 'extra'} onToggle={event => setView(event.currentTarget.open ? 'extra' : 'switch')}>
+      <summary className="cursor-pointer font-serif text-xl text-[color:var(--pension-accent)]">Already contributing through salary sacrifice, or starting with a cash budget?</summary>
+      <p className="my-4 text-sm leading-relaxed text-[color:var(--pension-muted)]">Use this detailed calculator to ask “What could £200 less take-home add to my pension?” It starts from your existing scheme and adds an extra contribution. It also supports bonus income and employer matching. Inputs here are separate from the simple comparison above.</p>
+      {isExample && <div role="status" className="mt-4 rounded-xl border border-[color:var(--pension-border)] p-3 text-xs leading-relaxed"><strong>Illustrative inputs.</strong> Edit to explore. <button type="button" className="underline underline-offset-2" onClick={() => { setSetup(initial()); setExample(false); requestAnimationFrame(() => document.getElementById('pension-setup')?.scrollIntoView({ block: 'start' })) }}>Return to my setup</button></div>}
     <div className="mx-auto grid max-w-6xl items-start gap-5 lg:grid-cols-[1.1fr_1fr]">
 
       <section aria-labelledby="decision-results-title" className="order-1 space-y-4">
@@ -190,6 +197,7 @@ export function PaydayToPension() {
       {showRetirement && valid ? <Suspense fallback={<p>Loading projection…</p>}><RetirementCalculator key={JSON.stringify(retirement)} initialInputs={retirement} /></Suspense> : <p className="mt-3 text-sm">Complete a supported pension setup above to initialise the projection.</p>}
     </details>
     {legacy && <details className="mx-auto mt-4 max-w-6xl p-4" onToggle={event => setLegacy(event.currentTarget.open)}><summary className="cursor-pointer">Open your older retirement share link</summary>{showLegacy && <Suspense fallback={<p>Loading saved projection…</p>}><RetirementCalculator /></Suspense>}</details>}
+    </details>
     <footer className="mx-auto mt-6 max-w-6xl text-xs leading-relaxed text-[color:var(--pension-muted)]">This is a calculator, not financial advice. Figures are estimates. Pension money is generally locked until pension access age; future withdrawals may be taxable. Check scheme details and your own tax position before changing contributions.</footer>
   </div>
 }

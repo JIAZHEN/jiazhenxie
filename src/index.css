@@ -423,3 +423,33 @@
   .pension-intro-compact > .pension-eyebrow, .pension-intro-compact > h1, .pension-intro-compact > .pension-intro-copy, .pension-intro-compact > .pension-intro-actions, .pension-intro-compact > .pension-intro-small { grid-column: 1; }
   .pension-quick-example { grid-column: 2; grid-row: 1 / 6; margin-top: 0; }
 }
+
+/* Keep paired scheme-switch labels and controls on the same baseline. */
+.pension-switch-fields > * { min-width: 0; }
+.pension-switch-fields > div > .flex,
+.pension-switch-fields > fieldset > legend {
+  min-height: 3.5rem;
+  height: 3.5rem;
+  width: 100%;
+  align-items: center;
+}
+.pension-switch-fields > div > .flex { justify-content: space-between; }
+.pension-switch-fields > div > .flex > label { line-height: 1.4; }
+.pension-switch-fields > div > .flex > span { flex-shrink: 0; }
+.pension-switch-fields > div > .relative > input {
+  height: 3.25rem;
+  margin-top: .375rem;
+}
+.pension-switch-fields > fieldset > div { margin-top: .375rem; }
+.pension-switch-fields > fieldset > div > label {
+  height: 3.25rem;
+  min-height: 3.25rem;
+  padding: .5rem;
+}
+.pension-switch-fields > fieldset > legend { display: flex; padding: 0; line-height: 1.4; }
+
+/* Stack large money figures on very narrow phones instead of squeezing columns. */
+@media (max-width: 380px) {
+  .pension-tool .pension-tradeoff { grid-template-columns: minmax(0, 1fr); }
+}
+.pension-tool [aria-label="Calculator steps"] > button { min-width: 0; overflow-wrap: anywhere; }

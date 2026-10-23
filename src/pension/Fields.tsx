@@ -21,6 +21,7 @@ export function NumberField({
   hint,
   value,
   onChange,
+  onValidityChange,
   min = 0,
   max = 100_000_000,
   step = 1,
@@ -34,6 +35,7 @@ export function NumberField({
   hint?: string
   value: number | null
   onChange: (value: number | null) => void
+  onValidityChange?: (valid: boolean) => void
   min?: number
   max?: number
   step?: number
@@ -79,9 +81,11 @@ export function NumberField({
             primary ? 'mt-2 py-4 font-serif text-3xl' : ''
           }`}
           value={text}
+          aria-invalid={draft != null && (parseNumber(draft) == null || Number(draft.replace(/,/g, '')) < min || Number(draft.replace(/,/g, '')) > max) || undefined}
           step={step}
           onFocus={() => setDraft(value == null ? '' : String(value))}
           onBlur={() => {
+            onValidityChange?.(true)
             if (optional && text.trim() === '') {
               onChange(null)
               setDraft(null)
@@ -99,6 +103,8 @@ export function NumberField({
           onChange={event => {
             const nextText = event.target.value
             setDraft(nextText)
+            const candidate = parseNumber(nextText)
+            onValidityChange?.(candidate != null && candidate >= min && candidate <= max)
             if (nextText.trim() === '') {
               onChange(null)
               return
