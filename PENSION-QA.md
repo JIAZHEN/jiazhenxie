@@ -13,7 +13,7 @@ Run: `npm run build && npm run check:pension`.
 
 ## Payroll scope
 
-The calculator estimates annual tax divided by 12. It does not reproduce cumulative PAYE ledgers, individual tax codes, or payroll rounding. The simple wizard assumes current net-pay contributions; other methods belong in the detailed calculator.
+The calculator estimates annual tax divided by 12. It does not reproduce cumulative PAYE ledgers, individual tax codes, or payroll rounding. The simple wizard assumes current net-pay contributions; other methods are outside the simplified calculator’s scope.
 
 Personal validation inputs and reconciliation details are excluded from the published repository.
 
@@ -39,3 +39,7 @@ No real payroll-system connection is available. Formula verification is not cert
 - https://www.gov.uk/income-tax-rates
 - https://www.gov.uk/national-insurance-rates-letters
 - https://www.gov.uk/workplace-pensions/what-you-your-employer-and-the-government-pay
+
+## Simplification follow-up
+
+Removed the second calculator and the budget input mode from the page. Employer NI sharing now accepts 0–100% of actual employer NI savings. Regression checks cover 0%, 60%, 100%, an invalid 101% and the employer NI threshold. Production build and calculation checks passed; new visual verification remains blocked as described above.

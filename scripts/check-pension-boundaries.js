@@ -42,6 +42,12 @@ try {
   }
   const validInput = { salary:80000,currentMethod:'netPay',currentGrossMonthly:200,employerMonthly:150,targetPercent:10,niTopUpPercent:0 };
   for (const [field, value] of [['salary',NaN],['salary',Infinity],['salary',-1],['currentGrossMonthly',-1],['employerMonthly',Infinity],['targetPercent',101],['niTopUpPercent',16]]) assert.ok(compareSchemeSwitch({...validInput,[field]:value}).issues.length);
+  const sharedNi = compareSchemeSwitch({ ...validInput, employerNiSharePercent: 60 });
+  close(sharedNi.topUpMonthly, 8000 * .15 * .6 / 12);
+  close(compareSchemeSwitch({ ...validInput, employerNiSharePercent: 100 }).topUpMonthly, 8000 * .15 / 12);
+  close(compareSchemeSwitch({ ...validInput, employerNiSharePercent: 0 }).topUpMonthly, 0);
+  close(compareSchemeSwitch({ ...validInput, salary:6000, currentGrossMonthly:0, employerMonthly:0, targetPercent:50, employerNiSharePercent:60 }).topUpMonthly, 1000 * .15 * .6 / 12);
+  assert.ok(compareSchemeSwitch({ ...validInput, employerNiSharePercent:101 }).issues.length);
   let solverCases = 0;
   for (const salary of [1,6240,12570,50270,80000,100000,125140,200000]) for (const budget of [0,.01,200,5000]) for (const targetBasis of ['full','qualifying']) {
     const input = { salary,currentMethod:'netPay',currentGrossMonthly:base(salary,'qualifying')*.05/12,employerMonthly:base(salary,'qualifying')*.03/12,targetPercent:10,targetBasis,niTopUpPercent:0 };

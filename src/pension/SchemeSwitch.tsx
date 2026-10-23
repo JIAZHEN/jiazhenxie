@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { compareSchemeSwitch, solveSchemeSwitchBudget, type SchemeSwitchInputs } from '../calc/schemeSwitch'
+import { compareSchemeSwitch, type SchemeSwitchInputs } from '../calc/schemeSwitch'
 import { pensionablePay } from '../calc/contributions'
 import type { ContributionBasis } from '../calc/types'
 import { formatGbp } from '../calc/format'
 import { Choice, NumberField, Section } from './Fields'
 
-const example: SchemeSwitchInputs = { salary: 80000, currentMethod: 'netPay', currentGrossMonthly: 200, employerMonthly: 150, targetPercent: 10, niTopUpPercent: 0 }
+const example: SchemeSwitchInputs = { salary: 80000, currentMethod: 'netPay', currentGrossMonthly: 200, employerMonthly: 150, targetPercent: 10, niTopUpPercent: 0, employerNiSharePercent: 0 }
 const basisOptions: { value: ContributionBasis; label: string }[] = [{ value: 'full', label: 'Full base salary' }, { value: 'qualifying', label: 'Qualifying earnings' }]
 const primary = 'rounded-xl bg-[color:var(--pension-accent)] px-5 py-3 text-sm font-medium text-[color:var(--pension-on-accent)] disabled:opacity-40'
 
@@ -24,22 +24,19 @@ export function SchemeSwitch() {
   const [keepEmployer, setKeepEmployer] = useState(true)
   const [newEmployerRate, setNewEmployerRate] = useState(3)
   const [newEmployerBasis, setNewEmployerBasis] = useState<ContributionBasis>('qualifying')
-  const [budgetMode, setBudgetMode] = useState<'cash' | 'percent'>('percent')
-  const [budget, setBudget] = useState(200)
   const patch = (value: Partial<SchemeSwitchInputs>) => setInput(previous => ({ ...previous, ...value }))
   const employeeMonthly = entryMode === 'percent' ? pensionablePay(input.salary, employeeBasis) * employeeRate / 1200 : input.currentGrossMonthly
   const employerMonthly = entryMode === 'percent' ? pensionablePay(input.salary, employerBasis) * employerRate / 1200 : input.employerMonthly
   const employerAfterMonthly = keepEmployer ? employerMonthly : pensionablePay(input.salary, newEmployerBasis) * newEmployerRate / 1200
   const current = { ...input, currentGrossMonthly: employeeMonthly, employerMonthly, employerAfterMonthly, targetBasis }
-  const solved = budgetMode === 'cash' ? solveSchemeSwitchBudget(current, budget) : null
-  const result = solved?.result ?? compareSchemeSwitch(current)
-  const targetPercent = solved?.targetPercent ?? input.targetPercent
+  const result = compareSchemeSwitch(current)
+  const targetPercent = input.targetPercent
   const supported = !hasInvalidFields && input.salary > 0 && input.salary <= 200000 && result.issues.length === 0
   const go = (next: number) => { setStep(next); requestAnimationFrame(() => document.getElementById('switch-inputs')?.scrollIntoView({ block: 'start' })) }
-  const reset = () => { setInvalidFields({}); setInput(example); setStep(1); setEntryMode('percent'); setEmployeeBasis('qualifying'); setEmployerBasis('qualifying'); setEmployeeRate(5); setEmployerRate(3); setTargetBasis('full'); setKeepEmployer(true); setNewEmployerRate(3); setNewEmployerBasis('qualifying'); setBudgetMode('percent'); setBudget(200) }
+  const reset = () => { setInvalidFields({}); setInput(example); setStep(1); setEntryMode('percent'); setEmployeeBasis('qualifying'); setEmployerBasis('qualifying'); setEmployeeRate(5); setEmployerRate(3); setTargetBasis('full'); setKeepEmployer(true); setNewEmployerRate(3); setNewEmployerBasis('qualifying') }
   return <section id="switch-inputs" className="mx-auto max-w-6xl scroll-mt-24 space-y-5" aria-label="Pension calculator">
     <nav aria-label="Calculator steps" className="grid grid-cols-3 gap-2">
-      {['Your pay', 'Pension today', 'Your result'].map((label, index) => <button key={label} type="button" aria-current={step === index + 1 ? 'step' : undefined} disabled={index > 0 && (input.salary <= 0 || input.salary > 200000 || hasInvalidFields)} onClick={() => go(index + 1)} className={`rounded-xl border p-3 text-left text-sm ${step === index + 1 ? 'border-[color:var(--pension-accent)] bg-[color:var(--pension-tint)]' : 'border-[color:var(--pension-border)]'}`}><span className="mr-2 font-semibold">{index + 1}</span>{' '}{label}</button>)}
+      {['Your salary', 'Current pension', 'Make a change'].map((label, index) => <button key={label} type="button" aria-current={step === index + 1 ? 'step' : undefined} disabled={index > 0 && (input.salary <= 0 || input.salary > 200000 || hasInvalidFields)} onClick={() => go(index + 1)} className={`rounded-xl border p-3 text-left text-sm ${step === index + 1 ? 'border-[color:var(--pension-accent)] bg-[color:var(--pension-tint)]' : 'border-[color:var(--pension-border)]'}`}><span className="mr-2 font-semibold">{index + 1}</span>{' '}{label}</button>)}
     </nav>
     <p className="text-xs text-[color:var(--pension-muted)]">Fictional example · edit any figure · your inputs stay in this page</p>
     {step === 1 && <Section title="1. What do you earn?" intro="Use your annual base salary before pension deductions.">
@@ -65,14 +62,14 @@ export function SchemeSwitch() {
         </div>
       </div>
       {entryMode === 'percent' && <p className="rounded-xl bg-[color:var(--pension-tint)] p-3 text-xs leading-relaxed">Full base salary: your percentage applies to {formatGbp(input.salary)} / year. Qualifying earnings: it applies to {formatGbp(pensionablePay(input.salary, 'qualifying'))} / year, the slice between £6,240 and £50,270. Your employer may use a different basis from you. Check your benefits portal; use monthly amounts if your scheme uses another definition.</p>}
-      <p className="text-xs text-[color:var(--pension-muted)]">Assumes your current deduction is before Income Tax (net pay). For an existing salary-sacrifice or relief-at-source scheme, use the detailed calculator below.</p>
+      <p className="text-xs text-[color:var(--pension-muted)]">Assumes your current deduction is before Income Tax (net pay). An existing salary-sacrifice or relief-at-source scheme needs a different tax calculation; this simplified comparison does not cover it.</p>
       <div className="flex flex-wrap items-center gap-4"><button type="button" className="text-sm underline" onClick={() => go(1)}>← Back</button><button type="button" className={primary} disabled={hasInvalidFields} onClick={() => go(3)}>Next: try a change →</button></div>
     </Section>}
     {step === 3 && <div className="grid min-w-0 items-start gap-5 lg:grid-cols-2 [&>*]:min-w-0">
       <Section title="3. How much salary would you sacrifice?" intro="Choose the total percentage you want to exchange for pension. See how much less you take home and how much more goes into your pension.">
-        {supported && <div className="rounded-xl bg-[color:var(--pension-tint)] p-4 text-sm lg:hidden" aria-live="polite"><strong>{formatGbp(Math.abs(result.cashCostMonthly))} {result.cashCostMonthly >= 0 ? 'less' : 'more'} to spend.</strong><br /><strong className="text-[color:var(--pension-positive)]">{formatGbp(Math.abs(result.extraMonthly))} {result.extraMonthly >= 0 ? 'more' : 'less'} in your pension each month.</strong></div>}
-        <Choice name="switch-budget-mode" label="Choose how to try a change" value={budgetMode} options={[{ value: 'percent', label: 'Salary sacrifice %' }, { value: 'cash', label: 'Take-home budget' }]} onChange={mode => { if (mode === 'percent') patch({ targetPercent }); else setBudget(Math.max(0, Math.round(result.cashCostMonthly))); setBudgetMode(mode) }} />
-        {budgetMode === 'cash' ? <><NumberField id="switch-budget" onValidityChange={valid => fieldValidity("switch-budget", valid)} label="I could take home less each month" prefix="£" value={budget} max={5000} onChange={value => setBudget(value ?? 0)} /><input type="range" className="pension-salary-slider" aria-label="Monthly take-home budget" min={0} max={Math.max(1000, budget)} step={25} value={budget} onChange={event => setBudget(Number(event.target.value))} /></> : <><NumberField id="switch-target" onValidityChange={valid => fieldValidity("switch-target", valid)} label="Total salary sacrifice" hint="Your new total percentage, not an extra percentage on top of today’s contribution." suffix="%" max={100} value={input.targetPercent} onChange={value => patch({ targetPercent: value ?? 0 })} /><input type="range" className="pension-salary-slider" aria-label="Total salary sacrifice percentage" min={0} max={Math.max(30, input.targetPercent)} step={.5} value={input.targetPercent} onChange={event => patch({ targetPercent: Number(event.target.value) })} /></>}
+        {supported && <div className="rounded-xl bg-[color:var(--pension-tint)] p-4 text-sm lg:hidden" aria-live="polite"><strong>{formatGbp(Math.abs(result.cashCostMonthly))} {result.cashCostMonthly >= 0 ? 'less' : 'more'} take-home pay each month.</strong><br /><strong className="text-[color:var(--pension-positive)]">{formatGbp(Math.abs(result.extraMonthly))} {result.extraMonthly >= 0 ? 'more' : 'less'} in your pension each month.</strong></div>}
+        <NumberField id="switch-target" onValidityChange={valid => fieldValidity("switch-target", valid)} label="Total salary sacrifice" hint="Your new total contribution, not an extra percentage." suffix="%" max={100} value={input.targetPercent} onChange={value => patch({ targetPercent: value ?? 0 })} />
+        <input type="range" className="pension-salary-slider" aria-label="Total salary sacrifice percentage" min={0} max={Math.max(30, input.targetPercent)} step={.5} value={input.targetPercent} onChange={event => patch({ targetPercent: Number(event.target.value) })} />
         <Choice name="target-basis" label="What is your new sacrifice percentage based on?" value={targetBasis} options={basisOptions} onChange={setTargetBasis} />
         <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Full base salary uses all {formatGbp(input.salary)} of your annual salary. Qualifying earnings use only {formatGbp(pensionablePay(input.salary, 'qualifying'))} — the slice between £6,240 and £50,270. The same percentage can mean very different payments. Check your employer’s scheme.</p>
         <p className="rounded-xl bg-[color:var(--pension-tint)] p-3 text-sm">Your new contribution: <strong>{targetPercent.toFixed(2)}%</strong> of {targetBasis === 'full' ? 'full base salary' : 'qualifying earnings'} = <strong>{formatGbp(result.sacrificeMonthly)} / month</strong>.</p>
@@ -81,19 +78,19 @@ export function SchemeSwitch() {
           {!keepEmployer && <><NumberField id="new-employer-rate" onValidityChange={valid => fieldValidity("new-employer-rate", valid)} label="New employer rate" suffix="%" max={100} value={newEmployerRate} onChange={value => setNewEmployerRate(value ?? 0)} /><Choice name="new-employer-basis" label="New employer contribution is based on" value={newEmployerBasis} options={basisOptions} onChange={setNewEmployerBasis} /></>}
           <p className="text-sm text-[color:var(--pension-muted)]">Your employer adds {formatGbp(employerAfterMonthly)} / month under this rule.</p>
         </div>
-        <details className="text-sm"><summary className="cursor-pointer underline">Does your employer add an extra NI bonus? (optional)</summary><div className="mt-3 space-y-3">
-          <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">This is extra money from your employer, separate from the salary you sacrifice. Some employers share their National Insurance savings with you. Leave this at 0 unless your scheme confirms a top-up.</p>
-          <NumberField id="switch-ni" onValidityChange={valid => fieldValidity("switch-ni", valid)} label="Employer NI bonus" hint="Bonus as a percentage of your sacrificed salary." suffix="%" max={15} value={input.niTopUpPercent} onChange={value => patch({ niTopUpPercent: value ?? 0 })} />
+        <details className="text-sm"><summary className="cursor-pointer underline">Does your employer share its NI savings? (optional)</summary><div className="mt-3 space-y-3">
+          <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Salary sacrifice can save your employer National Insurance. Enter the share of that saving they put into your pension: 0% for none, 60% if they return 60%, or 100% for all. This is separate from your own sacrifice.</p>
+          <NumberField id="switch-ni" onValidityChange={valid => fieldValidity("switch-ni", valid)} label="Share of employer NI savings returned" hint="Percentage of the NI saving, not of your salary." suffix="%" max={100} value={input.employerNiSharePercent ?? 0} onChange={value => patch({ employerNiSharePercent: value ?? 0 })} />
         </div></details>
         <p className="text-xs text-[color:var(--pension-muted)]">Your employer must offer salary sacrifice and keep cash pay above minimum wage. Confirm the contribution rules with payroll. Extra matching is included only if you enter the changed employer rate.</p>
         <button type="button" className="text-sm underline" onClick={() => go(2)}>← Edit your current pension</button>
       </Section>
-      <Section title="Your monthly difference">
+      <Section title="What changes each month">
         {supported ? <div id="switch-result" className="scroll-mt-24" aria-live="polite" aria-atomic="true">
-          <dl className="pension-tradeoff"><div><dt>{result.cashCostMonthly >= 0 ? 'Less to spend' : 'More to spend'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div><div><dt>{result.extraMonthly >= 0 ? 'More in your pension' : 'Less in your pension'}</dt><dd>{result.extraMonthly >= 0 ? '+' : '−'}{formatGbp(Math.abs(result.extraMonthly))}</dd></div></dl>
+          <dl className="pension-tradeoff"><div><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div><div><dt>{result.extraMonthly >= 0 ? 'Pension increases by' : 'Pension decreases by'}</dt><dd>{result.extraMonthly >= 0 ? '+' : '−'}{formatGbp(Math.abs(result.extraMonthly))}</dd></div></dl>
           <div className="my-5 border-y border-[color:var(--pension-border)] py-5"><p className="text-sm text-[color:var(--pension-muted)]">Total into your pension each month</p><p className="mt-2 font-serif text-5xl text-[color:var(--pension-positive)]">{formatGbp(result.afterMonthly)}</p><p className="mt-2 text-sm">{result.afterMonthly >= result.beforeMonthly ? 'Up' : 'Down'} from {formatGbp(result.beforeMonthly)} today</p></div>
-          <dl className="space-y-3 text-sm"><div className="flex justify-between gap-3"><dt>Your salary sacrifice</dt><dd>{formatGbp(result.sacrificeMonthly)}</dd></div><div className="flex justify-between gap-3"><dt>Your employer adds</dt><dd>{formatGbp(employerAfterMonthly)}</dd></div>{result.topUpMonthly > 0 && <div className="flex justify-between gap-3"><dt>Employer NI bonus</dt><dd>{formatGbp(result.topUpMonthly)}</dd></div>}</dl>
-          {solved?.limited && <p role="status" className="mt-4 text-sm">Only {formatGbp(Math.max(0, result.cashCostMonthly))} of your {formatGbp(budget)} budget is used. This estimate stops at its earnings or standard annual-allowance limit.</p>}
+          <dl className="space-y-3 text-sm"><div className="flex justify-between gap-3"><dt>Your salary sacrifice</dt><dd>{formatGbp(result.sacrificeMonthly)}</dd></div><div className="flex justify-between gap-3"><dt>Your employer adds</dt><dd>{formatGbp(employerAfterMonthly)}</dd></div>{result.topUpMonthly > 0 && <div className="flex justify-between gap-3"><dt>Employer NI savings added</dt><dd>{formatGbp(result.topUpMonthly)}</dd></div>}</dl>
+
         </div> : <div role="alert" className="space-y-2 text-sm"><p>Check your inputs before using this result.</p>{input.salary <= 0 && <p>Enter a salary above zero.</p>}{input.salary > 200000 && <p>Income above £200,000 needs a separate allowance assessment.</p>}{result.issues.map(issue => <p key={issue}>{issue}</p>)}</div>}
         <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Annual estimates divided by 12, at the same salary. Payroll timing and tax codes can change actual monthly pay. Pension money is locked until pension access age; withdrawals may be taxed.</p>
       </Section>
