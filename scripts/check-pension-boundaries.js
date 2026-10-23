@@ -35,6 +35,8 @@ try {
       close(result.cashCostMonthly,(beforeCash-afterCash)/12);
       close(result.afterMonthly, sacrifice / 12 * (1+niTopUpPercent/100)+employerMonthly);
       close(result.extraMonthly, result.afterMonthly-result.beforeMonthly);
+      close(result.cashCostMonthly, result.sacrificeMonthly-currentGrossMonthly-result.incomeTaxSavingMonthly-result.employeeNiSavingMonthly);
+      close(result.cashCostMonthly, result.beforeTakeHomeMonthly-result.afterTakeHomeMonthly);
       assert.ok(Object.values(result).filter(v => typeof v === 'number').every(Number.isFinite));
       if ((salary > 200000) || result.afterMonthly*12 > 60000+.00001) assert.ok(result.issues.length);
       cases++;

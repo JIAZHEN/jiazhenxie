@@ -19,7 +19,7 @@ export interface SchemeSwitchInputs {
 export function compareSchemeSwitch(input: SchemeSwitchInputs) {
   const amounts = [input.salary, input.currentGrossMonthly, input.employerMonthly, input.employerAfterMonthly ?? input.employerMonthly, input.targetPercent, input.niTopUpPercent, input.employerNiSharePercent ?? 0]
   if (amounts.some(value => !Number.isFinite(value) || value < 0) || input.targetPercent > 100 || input.niTopUpPercent > 15 || (input.employerNiSharePercent ?? 0) > 100) {
-    return { beforeMonthly: 0, afterMonthly: 0, extraMonthly: 0, cashCostMonthly: 0, finalCostMonthly: 0, sacrificeMonthly: 0, topUpMonthly: 0, issues: ['Enter finite, non-negative amounts and valid contribution percentages.'] }
+    return { incomeTaxSavingMonthly: 0, employeeNiSavingMonthly: 0, beforeTakeHomeMonthly: 0, afterTakeHomeMonthly: 0, beforeMonthly: 0, afterMonthly: 0, extraMonthly: 0, cashCostMonthly: 0, finalCostMonthly: 0, sacrificeMonthly: 0, topUpMonthly: 0, issues: ['Enter finite, non-negative amounts and valid contribution percentages.'] }
   }
   const common = { salary: input.salary, bonus: 0, otherIncome: 0, giftAidNet: 0,
     employeePercent: 0, employerAnnual: input.employerMonthly * 12,
@@ -33,6 +33,10 @@ export function compareSchemeSwitch(input: SchemeSwitchInputs) {
     currentWorkplaceAnnual: sacrificeMonthly * 12,
     employerAnnual: ((input.employerAfterMonthly ?? input.employerMonthly) + topUpMonthly) * 12 })
   return {
+    incomeTaxSavingMonthly: (before.before.tax - after.before.tax) / 12,
+    employeeNiSavingMonthly: (before.before.ni - after.before.ni) / 12,
+    beforeTakeHomeMonthly: before.before.cash / 12,
+    afterTakeHomeMonthly: after.before.cash / 12,
     beforeMonthly: before.annualPension / 12, afterMonthly: after.annualPension / 12,
     extraMonthly: (after.annualPension - before.annualPension) / 12,
     cashCostMonthly: (before.before.cash - after.before.cash) / 12,
