@@ -453,3 +453,38 @@
   .pension-tool .pension-tradeoff { grid-template-columns: minmax(0, 1fr); }
 }
 .pension-tool [aria-label="Calculator steps"] > button { min-width: 0; overflow-wrap: anywhere; }
+
+/* Submitted results: warm cash costs, green pension gains, quiet supporting detail. */
+.pension-result .pension-tradeoff { gap: 1rem; }
+.pension-result .pension-tradeoff > div {
+  border: 1px solid var(--pension-border);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: var(--pension-tint);
+}
+.pension-result .pension-tradeoff > div:last-child {
+  background: color-mix(in srgb, var(--pension-positive) 12%, var(--pension-surface));
+  border-color: color-mix(in srgb, var(--pension-positive) 40%, var(--pension-border));
+}
+.pension-result .pension-tradeoff dt { font-size: .8rem; line-height: 1.5; }
+.pension-result .pension-tradeoff dd { margin-top: .75rem; font-size: clamp(1.75rem, 4vw, 3.25rem); line-height: 1.15; }
+.pension-result-total {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border-left: 4px solid var(--pension-positive);
+  background: color-mix(in srgb, var(--pension-positive) 7%, var(--pension-surface));
+}
+.pension-result-details { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.pension-result-card { min-width: 0; border: 1px solid var(--pension-border); border-radius: 1rem; padding: 1.25rem; }
+.pension-result-kicker { color: var(--pension-accent); font-size: .65rem; font-weight: 700; letter-spacing: .12em; margin-bottom: .5rem; }
+.pension-result table { font-variant-numeric: tabular-nums; }
+.pension-result table thead { color: var(--pension-muted); font-size: .7rem; }
+.pension-result-table-total { background: color-mix(in srgb, var(--pension-positive) 12%, var(--pension-surface)); color: var(--pension-positive-strong); }
+.pension-result-table-total > * { font-weight: 600; }
+.pension-result-table-total > *:first-child { padding-left: .5rem; }
+.pension-result-table-total > *:last-child { padding-right: .5rem; }
+.pension-result-cash-total { margin-top: 1rem; padding: .875rem; border-radius: .5rem; background: var(--pension-tint); color: var(--pension-accent); font-weight: 600; }
+.pension-result dd { font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (min-width: 1024px) { .pension-result-details { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media (max-width: 380px) { .pension-result-card { padding: .875rem; } .pension-result-total { padding: 1rem; } }

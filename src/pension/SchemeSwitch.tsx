@@ -91,29 +91,29 @@ export function SchemeSwitch() {
         <div className="flex flex-wrap items-center gap-4"><button type="button" className="text-sm underline" onClick={() => go(2)}>← Back</button><button type="submit" className={primary} disabled={!supported}>Calculate my result →</button></div>
       </Section>
       </form>}
-      {showResult && <Section title="What changes each month">
+      {showResult && <div className="pension-result"><Section title="Your monthly pension picture" intro="The difference your new contribution makes, in pounds per month.">
         {supported ? <div id="switch-result" className="scroll-mt-24" aria-live="polite" aria-atomic="true">
           <dl className="pension-tradeoff"><div><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div><div><dt>{result.extraMonthly >= 0 ? 'Pension increases by' : 'Pension decreases by'}</dt><dd>{result.extraMonthly >= 0 ? '+' : '−'}{formatGbp(Math.abs(result.extraMonthly))}</dd></div></dl>
-          <div className="my-5 border-y border-[color:var(--pension-border)] py-5"><p className="text-sm text-[color:var(--pension-muted)]">Total into your pension each month</p><p className="mt-2 font-serif text-5xl text-[color:var(--pension-positive)]">{formatGbp(result.afterMonthly)}</p><p className="mt-2 text-sm">{result.afterMonthly >= result.beforeMonthly ? 'Up' : 'Down'} from {formatGbp(result.beforeMonthly)} today</p></div>
-          <h3 className="mb-3 font-medium">Where your pension comes from</h3>
+          <div className="pension-result-total"><p className="text-sm text-[color:var(--pension-muted)]">Total into your pension each month</p><p className="mt-2 font-serif text-5xl text-[color:var(--pension-positive)]">{formatGbp(result.afterMonthly)}</p><p className="mt-2 text-sm text-[color:var(--pension-muted)]">{result.afterMonthly >= result.beforeMonthly ? 'Up' : 'Down'} from {formatGbp(result.beforeMonthly)} today</p></div>
+          <div className="pension-result-details"><article className="pension-result-card"><p className="pension-result-kicker">01 · PENSION</p><h3 className="mb-4 font-serif text-xl">Where your pension comes from</h3>
           <div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr className="border-b border-[color:var(--pension-border)]"><th className="py-2 font-medium">Each month</th><th className="px-2 text-right font-medium">Now</th><th className="text-right font-medium">After</th></tr></thead><tbody>
-            {([['Your contribution', employeeMonthly, result.sacrificeMonthly], ['Your employer', employerMonthly, employerAfterMonthly], ['Employer NI savings added', 0, result.topUpMonthly], ['Total into pension', result.beforeMonthly, result.afterMonthly]] as const).map(([label, before, after]) => <tr key={label} className="border-b border-[color:var(--pension-border)]"><th className="py-3 font-normal">{label}</th><td className="px-2 text-right tabular-nums">{formatGbp(before)}</td><td className="text-right tabular-nums">{formatGbp(after)}</td></tr>)}
-          </tbody></table></div>
-          <h3 className="mb-3 mt-6 font-medium">Why your take-home pay changes</h3>
+            {([['Your contribution', employeeMonthly, result.sacrificeMonthly], ['Your employer', employerMonthly, employerAfterMonthly], ['Employer NI savings added', 0, result.topUpMonthly], ['Total into pension', result.beforeMonthly, result.afterMonthly]] as const).map(([label, before, after]) => <tr key={label} className={label === 'Total into pension' ? 'pension-result-table-total' : 'border-b border-[color:var(--pension-border)]'}><th className="py-3 font-normal">{label}</th><td className="px-2 text-right tabular-nums">{formatGbp(before)}</td><td className="text-right tabular-nums">{formatGbp(after)}</td></tr>)}
+          </tbody></table></div></article>
+          <article className="pension-result-card"><p className="pension-result-kicker">02 · TAKE-HOME PAY</p><h3 className="mb-4 font-serif text-xl">Why your take-home pay changes</h3>
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between gap-3"><dt>New salary sacrifice</dt><dd>{formatGbp(result.sacrificeMonthly)}</dd></div>
             <div className="flex justify-between gap-3"><dt>Replace your current pension deduction</dt><dd>−{formatGbp(employeeMonthly)}</dd></div>
-            <div className="flex justify-between gap-3"><dt>Income Tax saving</dt><dd>{result.incomeTaxSavingMonthly >= 0 ? '−' : '+'}{formatGbp(Math.abs(result.incomeTaxSavingMonthly))}</dd></div>
-            <div className="flex justify-between gap-3"><dt>Employee NI saving</dt><dd>−{formatGbp(result.employeeNiSavingMonthly)}</dd></div>
-            <div className="flex justify-between gap-3 border-t border-[color:var(--pension-border)] pt-3 font-medium"><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div>
+            <div className="flex justify-between gap-3 text-[color:var(--pension-positive-strong)]"><dt>Income Tax saving</dt><dd>{result.incomeTaxSavingMonthly >= 0 ? '−' : '+'}{formatGbp(Math.abs(result.incomeTaxSavingMonthly))}</dd></div>
+            <div className="flex justify-between gap-3 text-[color:var(--pension-positive-strong)]"><dt>Employee NI saving</dt><dd>−{formatGbp(result.employeeNiSavingMonthly)}</dd></div>
+            <div className="pension-result-cash-total flex justify-between gap-3"><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div>
           </dl>
-          <p className="mt-3 text-xs text-[color:var(--pension-muted)]">New sacrifice − old deduction − tax saving − employee NI saving = reduction in take-home pay. Figures are rounded; employer payments go into your pension separately.</p>
+          <p className="mt-3 text-xs text-[color:var(--pension-muted)]">New sacrifice − old deduction − tax saving − employee NI saving = reduction in take-home pay. Figures are rounded; employer payments go into your pension separately.</p></article></div>
 
 
         </div> : <div role="alert" className="space-y-2 text-sm"><p>Check your inputs before using this result.</p>{input.salary <= 0 && <p>Enter a salary above zero.</p>}{input.salary > 200000 && <p>Income above £200,000 needs a separate allowance assessment.</p>}{result.issues.map(issue => <p key={issue}>{issue}</p>)}</div>}
         <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Annual estimates divided by 12, at the same salary. Payroll timing and tax codes can change actual monthly pay. Pension money is locked until pension access age; withdrawals may be taxed.</p>
         <button type="button" className={primary} onClick={() => { setSubmittedKey(null); requestAnimationFrame(() => document.getElementById('switch-inputs')?.scrollIntoView({ block: 'start' })) }}>Edit and calculate again</button>
-      </Section>}
+      </Section></div>}
     </div>}
     {hasInvalidFields && <p role="alert" className="text-sm text-[color:var(--pension-danger)]">Enter a valid number within the field’s range. Results are hidden while an entry is invalid.</p>}
     <button type="button" className="text-xs underline" onClick={reset}>Reset fictional example</button>
