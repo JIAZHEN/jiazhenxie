@@ -12,7 +12,7 @@ try {
     fs.writeFileSync(path.join(scratch, name.replace('.ts', '.js')), ts.transpileModule(fs.readFileSync(`src/${name}`, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)
   }
   const require = createRequire(import.meta.url)
-  const { exchangeRate, incomeCliffs, childBenefitCharge, niSavingAffected } = require(path.join(scratch, 'calc/pensionInsights.js'))
+  const { exchangeRate, incomeCliffs, childBenefitCharge, niSavingAffected, aboveIncomeLine, sacrificeToIncomeLine, childBenefitCard } = require(path.join(scratch, 'calc/pensionInsights.js'))
   const { compareSchemeSwitch, splitPlan } = require(path.join(scratch, 'calc/schemeSwitch.js'))
   const { freedomAge, simulateFreedom } = require(path.join(scratch, 'calc/freedom.js'))
   const { FREEDOM_DEFAULTS } = require(path.join(scratch, 'uk-constants.js'))
@@ -21,6 +21,32 @@ try {
   assert.equal(exchangeRate(200, 0).kind, 'free')
   assert.equal(exchangeRate(200, -10).kind, 'gain')
   for (const [ani, cb, lost, taper] of [[59999,false,false,false],[60000,true,false,false],[80000,true,false,false],[100000,false,false,false],[100001,false,true,true],[125140,false,true,true]]) assert.deepEqual(incomeCliffs(ani), { childBenefit: cb, childcareLost: lost, allowanceTaper: taper })
+  // Income-line presentation tolerance must never alter payroll amounts.
+  for (const [ani, expected] of [[100000,false],[100000.40,false],[100000.50,false],[100001,true]]) {
+    assert.equal(aboveIncomeLine(ani), expected)
+    assert.equal(incomeCliffs(ani).childcareLost, expected)
+    assert.equal(incomeCliffs(ani).allowanceTaper, expected)
+  }
+  const thresholdTarget = sacrificeToIncomeLine(110000,110000)
+  assert.equal(thresholdTarget.annual,10000)
+  assert.equal(thresholdTarget.percent,9.10)
+  assert.ok(/^\d+(\.\d{1,2})?$/.test(String(thresholdTarget.percent)))
+  const atLine = compareSchemeSwitch({salary:110000,currentMethod:'netPay',currentGrossMonthly:200,employerMonthly:150,targetPercent:thresholdTarget.percent,niTopUpPercent:0})
+  assert.ok(atLine.afterAni <= 100000)
+  assert.equal(aboveIncomeLine(atLine.afterAni),false)
+  for (const salary of [110000,110000.4,105000.01]) for (const basis of [salary,44030]) {
+    const target = sacrificeToIncomeLine(salary,basis)
+    assert.equal(target.annual,Math.ceil(salary-100000))
+    assert.ok(salary - basis * target.percent / 100 <= 100000)
+    close(target.percent * 100,Math.round(target.percent * 100))
+  }
+  assert.equal(sacrificeToIncomeLine(110000,0),null)
+  assert.deepEqual(childBenefitCard(59000,59000),{kind:'hidden'})
+  assert.deepEqual(childBenefitCard(60000,60000),{kind:'hidden'})
+  assert.deepEqual(childBenefitCard(85000,82000),{kind:'full',aboveBefore:5000,aboveAfter:2000})
+  assert.deepEqual(childBenefitCard(80000,80000),{kind:'full',aboveBefore:0,aboveAfter:0})
+  assert.deepEqual(childBenefitCard(75000,67500),{kind:'partial'})
+  close(childBenefitCharge(75000,1)-childBenefitCharge(67500,1),534.508)
   close(childBenefitCharge(60000, 1), 0)
   close(childBenefitCharge(60199, 1), 0)
   close(childBenefitCharge(60200, 1), 14.066)

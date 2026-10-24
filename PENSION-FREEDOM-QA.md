@@ -53,3 +53,15 @@ Validation: typecheck and targeted ESLint; production build; local Chrome intera
 Added independent closed-form tests for a £50,000 starting pot at 2%, 4% and 6% real returns over 20 years, both without future payments and with the existing/new annual contribution schedules. The £50,000 is included exactly once in both plans. Tests separately verify that it cannot fund spending before pension access; a zero-ISA case still fails the savings bridge while the pension continues growing.
 
 Renamed the balance field to “Already saved in your pensions (£)” with an Explain tooltip distinguishing the current total across workplace/personal pots from future contributions and defined-benefit promised income. The generic £100,000 fictional default remains editable; no personal £50,000 value is stored or applied to other visitors.
+
+## Income hints and result clarity fixes
+
+- Added a £0.50 presentation tolerance to £100k alerts. The exact tax, NI, benefit-charge and freedom simulation formulas are unchanged.
+- Threshold buttons ceil the required annual sacrifice to whole pounds, then ceil the stored percentage to two decimal places so the displayed value reaches or passes the line. £110,000 with full-salary basis becomes 9.10%, leaving £99,990 ANI. All numeric fields format programmatic values to at most two decimal places, including on focus. Focusing and leaving a field without editing preserves its underlying precision.
+- The bridge heading now explicitly relates the desired stopping age to the Middle freedom age. A feasible stopping age shows spare pot balances at the planning horizon after spending.
+- Middle results are shown by default; a React-state-only toggle reveals Cautious/Hopeful details. A compact range stays under the headline.
+- Added the max-ISA leftover-pension explanation and a permanent three-value monthly summary directly below “Your change”. Detailed payroll breakdown remains collapsed.
+- Child Benefit cards hide when both incomes are at/below £60k and explain full repayment with distances above £80k when both are at/above £80k.
+- Removed em dashes from page copy. Chart marker labels now use 14px HTML text below the SVG so nearby ages cannot overlap at 375px.
+
+Validation: production build, targeted ESLint, all existing tests, new £100k/tolerance/button and Child Benefit state unit tests. Chrome interaction tests at 375px in light/dark themes cover the target/freedom-age relationship and spare balance, scenario toggle, max-ISA explanation, permanent summary, all requested income cases, exact button result, chart label bounds/non-overlap, slider, no em dashes and unchanged default monthly result. No browser errors.

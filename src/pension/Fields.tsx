@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Hint } from './Hint'
 
 const fieldClass =
@@ -13,6 +13,10 @@ function parseNumber(text: string): number | null {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value))
+}
+
+function displayNumber(value: number | null): string {
+  return value == null ? '' : String(Number(value.toFixed(2)))
 }
 
 export function NumberField({
@@ -45,7 +49,8 @@ export function NumberField({
   optional?: boolean
 }) {
   const [draft, setDraft] = useState<string | null>(null)
-  const text = draft ?? (value == null ? '' : String(value))
+  const edited = useRef(false)
+  const text = draft ?? displayNumber(value)
 
   return (
     <div>
@@ -83,9 +88,10 @@ export function NumberField({
           value={text}
           aria-invalid={draft != null && (parseNumber(draft) == null || Number(draft.replace(/,/g, '')) < min || Number(draft.replace(/,/g, '')) > max) || undefined}
           step={step}
-          onFocus={() => setDraft(value == null ? '' : String(value))}
+          onFocus={() => { edited.current = false; setDraft(displayNumber(value)) }}
           onBlur={() => {
             onValidityChange?.(true)
+            if (!edited.current) { setDraft(null); return }
             if (optional && text.trim() === '') {
               onChange(null)
               setDraft(null)
@@ -101,6 +107,7 @@ export function NumberField({
             setDraft(null)
           }}
           onChange={event => {
+            edited.current = true
             const nextText = event.target.value
             setDraft(nextText)
             const candidate = parseNumber(nextText)

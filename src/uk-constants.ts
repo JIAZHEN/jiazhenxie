@@ -141,3 +141,6 @@ export const CHILDCARE_MAX_ANNUAL = 2_000
 
 /** Fictional desired stopping age, a 2026/27 example choice, not GOV.UK guidance. */
 export const FREEDOM_TARGET_AGE = 50
+
+/** UI-only rounding tolerance requested for 2026/27 income-line hints, not a tax relief. */
+export const INCOME_LINE_TOLERANCE = .50
