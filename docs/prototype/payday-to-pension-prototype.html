@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payday to Pension prototype</title>
+<style>
+:root{
+  --bg:#1a1817; --panel:#211e1c; --card:#272321; --card2:#312c29; --line:#3b3531; --text:#f3ede8; --muted:#a59a92; --faint:#7d736c;
+  --accent:#C45A3B; --peach:#EBAA90; --isa:#8FBB9C; --pen:#D9907A; --work:#4b4541; --warn:#E6BE76;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#f8f4ef; --panel:#fffdfb; --card:#ffffff; --card2:#f3ece5; --line:#e7ddd4; --text:#2a2421; --muted:#6f645c; --faint:#9a8f87;
+    --peach:#B5502F; --isa:#5F9A72; --pen:#D27C61; --work:#ddd3ca; --warn:#B98A2E; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding:28px 16px 80px}
+.proto{font-size:12px;color:var(--faint);margin-bottom:18px}
+.kicker{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.4vw,46px);line-height:1.1;margin:8px 0 26px;max-width:24ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px 24px;margin-bottom:34px}
+.sentence{font-family:var(--serif);font-size:clamp(19px,2.6vw,23px);line-height:2;color:var(--muted)}
+.controls{display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:end;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.controls .give{margin:0;padding:0;border:0}
+.controls .seg-ctl{margin-top:0}
+.mini{position:fixed;left:0;right:0;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);transform:translateY(-100%);transition:transform .2s}
+.mini.show{transform:none}
+.mini .in{max-width:780px;margin:0 auto;padding:10px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;font-size:13px;color:var(--muted)}
+.mini input[type=range]{margin:0}
+.mini b{font-family:var(--serif);font-size:20px;color:var(--text);font-weight:500}
+.mini .res b{color:var(--peach)}
+@media (max-width:640px){ .controls{grid-template-columns:1fr} }
+.sentence input{font:inherit;color:var(--text);background:transparent;border:0;border-bottom:2px dashed var(--peach);padding:0 2px;text-align:center;outline:none;border-radius:0}
+.sentence input:focus{border-bottom-style:solid;background:var(--card2)}
+.give{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.give .top{display:flex;justify-content:space-between;align-items:baseline}
+.give .lbl{font-size:13px;color:var(--muted)}
+.give .val{font-family:var(--serif);font-size:30px}
+.give .val small{font-family:var(--sans);font-size:13px;color:var(--muted)}
+input[type=range]{width:100%;margin:10px 0 2px;accent-color:var(--accent);height:24px}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--faint)}
+.seg-ctl{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card2);border-radius:10px;padding:3px;margin-top:18px}
+.seg-ctl button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:7px 4px;border-radius:8px;cursor:pointer}
+.seg-ctl button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.seg-help{font-size:12px;color:var(--faint);margin-top:6px}
+details{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-size:13.5px;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";display:inline-block;width:16px;color:var(--peach)}
+details[open] summary::before{content:"−"}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media (max-width:640px){ .grid{grid-template-columns:1fr 1fr} }
+.grid label{font-size:12px;color:var(--muted);display:block}
+.grid input{width:100%;margin-top:3px;padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--text);font:inherit;font-size:14px}
+
+/* results */
+.hero{padding:6px 0 18px}
+.hero .meta{font-size:12px;color:var(--muted)}
+.hero .line{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin:6px 0 4px}
+.hero .age{font-family:var(--serif);font-size:clamp(72px,11vw,120px);line-height:.9;color:var(--peach)}
+.hero .ctx{font-family:var(--serif);font-size:clamp(20px,2.6vw,26px);line-height:1.25;padding-bottom:10px;max-width:22ch}
+.hero .ctx s{color:var(--muted);text-decoration-thickness:1px}
+.hero .days{display:inline-block;margin-top:10px;font-size:14px;color:var(--muted)}
+.hero .days b{color:var(--text);font-weight:600}
+.sec{margin-top:26px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.sec-h h2{font-family:var(--serif);font-weight:500;font-size:22px;margin:0}
+.legend{display:flex;gap:12px;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:0}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:1fr 84px;gap:4px 16px;align-items:center;text-align:left;width:100%;font:inherit;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:border-color .15s}
+.opt:hover{border-color:var(--faint)}
+.opt.sel{border-color:var(--peach);box-shadow:0 0 0 1px var(--peach) inset}
+.opt .t{font-weight:600;font-size:15px;display:flex;gap:8px;align-items:center}
+.opt .badge{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--peach);padding:2px 7px;border-radius:999px;font-weight:600}
+.opt .how{font-size:13px;color:var(--muted)}
+.opt .big{grid-column:2;grid-row:1/3;text-align:right;font-family:var(--serif);font-size:40px;line-height:1}
+.opt .big small{display:block;font-family:var(--sans);font-size:11px;color:var(--faint);margin-top:2px}
+.opt .bar{grid-column:1/3;position:relative;height:12px;border-radius:6px;overflow:hidden;background:var(--card2);margin-top:8px}
+.opt .bar div{position:absolute;top:0;bottom:0}
+.opt .axis{grid-column:1/3;position:relative;height:14px;font-size:10.5px;color:var(--faint)}
+.opt .axis span{position:absolute;transform:translateX(-50%)}
+.opt.base{background:transparent}
+.opt.base .big{color:var(--muted)}
+.why{font-family:var(--serif);font-size:18px;line-height:1.45;margin:16px 0 0;padding-left:14px;border-left:3px solid var(--peach)}
+.flag{margin-top:10px;font-size:13.5px;color:var(--muted);padding:10px 12px;background:var(--card);border-radius:10px;border:1px solid var(--line)}
+.flag b{color:var(--warn);font-weight:600}
+
+.life{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 18px}
+.stage{display:grid;grid-template-columns:22px 1fr auto;gap:0 14px;padding:16px 0;border-bottom:1px solid var(--line);position:relative}
+.stage:last-child{border-bottom:0}
+.dot{width:12px;height:12px;border-radius:50%;margin-top:6px}
+.stage .when{font-weight:600;font-size:15px}
+.stage .src{font-size:13px;color:var(--muted)}
+.stage .amt{text-align:right;font-family:var(--serif);font-size:28px;line-height:1.1}
+.stage .amt small{display:block;font-family:var(--sans);font-size:12px;color:var(--muted)}
+.stage .amt em{font-style:normal;color:var(--text)}
+.potline{font-size:13.5px;color:var(--muted);margin-top:12px}
+.potline b{color:var(--text);font-weight:600}
+.maths table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+.maths td{padding:6px 0;border-bottom:1px solid var(--line)}
+.maths td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.maths{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:26px;border-top:1px solid var(--line)}
+.fine{font-size:12px;color:var(--faint);margin-top:18px;line-height:1.55}
+
+@media (max-width:520px){
+  .opt{grid-template-columns:1fr 64px}
+  .opt .big{font-size:32px}
+  .stage{grid-template-columns:18px 1fr}
+  .stage .amt{grid-column:2;text-align:left;margin-top:6px}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="mini" id="mini"><div class="in">
+  <span>Give up <b id="miniVal">£400</b></span>
+  <input id="budget2" type="range" min="0" max="1500" step="25" value="400" aria-label="Monthly take-home pay you can give up">
+  <span class="res">Stop at <b id="miniAge">53</b></span>
+</div></div>
+<div class="wrap">
+  <div class="proto">Prototype for review · real 2026/27 tax maths, simplified projection</div>
+  <div class="kicker">Payday to Pension · 2026/27</div>
+  <h1>What could a little less take-home pay buy you?</h1>
+
+  <div>
+    <section class="panel" id="panel">
+      <div class="sentence">
+        I'm <input id="age" size="2" value="38" inputmode="numeric">, earn £<input id="salary" size="7" value="120,000" inputmode="numeric"> a year,
+        and want to live on £<input id="spend" size="6" value="40,000" inputmode="numeric"> a year (in today's money) once I stop working.
+      </div>
+      <div class="controls">
+        <div class="give">
+          <div class="top"><span class="lbl">Take-home pay I can give up</span><span class="val" id="budgetOut">£400<small> / month</small></span></div>
+          <input id="budget" type="range" min="0" max="1500" step="25" value="400" aria-label="Monthly take-home pay you can give up">
+          <div class="ticks"><span>£0</span><span>£750</span><span>£1,500</span></div>
+        </div>
+        <div>
+          <div class="seg-ctl" id="scen">
+            <button data-r="0.02">Cautious</button><button data-r="0.04" class="on">Middle</button><button data-r="0.06">Hopeful</button>
+          </div>
+          <div class="seg-help" id="scenHelp"></div>
+        </div>
+      </div>
+      <details>
+        <summary>Make it yours</summary>
+        <div class="grid">
+          <label>Pension pot today (£)<input id="pension" value="150,000" inputmode="numeric"></label>
+          <label>ISA and savings today (£)<input id="isa" value="30,000" inputmode="numeric"></label>
+          <label>Already into ISA (£ / month)<input id="isaMonthly" value="300" inputmode="numeric"></label>
+          <label>Children on Child Benefit<input id="children" value="2" inputmode="numeric"></label>
+          <label>You pay into pension (%)<input id="ownPct" value="5" inputmode="decimal"></label>
+          <label>Employer pays (%)<input id="employerPct" value="5" inputmode="decimal"></label>
+          <label>Pension unlocks at<input id="access" value="57" inputmode="numeric"></label>
+          <label>State Pension age<input id="spAge" value="67" inputmode="numeric"></label>
+          <label>Prices rise each year (%)<input id="infl" value="2.5" inputmode="decimal"></label>
+        </div>
+      </details>
+    </section>
+
+    <main>
+      <section class="hero">
+        <div class="meta" id="heroMeta"></div>
+        <div class="line"><div class="age" id="heroAge"></div><div class="ctx" id="heroCtx"></div></div>
+        <div class="days" id="heroDays"></div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2 id="optsTitle">Where should the money go?</h2>
+          <div class="legend"><span><i style="background:var(--work)"></i>Working</span><span><i style="background:var(--isa)"></i>Pension locked, ISA pays</span><span><i style="background:var(--pen)"></i>Pension pays</span></div>
+        </div>
+        <div class="opts" id="opts"></div>
+        <div class="why" id="why"></div>
+        <div id="flags"></div>
+      </section>
+
+      <section class="sec" id="lifeSec">
+        <div class="sec-h"><h2 id="lifeTitle">What you would live on</h2></div>
+        <div class="life" id="life"></div>
+        <div class="potline" id="pots"></div>
+      </section>
+
+      <details class="maths">
+        <summary>Check the maths</summary>
+        <div id="maths"></div>
+      </details>
+
+      <div class="fine">
+        Fictional example. "Today's money" means amounts with price rises taken out, so you can compare them with what things cost now.
+        Amounts shown for a future year add price rises at the rate you set. Cautious, Middle and Hopeful are investment growth after price rises (2%, 4%, 6% a year).
+        Your current pension is treated as net pay; the extra is salary sacrifice, and your employer keeps the same rate.
+        Assumes money lasts to 95, full State Pension, 25% of each pension withdrawal tax-free and tax bands rising with prices
+        (in reality they are frozen until 2031, so tax could be a little higher). Ignores fees, pay rises and future rule changes. Not financial advice.
+      </div>
+    </main>
+  </div>
+</div>
+<script>
+// Payday to Pension prototype engine. 2026/27 England, Wales & NI. Annual, real terms.
+const K = {
+  PA: 12570, PA_TAPER_START: 100000, BASIC_BAND: 37700, ADDL_START: 125140,
+  NI_PT: 12570, NI_UEL: 50270, NI_MAIN: 0.08, NI_UPPER: 0.02,
+  CB_FIRST: 27.05 * 52, CB_OTHER: 17.90 * 52, // verify on gov.uk
+  HICBC_START: 60000,
+  STATE_PENSION: 241.30 * 52,
+};
+
+function personalAllowance(ani) {
+  return Math.max(0, K.PA - Math.max(0, ani - K.PA_TAPER_START) / 2);
+}
+function incomeTax(income) {
+  const pa = personalAllowance(income);
+  const taxable = Math.max(0, income - pa);
+  const basic = Math.min(taxable, K.BASIC_BAND);
+  const higher = Math.min(Math.max(0, taxable - K.BASIC_BAND), K.ADDL_START - K.BASIC_BAND);
+  const addl = Math.max(0, taxable - K.ADDL_START);
+  return basic * 0.2 + higher * 0.4 + addl * 0.45;
+}
+function employeeNI(pay) {
+  const main = Math.max(0, Math.min(pay, K.NI_UEL) - K.NI_PT);
+  const upper = Math.max(0, pay - K.NI_UEL);
+  return main * K.NI_MAIN + upper * K.NI_UPPER;
+}
+function childBenefit(children) {
+  if (children <= 0) return 0;
+  return K.CB_FIRST + (children - 1) * K.CB_OTHER;
+}
+function hicbc(ani, children) {
+  const cb = childBenefit(children);
+  if (!cb || ani <= K.HICBC_START) return 0;
+  const pct = Math.min(100, Math.floor((ani - K.HICBC_START) / 200));
+  return cb * pct / 100;
+}
+function payPicture(p, extra) {
+  const own = p.salary * p.ownPct / 100;
+  const pay = p.salary - extra;
+  const ani = pay - own;
+  const tax = incomeTax(ani);
+  const ni = employeeNI(pay);
+  const charge = hicbc(ani, p.children);
+  const takeHome = pay - own - tax - ni - charge;
+  const pensionIn = own + extra + p.salary * p.employerPct / 100;
+  return { pay, ani, tax, ni, charge, takeHome, pensionIn, own };
+}
+function sacrificeForCost(p, cost) {
+  if (cost <= 0) return 0;
+  const base = payPicture(p, 0).takeHome;
+  let lo = 0, hi = p.salary * 0.9;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (base - payPicture(p, mid).takeHome < cost) lo = mid; else hi = mid;
+  }
+  return lo;
+}
+function grossWithdrawal(need, sp) {
+  const net = w => w + sp - incomeTax(0.75 * w + sp);
+  if (net(0) >= need) return 0;
+  let lo = 0, hi = need * 3 + 100000;
+  for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (net(m) < need) lo = m; else hi = m; }
+  return hi;
+}
+function simulate(s, stop) {
+  let pen = s.pension, isa = s.isa;
+  const path = [];
+  for (let a = s.age; a < stop; a++) {
+    path.push({ a, pen, isa });
+    pen = pen * (1 + s.r) + s.pensionYearly;
+    isa = isa * (1 + s.r) + s.isaYearly;
+  }
+  const atStop = { pen, isa };
+  let ok = true, why = null, failAge = null;
+  for (let a = stop; a < s.liveTo; a++) {
+    path.push({ a, pen: Math.max(0, pen), isa: Math.max(0, isa) });
+    const sp = a >= s.spAge ? s.sp : 0;
+    if (a < s.access) {
+      isa -= s.spend;
+      if (isa < -0.5 && ok) { ok = false; why = 'bridge'; failAge = a; }
+    } else {
+      const w = grossWithdrawal(s.spend, sp);
+      if (w <= pen) pen -= w;
+      else {
+        const left = Math.max(0, pen);
+        const netFromPen = left + sp - incomeTax(0.75 * left + sp);
+        pen = 0;
+        isa -= Math.max(0, s.spend - netFromPen);
+        if (isa < -0.5 && ok) { ok = false; why = 'total'; failAge = a; }
+      }
+    }
+    pen *= (1 + s.r); isa *= (1 + s.r);
+  }
+  return { ok, why, failAge, atStop, path };
+}
+function freedomAge(s) {
+  for (let stop = s.age; stop <= 75; stop++) {
+    const w = simulate(s, stop);
+    if (w.ok) return { age: stop, sim: w };
+  }
+  return { age: null, sim: simulate(s, 75) };
+}
+function compare(u) {
+  const p = { salary: u.salary, ownPct: u.ownPct, employerPct: u.employerPct, children: u.children };
+  const base = payPicture(p, 0);
+  const yearlyBudget = u.budget * 12;
+  const common = { age: u.age, spend: u.spend, pension: u.pension, isa: u.isa, r: u.r, access: u.access, spAge: u.spAge, liveTo: u.liveTo, sp: u.includeSP ? K.STATE_PENSION : 0 };
+  const scenario = (isaShare) => {
+    const isaYearly = yearlyBudget * isaShare;
+    const extra = sacrificeForCost(p, yearlyBudget - isaYearly);
+    const pic = payPicture(p, extra);
+    const s = { ...common, pensionYearly: pic.pensionIn, isaYearly: u.isaMonthly * 12 + isaYearly };
+    const f = freedomAge(s);
+    return { isaShare, isaMonthly: isaYearly / 12, pensionCostMonthly: (yearlyBudget - isaYearly) / 12, extra, pensionMonthlyExtra: extra / 12, pic, f, s };
+  };
+  const nothingS = { ...common, pensionYearly: base.pensionIn, isaYearly: u.isaMonthly * 12 };
+  const nothing = { f: freedomAge(nothingS), s: nothingS, pic: base, isaMonthly: 0, pensionMonthlyExtra: 0 };
+  const allPension = scenario(0);
+  const allIsa = scenario(1);
+  let best = allPension;
+  for (let i = 1; i <= 20; i++) {
+    const sc = scenario(i / 20);
+    if ((sc.f.age ?? 999) < (best.f.age ?? 999)) best = sc;
+  }
+  const rate = yearlyBudget > 0 ? allPension.extra / yearlyBudget : 0;
+  return { base, nothing, allPension, allIsa, best, rate, yearlyBudget, scenario };
+}
+// What you live on in each phase after stopping (yearly, today's money)
+function phases(s, stop) {
+  const out = [];
+  if (stop < s.access) out.push({ from: stop, to: s.access, isa: s.spend, penGross: 0, sp: 0, tax: 0, net: s.spend });
+  const p1 = Math.max(stop, s.access);
+  if (p1 < s.spAge) {
+    const w = grossWithdrawal(s.spend, 0);
+    out.push({ from: p1, to: s.spAge, isa: 0, penGross: w, sp: 0, tax: incomeTax(0.75 * w), net: s.spend });
+  }
+  const p2 = Math.max(stop, s.spAge);
+  const w2 = grossWithdrawal(s.spend, s.sp);
+  out.push({ from: p2, to: s.liveTo, isa: 0, penGross: w2, sp: s.sp, tax: incomeTax(0.75 * w2 + s.sp), net: s.spend });
+  // when does the pension run dry (ISA tops up after)?
+  const sim = simulate(s, stop);
+  const dry = sim.path.find(x => x.a > p1 && x.pen <= 1);
+  return { list: out, pensionDryAge: dry ? dry.a : null, atStop: sim.atStop };
+}
+if (typeof module !== 'undefined') module.exports = { K, incomeTax, employeeNI, hicbc, payPicture, sacrificeForCost, compare, simulate, freedomAge, phases };
+
+</script>
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat(String($(id).value).replace(/[^0-9.]/g,'')); return isNaN(v) ? 0 : v; };
+const gbp = v => '£' + Math.round(v).toLocaleString('en-GB');
+const gbpK = v => v >= 100000 ? '£' + Math.round(v / 1000).toLocaleString('en-GB') + 'k' : gbp(v);
+let r = 0.04, userSel = null;
+const YEAR = 2026;
+
+function inputs(rate){
+  return { age: Math.round(num('age')), salary: num('salary'), spend: num('spend'), budget: num('budget'),
+    pension: num('pension'), isa: num('isa'), isaMonthly: num('isaMonthly'), children: Math.round(num('children')),
+    ownPct: num('ownPct'), employerPct: num('employerPct'), access: Math.round(num('access')) || 57,
+    spAge: Math.round(num('spAge')) || 67, liveTo: 95, includeSP: true, r: rate, infl: num('infl') / 100 };
+}
+const ageTxt = a => a == null ? '75+' : String(a);
+
+function render(){
+  const u = inputs(r);
+  $('budgetOut').innerHTML = gbp(u.budget) + '<small> / month</small>';
+  $('scenHelp').textContent = 'Investments grow ' + (((1 + r) * (1 + u.infl) - 1) * 100).toFixed(1) + '% a year, prices rise ' + (u.infl * 100).toFixed(1) + '%.';
+  if (u.age < 18 || u.age > 74 || u.salary < 13000) { $('heroAge').textContent = ''; $('heroCtx').textContent = 'Check your age and salary.'; return; }
+
+  const c = compare(u), lo = compare(inputs(0.02)), hi = compare(inputs(0.06));
+  const nA = c.nothing.f.age, bA = c.best.f.age;
+  const interior = c.best.isaShare > 0 && c.best.isaShare < 1;
+  const improves = u.budget > 0 && bA != null && (nA == null || bA < nA);
+  const bestKey = !improves ? 'nothing' : interior ? 'mix' : c.best.isaShare === 1 ? 'isa' : 'pension';
+
+  const opts = [
+    { key: 'nothing', t: 'Keep things as they are', how: 'Your current pension and ISA saving only', sc: c.nothing, lo: lo.nothing, hi: hi.nothing },
+    { key: 'pension', t: 'All into your pension', how: '+' + gbp(c.allPension.pensionMonthlyExtra) + ' a month into your pension', sc: c.allPension, lo: lo.allPension, hi: hi.allPension },
+  ];
+  if (interior) opts.push({ key: 'mix', t: 'Split it', how: gbp(c.best.pensionCostMonthly) + ' towards pension (+' + gbp(c.best.pensionMonthlyExtra) + ' in it), ' + gbp(c.best.isaMonthly) + ' into an ISA',
+    sc: c.best, lo: lo.scenario(c.best.isaShare), hi: hi.scenario(c.best.isaShare) });
+  opts.push({ key: 'isa', t: 'All into an ISA', how: '+' + gbp(u.budget) + ' a month into an ISA', sc: c.allIsa, lo: lo.allIsa, hi: hi.allIsa });
+  const shown = u.budget > 0 ? opts : opts.slice(0, 1);
+  if (!shown.find(o => o.key === userSel)) userSel = null;
+  const selKey = userSel || bestKey;
+  const sel = shown.find(o => o.key === selKey) || shown[0];
+
+  // HERO
+  const scen = r === 0.02 ? 'Cautious' : r === 0.06 ? 'Hopeful' : 'Middle';
+  if (!improves) {
+    $('heroAge').textContent = ageTxt(nA);
+    $('heroCtx').innerHTML = nA == null ? 'Not reachable by 75 on this plan. Try spending less, or giving up more.'
+      : u.budget > 0 ? 'is when you could stop already. Giving up ' + gbp(u.budget) + ' a month would not make it earlier.'
+      : 'is when you could stop on your current plan. Move the slider to see what could change.';
+    $('heroMeta').textContent = scen + ' example';
+    $('heroDays').innerHTML = '';
+  } else {
+    $('heroAge').textContent = bA;
+    $('heroCtx').innerHTML = 'is when you could stop working, instead of <s>' + ageTxt(nA) + '</s>, by giving up ' + gbp(u.budget) + ' a month.';
+    const how = interior ? gbp(c.best.pensionCostMonthly) + ' to pension, ' + gbp(c.best.isaMonthly) + ' to an ISA' : c.best.isaShare === 1 ? 'all into an ISA' : 'all into your pension';
+    $('heroMeta').textContent = scen + ' example · best use of the money: ' + how;
+    const yrs = (nA == null ? 75 : nA) - bA, months = (bA - u.age) * 12;
+    const d = months > 0 ? Math.round(yrs * 365 / months) : 0;
+    $('heroDays').innerHTML = d > 0 ? 'Each month you do this buys you about <b>' + d + ' day' + (d === 1 ? '' : 's') + '</b> of not working.' : '';
+  }
+
+  $('miniVal').textContent = gbp(u.budget);
+  $('miniAge').textContent = ageTxt(sel.sc.f.age);
+
+  // OPTIONS with built-in timeline
+  const END = Math.max(u.spAge, u.access) + 3, span = END - u.age, x = a => Math.max(0, Math.min(100, (a - u.age) / span * 100));
+  const bar = a => {
+    if (a == null) return '<div style="left:0;width:100%;background:repeating-linear-gradient(45deg,var(--card2),var(--card2) 5px,var(--line) 5px,var(--line) 10px)"></div>';
+    let s = '<div style="left:0;width:' + x(a) + '%;background:var(--work)"></div>';
+    if (a < u.access) s += '<div style="left:' + x(a) + '%;width:' + (x(u.access) - x(a)) + '%;background:var(--isa)"></div>';
+    const ps = Math.max(a, u.access);
+    s += '<div style="left:' + x(ps) + '%;right:0;background:var(--pen)"></div>';
+    return s;
+  };
+  const ticks = [u.age, 45, 50, 55, u.access, 60, 65, u.spAge].filter((t, i, arr) => t >= u.age && t <= END && arr.indexOf(t) === i &&
+    (t === u.age || t - u.age > 2) && !(t !== u.access && t !== u.spAge && (Math.abs(t - u.access) < 3 || Math.abs(t - u.spAge) < 3)));
+  const axis = '<div class="axis">' + ticks.map(t => '<span style="left:' + x(t) + '%">' + t + '</span>').join('') + '</div>';
+  $('opts').innerHTML = shown.map((o, i) =>
+    '<button class="opt' + (o.key === 'nothing' ? ' base' : '') + (o.key === sel.key ? ' sel' : '') + '" data-k="' + o.key + '">' +
+    '<div class="t">' + o.t + (o.key === bestKey && improves ? ' <span class="badge">Earliest</span>' : '') + '</div>' +
+    '<div class="how">' + o.how + '</div>' +
+    '<div class="big">' + ageTxt(o.sc.f.age) + '<small>range ' + ageTxt(o.hi.f.age) + ' to ' + ageTxt(o.lo.f.age) + '</small></div>' +
+    '<div class="bar">' + bar(o.sc.f.age) + '</div>' + (i === shown.length - 1 ? axis : '') +
+    '</button>').join('');
+  $('opts').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => { userSel = b.dataset.k; render(); }));
+  $('optsTitle').textContent = u.budget > 0 ? 'Where should the ' + gbp(u.budget) + ' go?' : 'Your current plan';
+
+  // WHY
+  const pA = c.allPension.f.age, iA = c.allIsa.f.age;
+  let why = '';
+  if (improves) {
+    if (pA === nA && iA != null && (pA == null || iA < pA)) why = 'More pension buys you no time here. What holds you back is the ' + (u.access - iA) + ' years before your pension unlocks at ' + u.access + ', and only an ISA can pay for those.';
+    else if (interior) why = 'Your pension gives you more for your money: each £1 you give up becomes £' + c.rate.toFixed(2) + ' in it. But it stays locked until ' + u.access + '. ' + gbp(c.best.isaMonthly) + ' a month in an ISA pays for the ' + (u.access - bA) + ' years in between.';
+    else if (bestKey === 'pension') why = 'Here your pension wins. Each £1 you give up becomes £' + c.rate.toFixed(2) + ' in it, and your savings already cover the years before ' + u.access + '.';
+    else why = 'Here the ISA wins. Stopping at ' + bA + ' leaves ' + (u.access - bA) + ' years before your pension unlocks, and only money you can reach can pay for them.';
+  }
+  $('why').style.display = why ? '' : 'none';
+  $('why').textContent = why;
+
+  // FLAGS
+  const b0 = c.base, b1 = c.allPension.pic, flags = [];
+  if (u.budget > 0) {
+    if (b0.ani > 100000 && b1.ani <= 100000 && u.children > 0) flags.push('<b>Childcare.</b> Putting it all into your pension takes your income below £100,000, so you could get Tax-Free Childcare and funded hours back. That is worth up to £2,000 per child a year plus the hours, and is not counted here.');
+    else if (b1.ani > 100000 && b1.ani < 125140) flags.push('<b>60% tax zone.</b> Your income is still ' + gbp(b1.ani - 100000) + ' above £100,000, where each extra £1 into your pension costs you only about 38p.');
+    if (b0.charge - b1.charge > 1) flags.push('<b>Child Benefit.</b> All into pension also lets you keep ' + gbp(b0.charge - b1.charge) + ' a year you would otherwise pay back. Included above.');
+  }
+  $('flags').innerHTML = flags.map(f => '<div class="flag">' + f + '</div>').join('');
+
+  // LIFE AFTER (selected option)
+  const a = sel.sc.f.age;
+  if (a == null) { $('lifeSec').style.display = 'none'; }
+  else {
+    $('lifeSec').style.display = '';
+    const fut = (v, at) => v * Math.pow(1 + u.infl, at - u.age);
+    const yr = at => YEAR + (at - u.age);
+    const ph = phases(sel.sc.s, a);
+    $('lifeTitle').textContent = 'Life after ' + a + (shown.length > 1 ? ' · ' + sel.t : '');
+    const col = p => p.isa ? 'var(--isa)' : 'var(--pen)';
+    const src = p => p.isa ? 'Paid from your ISA and savings. No tax.'
+      : p.sp ? 'State Pension, plus a smaller amount from your pension.'
+      : 'Paid from your pension. A quarter is tax-free, the rest is taxed.';
+    $('life').innerHTML = ph.list.map((p, i) =>
+      '<div class="stage"><div class="dot" style="background:' + col(p) + '"></div>' +
+      '<div><div class="when">' + p.from + ' to ' + p.to + '</div><div class="src">' + src(p) + '</div></div>' +
+      '<div class="amt">' + gbp(fut(p.net, p.from) / 12) + '<small>a month in ' + yr(p.from) + (i === ph.list.length - 1 ? ', then rising with prices' : '') +
+      '<br>same as <em>' + gbp(p.net / 12) + '</em> today</small></div></div>').join('');
+    const pot = ph.atStop;
+    $('pots').innerHTML = 'At ' + a + ', your pension would be about <b>' + gbpK(fut(pot.pen, a)) + '</b> and your ISA <b>' + gbpK(fut(pot.isa, a)) + '</b>. ' +
+      'That is what your statements in ' + yr(a) + ' would show, the same as ' + gbpK(pot.pen) + ' and ' + gbpK(pot.isa) + ' today.' +
+      (ph.pensionDryAge ? ' Your pension runs out around ' + ph.pensionDryAge + ', then your ISA pays.' : '');
+  }
+
+  // MATHS
+  const m = v => gbp(v / 12), p = c.allPension;
+  $('maths').innerHTML = u.budget > 0 ? '<table>' +
+    '<tr><td>Extra salary sacrifice if it all goes to pension</td><td>' + m(p.extra) + ' / month</td></tr>' +
+    '<tr><td>Income Tax you no longer pay</td><td>−' + m(b0.tax - b1.tax) + '</td></tr>' +
+    '<tr><td>National Insurance you no longer pay</td><td>−' + m(b0.ni - b1.ni) + '</td></tr>' +
+    (b0.charge - b1.charge > 1 ? '<tr><td>Child Benefit you keep</td><td>−' + m(b0.charge - b1.charge) + '</td></tr>' : '') +
+    '<tr><td><b>Cost to your take-home pay</b></td><td><b>' + gbp(u.budget) + ' / month</b></td></tr>' +
+    '<tr><td>Pension for each £1 of take-home</td><td>£' + c.rate.toFixed(2) + '</td></tr>' +
+    '<tr><td>Income for tax thresholds, before → after</td><td>' + gbp(b0.ani) + ' → ' + gbp(b1.ani) + '</td></tr></table>'
+    : '<p class="potline">Move the slider to see the tax maths.</p>';
+}
+
+$('budget').addEventListener('input', () => { $('budget2').value = $('budget').value; });
+$('budget2').addEventListener('input', () => { $('budget').value = $('budget2').value; });
+const io = new IntersectionObserver(es => es.forEach(e => $('mini').classList.toggle('show', !e.isIntersecting && e.boundingClientRect.top < 0)));
+io.observe($('panel'));
+let t; const schedule = () => { clearTimeout(t); t = setTimeout(render, 70); };
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', schedule));
+['salary','spend','pension','isa'].forEach(id => $(id).addEventListener('blur', () => { $(id).value = Math.round(num(id)).toLocaleString('en-GB'); }));
+document.querySelectorAll('#scen button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#scen button').forEach(x => x.classList.remove('on')); b.classList.add('on'); r = parseFloat(b.dataset.r); render();
+}));
+render();
+})();
+
+</script>
+</body>
+</html>

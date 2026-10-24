@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 const calculatorHtml = fs.readFileSync('dist/payday-to-pension/index.html', 'utf8');
-assert.ok(calculatorHtml.includes('UK Pension Contribution Calculator'));
+assert.ok(calculatorHtml.includes('What could a little less take-home pay buy you?'));
+assert.ok(!/<script[^>]+src=["']https:\/\/www\.googletagmanager/.test(calculatorHtml));
+assert.ok(!/<link[^>]+href=["']https:\/\/fonts\.googleapis/.test(calculatorHtml));
 assert.equal((calculatorHtml.match(/<title>/g) || []).length, 1);
 const slug = 'why-i-built-payday-to-pension';
 const canonical = `https://jiazhenxie.com/blog/${slug}`;

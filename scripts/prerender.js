@@ -29,8 +29,8 @@ const siteConfig = {
 const staticPages = [
   {
     path: '/payday-to-pension',
-    title: 'UK Pension Contribution Calculator | Jiazhen Xie',
-    description: "Compare how extra pension contributions affect take-home pay and adjusted net income. A UK calculator with clearly stated assumptions.",
+    title: 'What could a little less take-home pay buy you? | Jiazhen Xie',
+    description: "See when you could stop working by giving up a little take-home pay, and compare pension, ISA or both. Live UK 2026/27 illustration. Inputs stay in the page.",
     keywords: ['UK pension calculator', 'retirement income', 'salary sacrifice'],
     type: 'website',
   },
@@ -250,6 +250,7 @@ function prerenderStaticPages(template) {
     // The calculator needs its own metadata rather than the homepage defaults.
     const pageTemplate = page.path === '/payday-to-pension'
       ? template
+          .replace(/<link\b[^>]*href=["']https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com|www\.google-analytics\.com)[^"']*["'][^>]*>/gi, '')
           .replace(/<title>[^<]*<\/title>/g, '')
           .replace(/<meta\b[^>]*(?:name|property)=["'](?:title|description|keywords|author|twitter:[^"']*|og:[^"']*)["'][^>]*>/gi, '')
           .replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '')

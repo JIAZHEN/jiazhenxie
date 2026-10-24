@@ -1,0 +1,83 @@
+
+<div class="mini" id="mini"><div class="in">
+  <span>Give up <b id="miniVal">£400</b></span>
+  <input id="budget2" type="range" min="0" max="1500" step="25" value="400" aria-label="Monthly take-home pay you can give up">
+  <span class="res">Stop at <b id="miniAge">53</b></span>
+</div></div>
+<div class="wrap">
+  <p class="proto">Fictional example · Your inputs stay in this page. Nothing is stored or sent.</p>
+  <div class="kicker">Payday to Pension · 2026/27</div>
+  <h1>What could a little less take-home pay buy you?</h1>
+
+  <div>
+    <section class="panel" id="panel">
+      <div class="sentence">
+        I'm <input aria-label="Age now" id="age" size="2" value="38" inputmode="numeric">, earn £<input aria-label="Annual salary" id="salary" size="7" value="120,000" inputmode="numeric"> a year,
+        and want to live on £<input aria-label="Annual spending in retirement" id="spend" size="6" value="40,000" inputmode="numeric"> a year (in today's money) once I stop working.
+      </div>
+      <div class="controls">
+        <div class="give">
+          <div class="top"><span class="lbl">Take-home pay I can give up</span><span class="val" id="budgetOut">£400<small> / month</small></span></div>
+          <input id="budget" type="range" min="0" max="1500" step="25" value="400" aria-label="Monthly take-home pay you can give up">
+          <div class="ticks"><span>£0</span><span>£750</span><span>£1,500</span></div>
+        </div>
+        <div>
+          <div class="seg-ctl" id="scen">
+            <button aria-pressed="false" data-r="0.02">Cautious</button><button aria-pressed="true" data-r="0.04" class="on">Middle</button><button aria-pressed="false" data-r="0.06">Hopeful</button>
+          </div>
+          <div class="seg-help" id="scenHelp"></div>
+        </div>
+      </div>
+      <details>
+        <summary>Make it yours</summary>
+        <div class="grid"><label>Pension percentages based on<select id="basis"><option value="full">Full salary</option><option value="qualifying">Qualifying earnings (£6,240 to £50,270)</option></select></label>
+          <label>Pension pot today (£)<input id="pension" value="150,000" inputmode="numeric"></label>
+          <label>ISA and savings today (£)<input id="isa" value="30,000" inputmode="numeric"></label>
+          <label>Already into ISA (£ / month)<input id="isaMonthly" value="300" inputmode="numeric"></label>
+          <label>Children on Child Benefit<input id="children" value="2" inputmode="numeric"></label>
+          <label>You pay into pension (%)<input id="ownPct" value="5" inputmode="decimal"></label>
+          <label>Employer pays (%)<input id="employerPct" value="5" inputmode="decimal"></label>
+          <label>Pension unlocks at<input id="access" value="57" inputmode="numeric"></label>
+          <label>State Pension age<input id="spAge" value="67" inputmode="numeric"></label>
+          <label>Prices rise each year (%)<input id="infl" value="2.5" inputmode="decimal"></label>
+        </div>
+      </details>
+    </section>
+
+    <div id="results">
+      <section class="hero" aria-live="polite" aria-atomic="true">
+        <div class="meta" id="heroMeta"></div>
+        <div class="line"><div class="age" id="heroAge"></div><div class="ctx" id="heroCtx"></div></div>
+        <div class="days" id="heroDays"></div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2 id="optsTitle">Where should the money go?</h2>
+          <div class="legend"><span><i style="background:var(--work)"></i>Working</span><span><i style="background:var(--isa)"></i>Pension locked, ISA pays</span><span><i style="background:var(--pen)"></i>Pension pays</span></div>
+        </div>
+        <div class="opts" id="opts"></div>
+        <div class="why" id="why"></div>
+        <div id="flags"></div>
+      </section>
+
+      <section class="sec" id="lifeSec">
+        <div class="sec-h"><h2 id="lifeTitle">What you would live on</h2></div>
+        <div class="life" id="life"></div>
+        <div class="potline" id="pots"></div>
+      </section>
+
+      <details class="maths">
+        <summary>Check the maths</summary>
+        <div id="maths"></div><p class="fine">From April 2029, only £2,000 a year of pension salary sacrifice gets National Insurance relief. This illustration keeps 2026/27 relief throughout; future pension contributions for the same take-home cost may be lower. Check your employer’s scheme and contribution limits.</p>
+      </details>
+
+      <div class="fine">
+        Fictional example. "Today's money" means amounts with price rises taken out, so you can compare them with what things cost now.
+        Amounts shown for a future year add price rises at the rate you set. Cautious, Middle and Hopeful are investment growth after price rises (2%, 4%, 6% a year).
+        Your current pension is treated as net pay; the extra is salary sacrifice, and your employer keeps the same rate.
+        Assumes money lasts to 95, full State Pension, 25% of each pension withdrawal tax-free and tax bands rising with prices
+        (in reality they are frozen until 2031, so tax could be a little higher). Ignores fees, pay rises and future rule changes. Not financial advice.
+      </div>
+    </div>
+  </div>
+</div>

@@ -106,7 +106,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 The UK pension calculator lives at `/payday-to-pension`, with an entry in the desktop and mobile navigation. It is loaded separately from the main pages. The build generates a dedicated HTML entry for GitHub Pages direct visits.
 
 - UI: `src/pension/`; pure calculation functions: `src/calc/`.
-- Inputs stay in localStorage; sharing encodes them in the URL fragment.
+- The current page keeps inputs only in page memory, with no storage, network calls or tracking.
 - Rates and assumptions: `src/uk-constants.ts`. See `PENSION-CHECKLIST.md` for the inherited pre-launch verification checklist.
 - Imported from `wealth-chaos`; no backend or additional runtime dependencies.
 
@@ -125,3 +125,9 @@ Run `npm run dev` and open `/payday-to-pension`, or `npm run build` for the prod
 ### Cash-budget discovery
 
 The primary control is a monthly reduction in cash, initially £200 in a labelled example. `solveCashBudget` reverses the current tax model without exceeding that budget and respects this calculator's earnings/standard-allowance boundary. RAS defaults to cash paid before extra relief; the eventual-cost alternative is explicit. Employer percentages follow the selected pay basis; confirmed annual employer amounts stay independent. Additional matching uses an explicitly entered ratio and total-employee-percent cap, and only adds matching above the current contribution. Hypothetical matching examples are clearly labelled and do not overwrite saved personal data. The £200 examples and breakdown conservation are checked during the build.
+
+### Single-page Payday to Pension
+
+The current route uses `DecisionPage.tsx`, `payday.html`, `payday.css` and the scoped `payday-view.js` controller. The trusted markup is checked in, with no user-provided HTML. The projection is in `src/calc/payday.ts` and reuses existing tax, NI, Child Benefit and earnings-basis functions. The source prototype is retained at `docs/prototype/payday-to-pension-prototype.html`. Run `node scripts/check-payday.js` for the default-reference and boundary cases.
+
+The model holds tax bands constant in real terms. TODO: model the nominal freeze until 2031 by making withdrawal tax year-aware. This is straightforward in principle but requires year-specific thresholds and new boundary tests. The 2029 NI cap is disclosed; contributions currently retain 2026/27 relief, matching the supplied reference. Earlier decision-flow sections above describe retained legacy modules, not the current route.

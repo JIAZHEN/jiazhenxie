@@ -15,6 +15,10 @@ export function usePageTracking() {
   const location = useLocation();
 
   useEffect(() => {
+    const pensionPage = /^\/payday-to-pension\/?$/.test(location.pathname);
+    // Also disable an Analytics script loaded before a client-side visit here.
+    Object.assign(window, { 'ga-disable-G-HWGJ79Y704': pensionPage });
+    if (pensionPage) return;
     try {
       if (window.gtag) {
         window.gtag("event", "page_view", {
