@@ -1,9 +1,11 @@
+import { childBenefitCharge } from './pensionInsights'
 import { pensionDecision } from './decision'
 import { pensionablePay } from './contributions'
 import { employerNiAnnual } from './tax'
 import type { ContributionBasis, ContributionMethod } from './types'
 
 export interface SchemeSwitchInputs {
+  children?: number
   salary: number
   currentMethod: Exclude<ContributionMethod, 'salarySacrifice'>
   currentGrossMonthly: number
@@ -17,9 +19,9 @@ export interface SchemeSwitchInputs {
 
 /** Compare two schemes at the same salary, with existing employer money retained. */
 export function compareSchemeSwitch(input: SchemeSwitchInputs) {
-  const amounts = [input.salary, input.currentGrossMonthly, input.employerMonthly, input.employerAfterMonthly ?? input.employerMonthly, input.targetPercent, input.niTopUpPercent, input.employerNiSharePercent ?? 0]
+  const amounts = [input.children ?? 0, input.salary, input.currentGrossMonthly, input.employerMonthly, input.employerAfterMonthly ?? input.employerMonthly, input.targetPercent, input.niTopUpPercent, input.employerNiSharePercent ?? 0]
   if (amounts.some(value => !Number.isFinite(value) || value < 0) || input.targetPercent > 100 || input.niTopUpPercent > 15 || (input.employerNiSharePercent ?? 0) > 100) {
-    return { incomeTaxSavingMonthly: 0, employeeNiSavingMonthly: 0, beforeTakeHomeMonthly: 0, afterTakeHomeMonthly: 0, beforeMonthly: 0, afterMonthly: 0, extraMonthly: 0, cashCostMonthly: 0, finalCostMonthly: 0, sacrificeMonthly: 0, topUpMonthly: 0, issues: ['Enter finite, non-negative amounts and valid contribution percentages.'] }
+    return { beforeAni: 0, afterAni: 0, childBenefitSavingMonthly: 0, incomeTaxSavingMonthly: 0, employeeNiSavingMonthly: 0, beforeTakeHomeMonthly: 0, afterTakeHomeMonthly: 0, beforeMonthly: 0, afterMonthly: 0, extraMonthly: 0, cashCostMonthly: 0, finalCostMonthly: 0, sacrificeMonthly: 0, topUpMonthly: 0, issues: ['Enter finite, non-negative amounts and valid contribution percentages.'] }
   }
   const common = { salary: input.salary, bonus: 0, otherIncome: 0, giftAidNet: 0,
     employeePercent: 0, employerAnnual: input.employerMonthly * 12,
@@ -32,15 +34,17 @@ export function compareSchemeSwitch(input: SchemeSwitchInputs) {
   const after = pensionDecision({ ...common, method: 'salarySacrifice',
     currentWorkplaceAnnual: sacrificeMonthly * 12,
     employerAnnual: ((input.employerAfterMonthly ?? input.employerMonthly) + topUpMonthly) * 12 })
+  const childBenefitSavingMonthly = (childBenefitCharge(before.before.ani, input.children ?? 0) - childBenefitCharge(after.before.ani, input.children ?? 0)) / 12
   return {
+    beforeAni: before.before.ani, afterAni: after.before.ani, childBenefitSavingMonthly,
     incomeTaxSavingMonthly: (before.before.tax - after.before.tax) / 12,
     employeeNiSavingMonthly: (before.before.ni - after.before.ni) / 12,
-    beforeTakeHomeMonthly: before.before.cash / 12,
-    afterTakeHomeMonthly: after.before.cash / 12,
+    beforeTakeHomeMonthly: (before.before.cash - childBenefitCharge(before.before.ani, input.children ?? 0)) / 12,
+    afterTakeHomeMonthly: (after.before.cash - childBenefitCharge(after.before.ani, input.children ?? 0)) / 12,
     beforeMonthly: before.annualPension / 12, afterMonthly: after.annualPension / 12,
     extraMonthly: (after.annualPension - before.annualPension) / 12,
-    cashCostMonthly: (before.before.cash - after.before.cash) / 12,
-    finalCostMonthly: (before.before.finalCash - after.before.finalCash) / 12,
+    cashCostMonthly: (before.before.cash - after.before.cash) / 12 - childBenefitSavingMonthly,
+    finalCostMonthly: (before.before.finalCash - after.before.finalCash) / 12 - childBenefitSavingMonthly,
     sacrificeMonthly, topUpMonthly,
     issues: [...new Set([...before.issues, ...after.issues])],
   }
@@ -58,4 +62,17 @@ export function solveSchemeSwitchBudget(input: SchemeSwitchInputs, budget: numbe
   const targetPercent = Math.floor(lo * 10000) / 10000
   const result = compareSchemeSwitch({ ...input, targetPercent })
   return { targetPercent, result, limited: result.cashCostMonthly < Math.max(0, budget) - .02 }
+}
+
+/** Solve in take-home pounds, using the original payroll calculation at every trial. */
+export function splitPlan(input: SchemeSwitchInputs, isaMonthly: number) {
+  const full = compareSchemeSwitch(input)
+  const budget = Math.max(0, full.cashCostMonthly) - isaMonthly
+  let lo = 0, hi = input.targetPercent
+  for (let i = 0; i < 55; i++) {
+    const mid = (lo + hi) / 2
+    if (compareSchemeSwitch({ ...input, targetPercent: mid }).cashCostMonthly <= budget) lo = mid
+    else hi = mid
+  }
+  return compareSchemeSwitch({ ...input, targetPercent: lo })
 }

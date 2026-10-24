@@ -4,11 +4,11 @@ import { SchemeSwitch } from './SchemeSwitch'
 
 export function PaydayToPension() {
   return <main className="pension-tool mt-16 bg-[color:var(--pension-canvas)] p-4 text-[color:var(--pension-ink)] sm:mt-20 sm:p-6">
-    <SEO title="UK Pension Contribution Calculator" description="See how salary sacrifice changes your monthly take-home pay and pension contributions." canonicalUrl="https://jiazhenxie.com/payday-to-pension" />
+    <SEO title="UK Pension Contribution Calculator" description="Explore when you could stop working, the savings you need before pension access, and how to split your money between pension and ISA." canonicalUrl="https://jiazhenxie.com/payday-to-pension" />
     <header className="mx-auto max-w-6xl py-5">
       <p className="pension-eyebrow">PAYDAY TO PENSION · 2026/27</p>
-      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">More pension. How much less take-home pay?</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">Enter your current contributions. Choose how much salary to sacrifice. See the monthly difference.</p>
+      <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">Could your pension buy you more time?</h1>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">See when you could stop working — and whether your money needs to go into a pension or an ISA to get you there. Start with your pay, then explore your freedom age and the years your pension cannot cover.</p>
     </header>
     <SchemeSwitch />
     <footer className="mx-auto mt-8 max-w-6xl space-y-3 text-xs leading-relaxed text-[color:var(--pension-muted)]">

@@ -1,3 +1,5 @@
+import { Freedom } from './Freedom'
+import { IncomeInsights } from './IncomeInsights'
 import { useState } from 'react'
 import { compareSchemeSwitch, type SchemeSwitchInputs } from '../calc/schemeSwitch'
 import { pensionablePay } from '../calc/contributions'
@@ -10,6 +12,7 @@ const basisOptions: { value: ContributionBasis; label: string }[] = [{ value: 'f
 const primary = 'rounded-xl bg-[color:var(--pension-accent)] px-5 py-3 text-sm font-medium text-[color:var(--pension-on-accent)] disabled:opacity-40'
 
 export function SchemeSwitch() {
+  const [childcare, setChildcare] = useState(false)
   const [invalidFields, setInvalidFields] = useState<Record<string, boolean>>({})
   const hasInvalidFields = Object.values(invalidFields).some(Boolean)
   const fieldValidity = (id: string, valid: boolean) => setInvalidFields(previous => ({ ...previous, [id]: !valid }))
@@ -36,7 +39,7 @@ export function SchemeSwitch() {
   const targetPercent = input.targetPercent
   const supported = !hasInvalidFields && input.salary > 0 && input.salary <= 200000 && result.issues.length === 0
   const go = (next: number) => { if (next < 3) setSubmittedKey(null); setStep(next); requestAnimationFrame(() => document.getElementById('switch-inputs')?.scrollIntoView({ block: 'start' })) }
-  const reset = () => { setSubmittedKey(null); setInvalidFields({}); setInput(example); setStep(1); setEntryMode('percent'); setEmployeeBasis('qualifying'); setEmployerBasis('qualifying'); setEmployeeRate(5); setEmployerRate(3); setTargetBasis('full'); setKeepEmployer(true); setNewEmployerRate(3); setNewEmployerBasis('qualifying') }
+  const reset = () => { setSubmittedKey(null); setInvalidFields({}); setInput(example); setChildcare(false); setStep(1); setEntryMode('percent'); setEmployeeBasis('qualifying'); setEmployerBasis('qualifying'); setEmployeeRate(5); setEmployerRate(3); setTargetBasis('full'); setKeepEmployer(true); setNewEmployerRate(3); setNewEmployerBasis('qualifying') }
   return <section id="switch-inputs" className="mx-auto max-w-6xl scroll-mt-24 space-y-5" aria-label="Pension calculator">
     <nav aria-label="Calculator steps" className="grid grid-cols-3 gap-2">
       {['Your salary', 'Current pension', 'Make a change'].map((label, index) => <button key={label} type="button" aria-current={step === index + 1 ? 'step' : undefined} disabled={index > 0 && (input.salary <= 0 || input.salary > 200000 || hasInvalidFields)} onClick={() => go(index + 1)} className={`rounded-xl border p-3 text-left text-sm ${step === index + 1 ? 'border-[color:var(--pension-accent)] bg-[color:var(--pension-tint)]' : 'border-[color:var(--pension-border)]'}`}><span className="mr-2 font-semibold">{index + 1}</span>{' '}{label}</button>)}
@@ -45,6 +48,10 @@ export function SchemeSwitch() {
     {step === 1 && <Section title="1. What do you earn?" intro="Use your annual base salary before pension deductions.">
       <NumberField id="switch-salary" onValidityChange={valid => fieldValidity("switch-salary", valid)} label="Annual salary" prefix="£" value={input.salary} onChange={value => patch({ salary: value ?? 0 })} />
       <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">2026/27 · England, Wales & Northern Ireland. This simple comparison excludes bonuses, other income, benefits and student loans.</p>
+      <details><summary className="cursor-pointer text-sm underline">Do you have children? (optional)</summary><div className="mt-3 space-y-3">
+        <NumberField id="benefit-children" label="Number of children you get Child Benefit for" value={input.children ?? 0} max={20} onValidityChange={valid => fieldValidity('benefit-children', valid)} onChange={value => patch({ children: Math.floor(value ?? 0) })} />
+        <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={childcare} onChange={e => setChildcare(e.target.checked)} />Do you use, or plan to use, Tax-Free Childcare or funded childcare hours?</label>
+      </div></details>
       {input.salary > 200000 && <p role="alert" className="text-sm">Above £200,000, a separate pension allowance assessment is needed.</p>}
       <button type="button" className={primary} disabled={input.salary <= 0 || input.salary > 200000 || hasInvalidFields} onClick={() => go(2)}>Next: your current pension →</button>
     </Section>}
@@ -69,7 +76,7 @@ export function SchemeSwitch() {
       <div className="flex flex-wrap items-center gap-4"><button type="button" className="text-sm underline" onClick={() => go(1)}>← Back</button><button type="button" className={primary} disabled={hasInvalidFields} onClick={() => go(3)}>Next: try a change →</button></div>
     </Section>}
     {step === 3 && <div className="min-w-0 space-y-5">
-      {!showResult && <form onSubmit={event => { event.preventDefault(); if (supported) { setSubmittedKey(calculationKey); requestAnimationFrame(() => document.getElementById('switch-result')?.scrollIntoView({ block: 'start' })) } }}>
+      {!showResult && <form onSubmit={event => { event.preventDefault(); if (supported) { setSubmittedKey(calculationKey); requestAnimationFrame(() => document.getElementById('freedom-result')?.scrollIntoView({ block: 'start' })) } }}>
       <Section title="3. How much salary would you sacrifice?" intro="Choose your total contribution, then calculate the change in take-home pay and pension.">
 
         <NumberField id="switch-target" onValidityChange={valid => fieldValidity("switch-target", valid)} label="Total salary sacrifice" hint="Your new total contribution, not an extra percentage." suffix="%" max={100} value={input.targetPercent} onChange={value => patch({ targetPercent: value ?? 0 })} />
@@ -91,7 +98,10 @@ export function SchemeSwitch() {
         <div className="flex flex-wrap items-center gap-4"><button type="button" className="text-sm underline" onClick={() => go(2)}>← Back</button><button type="submit" className={primary} disabled={!supported}>Calculate my result →</button></div>
       </Section>
       </form>}
-      {showResult && <div className="pension-result"><Section title="Your monthly pension picture" intro="The difference your new contribution makes, in pounds per month.">
+      {showResult && <div className="pension-result space-y-5">
+        {supported && <Freedom current={current} />}
+        <IncomeInsights showExchange={false} input={current} childcare={childcare} setTarget={percent => { patch({ targetPercent: percent }); setSubmittedKey(null) }} />
+        <details className="rounded-2xl border border-[color:var(--pension-border)] p-4"><summary className="cursor-pointer py-2 font-serif text-xl text-[color:var(--pension-accent)]">Check the monthly pay, pension and tax breakdown</summary><div className="mt-4"><Section title="Your monthly pension picture" intro="The difference your new contribution makes, in pounds per month.">
         {supported ? <div id="switch-result" className="scroll-mt-24" aria-live="polite" aria-atomic="true">
           <dl className="pension-tradeoff"><div><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div><div><dt>{result.extraMonthly >= 0 ? 'Pension increases by' : 'Pension decreases by'}</dt><dd>{result.extraMonthly >= 0 ? '+' : '−'}{formatGbp(Math.abs(result.extraMonthly))}</dd></div></dl>
           <div className="pension-result-total"><p className="text-sm text-[color:var(--pension-muted)]">Total into your pension each month</p><p className="mt-2 font-serif text-5xl text-[color:var(--pension-positive)]">{formatGbp(result.afterMonthly)}</p><p className="mt-2 text-sm text-[color:var(--pension-muted)]">{result.afterMonthly >= result.beforeMonthly ? 'Up' : 'Down'} from {formatGbp(result.beforeMonthly)} today</p></div>
@@ -105,15 +115,18 @@ export function SchemeSwitch() {
             <div className="flex justify-between gap-3"><dt>Replace your current pension deduction</dt><dd>−{formatGbp(employeeMonthly)}</dd></div>
             <div className="flex justify-between gap-3 text-[color:var(--pension-positive-strong)]"><dt>Income Tax saving</dt><dd>{result.incomeTaxSavingMonthly >= 0 ? '−' : '+'}{formatGbp(Math.abs(result.incomeTaxSavingMonthly))}</dd></div>
             <div className="flex justify-between gap-3 text-[color:var(--pension-positive-strong)]"><dt>Employee NI saving</dt><dd>−{formatGbp(result.employeeNiSavingMonthly)}</dd></div>
+            {(input.children ?? 0) > 0 && <div className="flex justify-between gap-3"><dt>Child Benefit charge saving</dt><dd>{result.childBenefitSavingMonthly >= 0 ? '−' : '+'}{formatGbp(Math.abs(result.childBenefitSavingMonthly))}</dd></div>}
             <div className="pension-result-cash-total flex justify-between gap-3"><dt>{result.cashCostMonthly >= 0 ? 'Take-home pay decreases by' : 'Take-home pay increases by'}</dt><dd>{formatGbp(Math.abs(result.cashCostMonthly))}</dd></div>
           </dl>
-          <p className="mt-3 text-xs text-[color:var(--pension-muted)]">New sacrifice − old deduction − tax saving − employee NI saving = reduction in take-home pay. Figures are rounded; employer payments go into your pension separately.</p></article></div>
+          <p className="mt-3 text-xs text-[color:var(--pension-muted)]">New sacrifice − old deduction − tax saving − employee NI saving − Child Benefit charge saving = reduction in take-home pay. Figures are rounded; employer payments go into your pension separately.</p></article></div>
 
 
         </div> : <div role="alert" className="space-y-2 text-sm"><p>Check your inputs before using this result.</p>{input.salary <= 0 && <p>Enter a salary above zero.</p>}{input.salary > 200000 && <p>Income above £200,000 needs a separate allowance assessment.</p>}{result.issues.map(issue => <p key={issue}>{issue}</p>)}</div>}
         <p className="text-xs leading-relaxed text-[color:var(--pension-muted)]">Annual estimates divided by 12, at the same salary. Payroll timing and tax codes can change actual monthly pay. Pension money is locked until pension access age; withdrawals may be taxed.</p>
         <button type="button" className={primary} onClick={() => { setSubmittedKey(null); requestAnimationFrame(() => document.getElementById('switch-inputs')?.scrollIntoView({ block: 'start' })) }}>Edit and calculate again</button>
-      </Section></div>}
+      </Section></div></details>
+        <button type="button" className={primary} onClick={() => { setSubmittedKey(null); requestAnimationFrame(() => document.getElementById('switch-inputs')?.scrollIntoView({ block: 'start' })) }}>Change my pension contribution</button>
+      </div>}
     </div>}
     {hasInvalidFields && <p role="alert" className="text-sm text-[color:var(--pension-danger)]">Enter a valid number within the field’s range. Results are hidden while an entry is invalid.</p>}
     <button type="button" className="text-xs underline" onClick={reset}>Reset fictional example</button>
