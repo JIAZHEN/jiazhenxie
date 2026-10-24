@@ -8,7 +8,7 @@ export function PaydayToPension() {
     <header className="mx-auto max-w-6xl py-5">
       <p className="pension-eyebrow">PAYDAY TO PENSION · 2026/27</p>
       <h1 className="font-serif text-3xl leading-tight text-[color:var(--pension-accent)] sm:text-4xl">Could your pension buy you more time?</h1>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">See when you could stop working. and whether your money needs to go into a pension or an ISA to get you there. Start with your pay, then explore your freedom age and the years your pension cannot cover.</p>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--pension-muted)]">See when you could stop working, and whether your money should go into a pension or an ISA to get you there.</p>
     </header>
     <SchemeSwitch />
     <footer className="mx-auto mt-8 max-w-6xl space-y-3 text-xs leading-relaxed text-[color:var(--pension-muted)]">

@@ -32,7 +32,11 @@ export function sacrificeToIncomeLine(salary: number, pensionableSalary: number,
 }
 
 /** Card state is separate from the exact charge calculation. */
-export function childBenefitCard(beforeAni: number, afterAni: number) {
+export function childBenefitCard(beforeAni: number, afterAni: number, children: number) {
+  if (children <= 0) {
+    const inBand = (ani: number) => ani >= CHILD_BENEFIT_CHARGE_START && ani <= CHILD_BENEFIT_CHARGE_END
+    return { kind: inBand(beforeAni) || inBand(afterAni) ? 'prompt' as const : 'hidden' as const }
+  }
   if (beforeAni <= CHILD_BENEFIT_CHARGE_START && afterAni <= CHILD_BENEFIT_CHARGE_START) return { kind: 'hidden' as const }
   if (beforeAni >= CHILD_BENEFIT_CHARGE_END && afterAni >= CHILD_BENEFIT_CHARGE_END) {
     return { kind: 'full' as const, aboveBefore: beforeAni - CHILD_BENEFIT_CHARGE_END, aboveAfter: afterAni - CHILD_BENEFIT_CHARGE_END }

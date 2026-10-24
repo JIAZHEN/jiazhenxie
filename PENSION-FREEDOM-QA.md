@@ -65,3 +65,14 @@ Renamed the balance field to “Already saved in your pensions (£)” with an E
 - Removed em dashes from page copy. Chart marker labels now use 14px HTML text below the SVG so nearby ages cannot overlap at 375px.
 
 Validation: production build, targeted ESLint, all existing tests, new £100k/tolerance/button and Child Benefit state unit tests. Chrome interaction tests at 375px in light/dark themes cover the target/freedom-age relationship and spare balance, scenario toggle, max-ISA explanation, permanent summary, all requested income cases, exact button result, chart label bounds/non-overlap, slider, no em dashes and unchanged default monthly result. No browser errors.
+
+## Small copy, bridge and chart follow-up
+
+- Replaced the subtitle with the requested sentence. Searched all TS/TSX/JSON source strings for a full stop followed by a lowercase letter and repaired the other broken qualifying-earnings sentence; no matches remain.
+- Child Benefit card presentation now requires a child count. With zero children, only the add-children prompt is shown when either ANI is in the £60k–£80k band; other incomes hide the card. Exact benefit charges are unchanged.
+- Feasible target-age surplus is accessible savings at the target age minus the savings needed for the bridge. Removed the pot balance at the planning horizon. No optional long-term spending-capacity calculation or claim was added.
+- Always show pension access age and the number of bridge years under the bridge title, including zero years for stopping at/after access.
+- The chart uses its measured pixel width as its SVG coordinate width, keeping the top value and marker text at 12px. Labels share each dashed line's x-coordinate and stack into collision-free rows. Extracted this presentation into WealthChart.tsx; wealth points and model calculations are unchanged.
+- Removed the split-count/tie-breaking copy, retaining the recommendation disclaimer. All dynamic currency output uses the shared whole-pound/under-£100 pence formatter, including exchange rates and zero amounts.
+
+Validation: typecheck, targeted ESLint, production build and all pension tests passed. Added unit coverage for zero-child prompt/hidden states and currency formatting around £0/£100, negative values and rounded boundaries. Chrome checks cover all three input steps and result copy, target-age surplus arithmetic, bridge context, zero-child/positive-child cases, unchanged default payroll amounts, and chart labels at 320/375/479/1024px in light/dark themes. Checked label bounds, non-overlap, exact line alignment, >=12px rendered font and coincident Stop/Pension ages. No browser errors or horizontal overflow.

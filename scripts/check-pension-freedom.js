@@ -41,12 +41,18 @@ try {
     close(target.percent * 100,Math.round(target.percent * 100))
   }
   assert.equal(sacrificeToIncomeLine(110000,0),null)
-  assert.deepEqual(childBenefitCard(59000,59000),{kind:'hidden'})
-  assert.deepEqual(childBenefitCard(60000,60000),{kind:'hidden'})
-  assert.deepEqual(childBenefitCard(85000,82000),{kind:'full',aboveBefore:5000,aboveAfter:2000})
-  assert.deepEqual(childBenefitCard(80000,80000),{kind:'full',aboveBefore:0,aboveAfter:0})
-  assert.deepEqual(childBenefitCard(75000,67500),{kind:'partial'})
+  assert.deepEqual(childBenefitCard(59000,59000,1),{kind:'hidden'})
+  assert.deepEqual(childBenefitCard(60000,60000,1),{kind:'hidden'})
+  assert.deepEqual(childBenefitCard(85000,82000,1),{kind:'full',aboveBefore:5000,aboveAfter:2000})
+  assert.deepEqual(childBenefitCard(80000,80000,1),{kind:'full',aboveBefore:0,aboveAfter:0})
+  assert.deepEqual(childBenefitCard(75000,67500,1),{kind:'partial'})
   close(childBenefitCharge(75000,1)-childBenefitCharge(67500,1),534.508)
+  for (const [before,after,expected] of [[85000,82000,'hidden'],[59000,59000,'hidden'],[75000,67500,'prompt'],[85000,75000,'prompt'],[60000,60000,'prompt'],[80000,80000,'prompt']]) {
+    assert.equal(childBenefitCard(before,after,0).kind,expected)
+  }
+  const { formatGbp } = require(path.join(scratch, 'calc/format.js'))
+  for (const [amount,expected] of [[0,'£0.00'],[1,'£1.00'],[1.749,'£1.75'],[99.99,'£99.99'],[100,'£100'],[100.49,'£100'],[277.45,'£277'],[-12.5,'-£12.50'],[-123.45,'-£123'],[99.999,'£100']]) assert.equal(formatGbp(amount),expected)
+
   close(childBenefitCharge(60000, 1), 0)
   close(childBenefitCharge(60199, 1), 0)
   close(childBenefitCharge(60200, 1), 14.066)

@@ -1,7 +1,7 @@
 /** Pounds at or above £100 are whole pounds. Smaller amounts keep pence. */
 export function formatGbp(amount: number): string {
   const abs = Math.abs(amount)
-  const digits = abs > 0 && abs < 100 ? 2 : 0
+  const digits = Math.round(abs * 100) / 100 < 100 ? 2 : 0
   return new Intl.NumberFormat('en-GB', {
     style: 'currency',
     currency: 'GBP',
