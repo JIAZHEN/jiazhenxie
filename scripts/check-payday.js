@@ -11,7 +11,7 @@ try {
     fs.writeFileSync(path.join(scratch, name.replace('.ts', '.js')), ts.transpileModule(fs.readFileSync(`src/${name}`, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)
   }
   const require = createRequire(import.meta.url)
-  const { compare, sacrificeForCost, payPicture, futureValue, freedomAge, simulate, exampleInputs } = require(path.join(scratch, 'calc/payday.js'))
+  const { compare, sacrificeForCost, payPicture, futureValue, freedomAge, simulate, exampleInputs, inputsForExample } = require(path.join(scratch, 'calc/payday.js'))
   const close = (a,b,t=.01) => assert.ok(Math.abs(a-b)<t, `${a} != ${b}`)
   const pay = {salary:110000,ownPct:0,employerPct:0,children:0,basis:'full'}
   close(sacrificeForCost(pay,3800),10000)
@@ -20,6 +20,16 @@ try {
     const s = sacrificeForCost(p,4800)
     close(payPicture(p,0).takeHome-payPicture(p,s).takeHome,4800)
   }
+  const blog = inputsForExample('80k')
+  assert.deepEqual(inputsForExample('unknown'), exampleInputs)
+  assert.deepEqual(inputsForExample(null), exampleInputs)
+  const results = [.02,.04,.06].map(r => compare({...blog,r}))
+  assert.deepEqual([results[1].nothing.f.age,results[1].allPension.f.age,results[1].allIsa.f.age],[53,53,50])
+  assert.equal(Math.round(results[1].allPension.pensionMonthlyExtra),474)
+  assert.ok(results[0].allPension.f.age < results[0].allIsa.f.age)
+  assert.ok(results[2].allIsa.f.age < results[2].allPension.f.age)
+  assert.equal(Math.round(futureValue(2000,.025,15)),2897)
+  console.log('Blog example:', results.map(c => ({keep:c.nothing.f.age,pension:c.allPension.f.age,isa:c.allIsa.f.age})))
   const c = compare(exampleInputs)
   assert.deepEqual([c.nothing.f.age,c.allPension.f.age,c.best.f.age,c.allIsa.f.age],[56,54,53,54])
   close(c.best.isaMonthly,120)

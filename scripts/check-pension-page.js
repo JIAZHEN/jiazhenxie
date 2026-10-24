@@ -13,10 +13,12 @@ for (const pattern of [/<title>[\s\S]*?<\/title>/g, /<meta name="description"[^>
 }
 assert.ok(html.includes(`href="${canonical}"`));
 assert.ok(html.includes(`content="${canonical}"`));
-assert.ok(html.includes('£1,422'));
-assert.ok(html.includes('Why: start with the cash you can spare'));
-assert.ok(html.includes('How: explore first, then check your scheme'));
-assert.ok(html.includes('href="/payday-to-pension"'));
+assert.ok(html.includes('The example that changed how I built it'));
+assert.ok(html.includes('Updated 24 October 2026'));
+assert.ok(html.includes('href="/payday-to-pension?example=80k"'));
+assert.ok(html.includes('<table>'));
+assert.ok(!fs.readFileSync(`src/content/posts/${slug}.md`, 'utf8').includes('—'));
+for (const file of ['src/pension/payday.html', 'src/pension/payday-view.js']) assert.ok(!fs.readFileSync(file, 'utf8').includes('—'));
 assert.equal((html.match(/<h1\b/g) || []).length, 1);
 const schema = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
 const article = schema.find(value => value['@type'] === 'BlogPosting');
@@ -24,10 +26,6 @@ assert.ok(article);
 assert.equal(article.url, canonical);
 assert.equal(article.author.name, 'Jiazhen Xie');
 assert.ok(article.datePublished);
-for (const name of ['extra-pot-growth', 'cash-budget-matching']) {
-  assert.ok(html.includes(`/images/pension/${name}.svg`));
-  assert.ok(fs.existsSync(`dist/images/pension/${name}.svg`));
-}
 assert.ok(fs.readFileSync('dist/sitemap.xml','utf8').includes(`<loc>${canonical}</loc>`));
 assert.ok(fs.readFileSync('dist/robots.txt','utf8').includes('Sitemap: https://jiazhenxie.com/sitemap.xml'));
 const example = JSON.parse(fs.readFileSync('dist/images/pension/example.json','utf8'));

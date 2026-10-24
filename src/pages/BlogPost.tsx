@@ -203,6 +203,7 @@ export default function BlogPostPage() {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <FiCalendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  {post.updated && <time dateTime={post.updated}>Updated {new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(post.updated))}</time>}
                 </div>
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <FiClock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

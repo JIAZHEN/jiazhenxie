@@ -3,6 +3,7 @@ import frontMatter from "front-matter";
 interface FrontMatterAttributes {
   title: string;
   date: string;
+  updated?: string;
   description: string;
   tags: string[];
   image: string;
@@ -13,6 +14,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   date: string;
+  updated?: string;
   description: string;
   tags: string[];
   image: string;
@@ -50,6 +52,7 @@ export async function getBlogPosts(
       slug,
       title: attributes.title,
       date: attributes.date,
+      updated: attributes.updated,
       description: attributes.description,
       tags: attributes.tags || [],
       image: attributes.image || "",

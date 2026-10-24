@@ -1,4 +1,4 @@
-import { compare, phases, futureValue, payPicture } from '../calc/payday'
+import { compare, phases, futureValue, payPicture, inputsForExample } from '../calc/payday'
 
 export function mountPayday(root) {
 const $ = id => root.querySelector('#' + id);
@@ -156,6 +156,10 @@ root.querySelectorAll('input,select').forEach(el => el.addEventListener('input',
 root.querySelectorAll('#scen button').forEach(b => b.addEventListener('click', () => {
   root.querySelectorAll('#scen button').forEach(x => x.classList.remove('on')); b.classList.add('on'); root.querySelectorAll('#scen button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); r = parseFloat(b.dataset.r); render();
 }));
+const preset = inputsForExample(new URLSearchParams(window.location.search).get('example'));
+for (const id of ['age', 'salary', 'spend', 'budget', 'pension', 'isa', 'isaMonthly', 'children', 'ownPct', 'employerPct', 'access', 'spAge', 'basis']) $(id).value = preset[id];
+$('infl').value = preset.infl * 100;
+$('budget2').value = preset.budget;
 render();
 return () => { clearTimeout(t); io.disconnect(); };
 }

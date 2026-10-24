@@ -322,7 +322,7 @@ function prerenderBlogPosts(template) {
             className: 'prose mx-auto max-w-3xl px-6 py-24',
           },
           React.createElement('h1', null, frontMatter.title),
-          React.createElement('p', null, `By ${siteConfig.author.name} · ${formatDate(frontMatter.date)}`),
+          React.createElement('p', null, `By ${siteConfig.author.name} · ${formatDate(frontMatter.date)}${frontMatter.updated ? " · Updated " + new Intl.DateTimeFormat("en-GB", {day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(frontMatter.updated)) : ""} · ${Math.ceil(postContent.trim().split(/\s+/).length / 200)} min read · ${postContent.trim().split(/\s+/).length} words`),
           React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, postContent)))
         : undefined,
       noscriptContent

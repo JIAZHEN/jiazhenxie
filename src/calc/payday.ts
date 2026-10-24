@@ -7,6 +7,9 @@ export interface PayInputs { salary: number; ownPct: number; employerPct: number
 export interface Inputs extends PayInputs { age: number; spend: number; budget: number; pension: number; isa: number; isaMonthly: number; r: number; access: number; spAge: number; liveTo: number; includeSP: boolean; infl: number }
 export interface Projection { age: number; spend: number; pension: number; isa: number; r: number; access: number; spAge: number; liveTo: number; sp: number; pensionYearly: number; isaYearly: number }
 export const exampleInputs: Inputs = { age: 38, salary: 120000, spend: 40000, budget: 400, pension: 150000, isa: 30000, isaMonthly: 300, children: 2, ownPct: 5, employerPct: 5, basis: 'full', r: .04, access: 57, spAge: 67, liveTo: 95, includeSP: true, infl: .025 }
+// Only named fictional examples are accepted from a URL.
+export const blogExampleInputs: Inputs = { ...exampleInputs, age: 35, salary: 80000, spend: 24000, budget: 275, pension: 100000, isa: 20000, isaMonthly: 200, children: 0, employerPct: 3 }
+export const inputsForExample = (example: string | null): Inputs => ({ ...(example === '80k' ? blogExampleInputs : exampleInputs) })
 export const futureValue = (value: number, inflation: number, years: number) => value * (1 + inflation) ** years
 // Tax thresholds stay constant in real terms, equivalent to rising with prices.
 // TODO: model frozen nominal thresholds until 2031 by passing year-adjusted tax bands into withdrawals.
