@@ -16,6 +16,7 @@ const navLinks = [
   // { path: "/solutions", label: "Solutions" },
   { path: "/about", label: "About" },
   { path: "/blog", label: "Blog" },
+  { path: "/advisory", label: "Advisory" },
   { path: "/payday-to-pension", label: "Pension tool" },
 ];
 
@@ -72,7 +73,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-6">
               {navLinks.map((link) => (
                 <Link key={link.path} to={link.path} className="relative group">
                   <span
@@ -142,7 +143,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setIsMobileOpen(!isMobileOpen)}
-                className="md:hidden p-3 text-charcoal-600 dark:text-paper-400 tap-highlight-transparent touch-manipulation"
+                className="lg:hidden p-3 text-charcoal-600 dark:text-paper-400 tap-highlight-transparent touch-manipulation"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileOpen}
               >
@@ -161,7 +162,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 md:hidden"
+            className="fixed inset-0 z-40 lg:hidden"
           >
             {/* Backdrop */}
             <motion.div

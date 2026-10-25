@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import Advisory from "./pages/Advisory";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Projects from "./pages/Projects";
@@ -33,6 +34,7 @@ function App() {
                 </Suspense>
               } />
               <Route path="/" element={<Home />} />
+              <Route path="/advisory" element={<Advisory />} />
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/projects" element={<Projects />} />

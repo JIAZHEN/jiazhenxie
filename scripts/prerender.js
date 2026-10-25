@@ -28,6 +28,13 @@ const siteConfig = {
 // Static pages to pre-render
 const staticPages = [
   {
+    path: '/advisory',
+    title: 'Advisory · Jiazhen Xie',
+    description: 'Part-time engineering leadership for seed and Series A teams without a technical leader.',
+    keywords: ['engineering advisory', 'engineering leadership'],
+    type: 'website',
+  },
+  {
     path: '/payday-to-pension',
     title: 'What could a little less take-home pay buy you? | Jiazhen Xie',
     description: "See when you could stop working by giving up a little take-home pay, and compare pension, ISA or both. Live UK 2026/27 illustration. Inputs stay in the page.",
