@@ -4,7 +4,7 @@ export function mountPayday(root) {
 const $ = id => root.querySelector('#' + id);
 const num = id => { return Number(String($(id).value).replace(/,/g, '').trim()); };
 const gbp = v => '£' + Math.round(v).toLocaleString('en-GB');
-const gbpK = v => v >= 100000 ? '£' + Math.round(v / 1000).toLocaleString('en-GB') + 'k' : gbp(v);
+const gbpK = v => v >= 1000 ? '£' + Math.round(v / 1000).toLocaleString('en-GB') + 'k' : gbp(v);
 let r = 0.04, userSel = null;
 const YEAR = 2026;
 
@@ -22,7 +22,7 @@ function render(){
   const affordable = (u.budget + u.isaMonthly) * 12 <= payPicture(u, 0).takeHome;
   $('budgetOut').innerHTML = gbp(u.budget) + '<small> / month</small>';
   $('scenHelp').textContent = 'Investments grow ' + (((1 + r) * (1 + u.infl) - 1) * 100).toFixed(1) + '% a year, prices rise ' + (u.infl * 100).toFixed(1) + '%.';
-  if (u.age < 18 || u.age > 74 || u.salary < 13000 || u.spend <= 0 || u.ownPct > 100 || u.employerPct > 100 || u.access < 55 || u.access > 75 || u.spAge < u.access || u.spAge > 80 || u.infl > .2 || !affordable || Object.values(u).some(v => typeof v === 'number' && (!Number.isFinite(v) || v < 0))) { root.querySelectorAll('.sec,.maths').forEach(el => el.hidden = true); $('miniAge').textContent = '?'; $('heroMeta').textContent = ''; $('heroDays').textContent = ''; $('heroAge').textContent = ''; $('heroCtx').textContent = 'Check your inputs: age 18 to 74, salary at least £13,000, positive spending, pension percentages up to 100%, access age 55 to 75, State Pension age at least access age and no later than 80, price rises up to 20%, and total monthly saving within take-home pay.'; return; }
+  if (u.age < 18 || u.age > 74 || u.salary < 13000 || u.spend <= 0 || u.ownPct > 100 || u.employerPct > 100 || u.access < 55 || u.access > 75 || u.spAge < u.access || u.spAge > 80 || u.infl > .2 || !affordable || Object.values(u).some(v => typeof v === 'number' && (!Number.isFinite(v) || v < 0))) { root.querySelectorAll('.sec,.maths').forEach(el => el.hidden = true); $('childcareHero').hidden = true; $('childcareHero').textContent = ''; $('miniAge').textContent = '?'; $('heroMeta').textContent = ''; $('heroDays').textContent = ''; $('heroAge').textContent = ''; $('heroCtx').textContent = 'Check your inputs: age 18 to 74, salary at least £13,000, positive spending, pension percentages up to 100%, access age 55 to 75, State Pension age at least access age and no later than 80, price rises up to 20%, and total monthly saving within take-home pay.'; return; }
 
   root.querySelectorAll('.sec,.maths').forEach(el => el.hidden = false);
   const c = compare(u), lo = compare(inputs(0.02)), hi = compare(inputs(0.06));
@@ -114,14 +114,20 @@ function render(){
     if (b0.charge - b1.charge > 1) flags.push('<b>Child Benefit.</b> All into pension also lets you keep ' + gbp(b0.charge - b1.charge) + ' a year you would otherwise pay back. Included above.');
   }
   const chosen = sel.sc.pic;
+  let childcare = '';
+  $('childcareHero').hidden = true;
+  $('childcareHero').textContent = '';
   if (u.childcareChildren > 0) {
     if (chosen.ani > 100000 && chosen.ani <= 125140) {
       const chosenExtra = sel.sc.extra ?? 0;
       const gap = chosen.ani - 100000;
       const cost = (chosen.takeHome - payPicture(u, chosenExtra + gap).takeHome) / 12;
-      flags.push('<b>Childcare.</b> You are ' + gbp(gap) + ' above £100,000. Put another ' + gbp(cost) + ' a month of take-home pay into your pension and you could get back up to ' + gbp(2000 * u.childcareChildren) + ' a year of childcare support.');
-    } else if (chosen.ani <= 100000) flags.push('<b>Childcare.</b> Your income is under £100,000, so you keep childcare support, subject to the other eligibility rules.');
-    flags.push('Free childcare hours in England could be worth more and depend on your child’s age and nursery. Both parents must meet the income rules, including income of no more than £100,000 each. Tax-Free Childcare ends in September after a child turns 11. The amount shown covers Tax-Free Childcare only and depends on childcare costs. It is not added to this projection.');
+      childcare = '<b>Childcare support</b><p>Put another <strong>' + gbp(cost) + ' a month</strong> of take-home pay into your pension and you could get back up to <strong>' + gbp(2000 * u.childcareChildren) + ' a year</strong> in Tax-Free Childcare.</p><small>On your selected plan, your income is ' + gbp(gap) + ' above £100,000.</small>';
+    } else if (chosen.ani <= 100000) childcare = '<b>Childcare support</b><p>Your income is under £100,000, so you keep childcare support, subject to the other eligibility rules.</p>';
+    if (childcare) {
+      $('childcareHero').innerHTML = childcare + '<small>Free childcare hours in England could be worth more, depending on your child’s age and nursery. Both parents must meet the eligibility rules. <a href="/blog/why-i-built-payday-to-pension#childcare-support">How this works →</a></small>';
+      $('childcareHero').hidden = false;
+    }
   }
   $('flags').innerHTML = flags.map(f => '<div class="flag">' + f + '</div>').join('');
 
@@ -140,13 +146,10 @@ function render(){
       : 'Paid from your pension. Up to a quarter is tax-free until your lifetime cash cap is used.';
     $('life').innerHTML = ph.list.map(p =>
       '<div class="stage"><div class="dot" style="background:' + col(p) + '"></div>' +
-      '<div><div class="when">' + p.from + ' to ' + p.to + '</div><div class="src">' + src(p) + '</div><div class="src">At ' + p.from + ': pension ' + gbp(p.balance?.pen ?? 0) + ', ISA ' + gbp(p.balance?.isa ?? 0) + ' in today’s money</div></div>' +
+      '<div><div class="when">' + p.from + ' to ' + p.to + '</div><div class="src">' + src(p) + '</div><div class="src">At ' + p.from + ': pension ' + gbpK(p.balance?.pen ?? 0) + ', ISA ' + gbpK(p.balance?.isa ?? 0) + ' in today’s money</div></div>' +
       '<div class="amt">' + gbp(p.net / 12) + '<small>a month in today’s money</small><small>' + gbp(fut(p.net, p.from) / 12) + ' in ' + yr(p.from) + ' after price rises</small></div></div>').join('');
-    const pot = ph.atStop;
-    $('pots').innerHTML = 'At ' + a + ', your pension would be about <b>' + gbpK(pot.pen) + '</b> and your ISA <b>' + gbpK(pot.isa) + '</b> in today’s money. ' +
-      'After price rises, that is ' + gbpK(fut(pot.pen, a)) + ' and ' + gbpK(fut(pot.isa, a)) + ' in ' + yr(a) + '.' +
-      (ph.pensionDryAge ? ' Your pension runs out around ' + ph.pensionDryAge + ', then your ISA pays.' : '') +
-      '<br>At ' + ph.end.a + ': pension ' + gbp(ph.end.pen) + ', ISA ' + gbp(ph.end.isa) + ' left in today’s money.';
+    $('pots').innerHTML = (ph.pensionDryAge ? 'Your pension runs out around ' + ph.pensionDryAge + ', then your ISA pays. ' : '') +
+      'At ' + ph.end.a + ': pension ' + gbpK(ph.end.pen) + ', ISA ' + gbpK(ph.end.isa) + ' left in today’s money.';
   }
 
   // MATHS

@@ -14,7 +14,7 @@ for (const pattern of [/<title>[\s\S]*?<\/title>/g, /<meta name="description"[^>
 assert.ok(html.includes(`href="${canonical}"`));
 assert.ok(html.includes(`content="${canonical}"`));
 assert.ok(html.includes('The example that changed how I built it'));
-assert.ok(html.includes('Updated 24 October 2026'));
+assert.ok(html.includes('Updated 25 October 2026'));
 assert.ok(html.includes('href="/payday-to-pension?example=80k"'));
 assert.ok(html.includes('<table>'));
 assert.ok(!fs.readFileSync(`src/content/posts/${slug}.md`, 'utf8').includes('—'));

@@ -116,3 +116,10 @@ margin-top:80px;
 .payday-live .ni-note{display:block;font-family:var(--sans);font-size:13px;margin-top:8px}
 .payday-live .grid>*{min-width:0}
 .payday-live .stage>*{min-width:0}
+
+.payday-live .childcare-callout{margin-top:18px;padding:16px 18px;border:1px solid var(--warn);border-radius:14px;background:var(--card);font-size:15px;line-height:1.5}
+.payday-live .childcare-callout>b{color:var(--warn)}
+.payday-live .childcare-callout p{margin:6px 0}
+.payday-live .childcare-callout strong{color:var(--text)}
+.payday-live .childcare-callout small{display:block;color:var(--muted);font-size:12px;margin-top:6px}
+.payday-live .childcare-callout a{text-decoration:underline}
