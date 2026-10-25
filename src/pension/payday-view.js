@@ -1,4 +1,4 @@
-import { compare, phases, futureValue, payPicture, inputsForExample } from '../calc/payday'
+import { compare, phases, futureValue, payPicture, inputsForExample, sacrificeForCost } from '../calc/payday'
 
 export function mountPayday(root) {
 const $ = id => root.querySelector('#' + id);
@@ -6,11 +6,11 @@ const num = id => { return Number(String($(id).value).replace(/,/g, '').trim());
 const gbp = v => '£' + Math.round(v).toLocaleString('en-GB');
 const gbpK = v => v >= 100000 ? '£' + Math.round(v / 1000).toLocaleString('en-GB') + 'k' : gbp(v);
 let r = 0.04, userSel = null;
-const YEAR = new Date().getFullYear();
+const YEAR = 2026;
 
 function inputs(rate){
   return { age: Math.round(num('age')), salary: num('salary'), spend: num('spend'), budget: num('budget'),
-    pension: num('pension'), isa: num('isa'), isaMonthly: num('isaMonthly'), children: Math.round(num('children')),
+    pension: num('pension'), isa: num('isa'), isaMonthly: num('isaMonthly'), children: Math.round(num('children')), childcareChildren: Math.round(num('childcareChildren')), employerNiShare: num('employerNiShare'),
     ownPct: num('ownPct'), employerPct: num('employerPct'), access: Math.round(num('access')) || 57,
     spAge: Math.round(num('spAge')) || 67, liveTo: 95, includeSP: true, r: rate, infl: num('infl') / 100, basis: $('basis').value };
 }
@@ -98,13 +98,30 @@ function render(){
   }
   $('why').style.display = why ? '' : 'none';
   $('why').textContent = why;
+  if (why && u.budget > 0) {
+    const extra2029 = sacrificeForCost(u, u.budget * 12, 2029, (1 + u.infl) ** 3);
+    const rate2029 = (payPicture(u, extra2029, 2029, (1 + u.infl) ** 3).pensionIn - payPicture(u, 0).pensionIn) / (u.budget * 12);
+    const note = document.createElement('small');
+    note.className = 'ni-note';
+    note.textContent = 'From April 2029, less of this is NI-free, so each £1 becomes about £' + rate2029.toFixed(2) + '.';
+    $('why').appendChild(note);
+  }
 
   // FLAGS
   const b0 = c.base, b1 = c.allPension.pic, flags = [];
   if (u.budget > 0) {
-    if (b0.ani > 100000 && b1.ani <= 100000 && u.children > 0) flags.push('<b>Childcare.</b> Putting it all into your pension takes your income below £100,000, so you could get Tax-Free Childcare and funded hours back. That is worth up to £2,000 per child a year plus the hours, and is not counted here.');
-    else if (b1.ani > 100000 && b1.ani < 125140) flags.push('<b>60% tax zone.</b> Your income is still ' + gbp(b1.ani - 100000) + ' above £100,000, where each extra £1 into your pension costs you only about 38p under the current NI rules.');
+    if (b1.ani > 100000 && b1.ani < 125140) flags.push('<b>60% tax zone.</b> Each extra £1 into your pension here costs about 38p of take-home pay in 2026/27. From April 2029, amounts above the £2,000 yearly NI-free cap cost about 40p.');
     if (b0.charge - b1.charge > 1) flags.push('<b>Child Benefit.</b> All into pension also lets you keep ' + gbp(b0.charge - b1.charge) + ' a year you would otherwise pay back. Included above.');
+  }
+  const chosen = sel.sc.pic;
+  if (u.childcareChildren > 0) {
+    if (chosen.ani > 100000 && chosen.ani <= 125140) {
+      const chosenExtra = sel.sc.extra ?? 0;
+      const gap = chosen.ani - 100000;
+      const cost = (chosen.takeHome - payPicture(u, chosenExtra + gap).takeHome) / 12;
+      flags.push('<b>Childcare.</b> You are ' + gbp(gap) + ' above £100,000. Put another ' + gbp(cost) + ' a month of take-home pay into your pension and you could get back up to ' + gbp(2000 * u.childcareChildren) + ' a year of childcare support.');
+    } else if (chosen.ani <= 100000) flags.push('<b>Childcare.</b> Your income is under £100,000, so you keep childcare support, subject to the other eligibility rules.');
+    flags.push('Free childcare hours in England could be worth more and depend on your child’s age and nursery. Both parents must meet the income rules, including income of no more than £100,000 each. Tax-Free Childcare ends in September after a child turns 11. The amount shown covers Tax-Free Childcare only and depends on childcare costs. It is not added to this projection.');
   }
   $('flags').innerHTML = flags.map(f => '<div class="flag">' + f + '</div>').join('');
 
@@ -120,22 +137,23 @@ function render(){
     const col = p => p.isa ? 'var(--isa)' : 'var(--pen)';
     const src = p => p.isa ? 'Paid from your ISA and savings. No tax.'
       : p.sp ? 'State Pension, plus a smaller amount from your pension.'
-      : 'Paid from your pension. A quarter is tax-free, the rest is taxed.';
-    $('life').innerHTML = ph.list.map((p, i) =>
+      : 'Paid from your pension. Up to a quarter is tax-free until your lifetime cash cap is used.';
+    $('life').innerHTML = ph.list.map(p =>
       '<div class="stage"><div class="dot" style="background:' + col(p) + '"></div>' +
-      '<div><div class="when">' + p.from + ' to ' + p.to + '</div><div class="src">' + src(p) + '</div></div>' +
-      '<div class="amt">' + gbp(fut(p.net, p.from) / 12) + '<small>a month in ' + yr(p.from) + (i === ph.list.length - 1 ? ', then rising with prices' : '') +
-      '<br>same as <em>' + gbp(p.net / 12) + '</em> today</small></div></div>').join('');
+      '<div><div class="when">' + p.from + ' to ' + p.to + '</div><div class="src">' + src(p) + '</div><div class="src">At ' + p.from + ': pension ' + gbp(p.balance?.pen ?? 0) + ', ISA ' + gbp(p.balance?.isa ?? 0) + ' in today’s money</div></div>' +
+      '<div class="amt">' + gbp(p.net / 12) + '<small>a month in today’s money</small><small>' + gbp(fut(p.net, p.from) / 12) + ' in ' + yr(p.from) + ' after price rises</small></div></div>').join('');
     const pot = ph.atStop;
-    $('pots').innerHTML = 'At ' + a + ', your pension would be about <b>' + gbpK(fut(pot.pen, a)) + '</b> and your ISA <b>' + gbpK(fut(pot.isa, a)) + '</b>. ' +
-      'That is what your statements in ' + yr(a) + ' would show, the same as ' + gbpK(pot.pen) + ' and ' + gbpK(pot.isa) + ' today.' +
-      (ph.pensionDryAge ? ' Your pension runs out around ' + ph.pensionDryAge + ', then your ISA pays.' : '');
+    $('pots').innerHTML = 'At ' + a + ', your pension would be about <b>' + gbpK(pot.pen) + '</b> and your ISA <b>' + gbpK(pot.isa) + '</b> in today’s money. ' +
+      'After price rises, that is ' + gbpK(fut(pot.pen, a)) + ' and ' + gbpK(fut(pot.isa, a)) + ' in ' + yr(a) + '.' +
+      (ph.pensionDryAge ? ' Your pension runs out around ' + ph.pensionDryAge + ', then your ISA pays.' : '') +
+      '<br>At ' + ph.end.a + ': pension ' + gbp(ph.end.pen) + ', ISA ' + gbp(ph.end.isa) + ' left in today’s money.';
   }
 
   // MATHS
   const m = v => gbp(v / 12), p = c.allPension;
   $('maths').innerHTML = u.budget > 0 ? '<table>' +
     '<tr><td>Extra salary sacrifice if it all goes to pension</td><td>' + m(p.extra) + ' / month</td></tr>' +
+    (b1.employerTopUp > 0 ? '<tr><td>Employer NI saving added to your pension</td><td>' + m(b1.employerTopUp) + ' / month</td></tr>' : '') +
     '<tr><td>Income Tax you no longer pay</td><td>−' + m(b0.tax - b1.tax) + '</td></tr>' +
     '<tr><td>National Insurance you no longer pay</td><td>−' + m(b0.ni - b1.ni) + '</td></tr>' +
     (b0.charge - b1.charge > 1 ? '<tr><td>Child Benefit you keep</td><td>−' + m(b0.charge - b1.charge) + '</td></tr>' : '') +
@@ -145,6 +163,7 @@ function render(){
     : '<p class="potline">Move the slider to see the tax maths.</p>';
 }
 
+['pension', 'pensionInline'].forEach(id => $(id).addEventListener('input', () => { $(id === 'pension' ? 'pensionInline' : 'pension').value = $(id).value; }));
 $('budget').addEventListener('input', () => { $('budget2').value = $('budget').value; });
 $('budget2').addEventListener('input', () => { $('budget').value = $('budget2').value; });
 $('mini').inert = true;
@@ -152,7 +171,7 @@ const io = new IntersectionObserver(es => es.forEach(e => { const show = !e.isIn
 io.observe($('panel'));
 let t; const schedule = () => { clearTimeout(t); t = setTimeout(render, 70); };
 root.querySelectorAll('input,select').forEach(el => el.addEventListener('input', schedule));
-['salary','spend','pension','isa'].forEach(id => $(id).addEventListener('blur', () => { $(id).value = Math.round(num(id)).toLocaleString('en-GB'); }));
+['salary','spend','pension','pensionInline','isa'].forEach(id => $(id).addEventListener('blur', () => { $(id).value = Math.round(num(id)).toLocaleString('en-GB'); }));
 root.querySelectorAll('#scen button').forEach(b => b.addEventListener('click', () => {
   root.querySelectorAll('#scen button').forEach(x => x.classList.remove('on')); b.classList.add('on'); root.querySelectorAll('#scen button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); r = parseFloat(b.dataset.r); render();
 }));
@@ -160,6 +179,7 @@ const preset = inputsForExample(new URLSearchParams(window.location.search).get(
 for (const id of ['age', 'salary', 'spend', 'budget', 'pension', 'isa', 'isaMonthly', 'children', 'ownPct', 'employerPct', 'access', 'spAge', 'basis']) $(id).value = preset[id];
 $('infl').value = preset.infl * 100;
 $('budget2').value = preset.budget;
+$('pensionInline').value = preset.pension;
 render();
 return () => { clearTimeout(t); io.disconnect(); };
 }

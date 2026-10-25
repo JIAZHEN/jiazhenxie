@@ -112,3 +112,7 @@ margin-top:80px;
 }
 /* Clear the fixed site navigation, after the prototype's root margin reset. */
 .payday-live.payday-live { margin-top: 64px; }
+
+.payday-live .ni-note{display:block;font-family:var(--sans);font-size:13px;margin-top:8px}
+.payday-live .grid>*{min-width:0}
+.payday-live .stage>*{min-width:0}

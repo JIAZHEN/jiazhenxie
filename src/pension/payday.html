@@ -12,7 +12,7 @@
   <div>
     <section class="panel" id="panel">
       <div class="sentence">
-        I'm <input aria-label="Age now" id="age" size="2" value="38" inputmode="numeric">, earn £<input aria-label="Annual salary" id="salary" size="7" value="120,000" inputmode="numeric"> a year,
+        I'm <input aria-label="Age now" id="age" size="2" value="38" inputmode="numeric">, earn £<input aria-label="Annual salary" id="salary" size="7" value="120,000" inputmode="numeric"> a year, have £<input aria-label="Pension pot today" id="pensionInline" size="7" value="150,000" inputmode="numeric"> in my pension,
         and want to live on £<input aria-label="Annual spending in retirement" id="spend" size="6" value="40,000" inputmode="numeric"> a year (in today's money) once I stop working.
       </div>
       <div class="controls">
@@ -35,6 +35,8 @@
           <label>ISA and savings today (£)<input id="isa" value="30,000" inputmode="numeric"></label>
           <label>Already into ISA (£ / month)<input id="isaMonthly" value="300" inputmode="numeric"></label>
           <label>Children on Child Benefit<input id="children" value="2" inputmode="numeric"></label>
+          <label>Children aged 11 or under<input id="childcareChildren" type="number" min="0" step="1" value="0"></label>
+          <label>Employer adds their NI saving to your pension<select id="employerNiShare"><option value="0">No</option><option value="0.5">Half</option><option value="1">All</option></select></label>
           <label>You pay into pension (%)<input id="ownPct" value="5" inputmode="decimal"></label>
           <label>Employer pays (%)<input id="employerPct" value="5" inputmode="decimal"></label>
           <label>Pension unlocks at<input id="access" value="57" inputmode="numeric"></label>
@@ -68,14 +70,14 @@
 
       <details class="maths">
         <summary>Check the maths</summary>
-        <div id="maths"></div><p class="fine">From April 2029, only £2,000 a year of pension salary sacrifice gets National Insurance relief. This illustration keeps 2026/27 relief throughout; future pension contributions for the same take-home cost may be lower. Check your employer’s scheme and contribution limits.</p>
+        <div id="maths"></div><p class="fine">Under the change announced in the November 2025 Budget, from 6 April 2029 only the first £2,000 a year of pension salary sacrifice is free of employee and employer National Insurance. Income Tax relief and the reduction in income used for childcare eligibility continue above this limit. The projection applies this limit from 2029/30 to both employee and employer NI savings. This model holds the £2,000 cap fixed in cash in later years. Further details on how the limit will work are still to be set out. Your selected share of the employer saving on extra sacrifice is added to your pension. Check your employer’s scheme and contribution limits. Tax-free cash is limited to 25% of each withdrawal and £268,275 across your lifetime in nominal pounds. This cap does not rise with prices. Once it is used, all further pension withdrawals are taxable income. <a href="https://www.gov.uk/tax-on-your-private-pension/lump-sum-allowance">Tax-free cash rules</a> · <a href="https://www.gov.uk/government/publications/changes-to-salary-sacrifice-for-pensions-from-april-2029/changes-to-salary-sacrifice-for-pensions-from-april-2029">2029 NI rules</a> · <a href="https://www.gov.uk/tax-free-childcare/check-if-youre-eligible">Childcare eligibility</a></p>
       </details>
 
       <div class="fine">
         Fictional example. "Today's money" means amounts with price rises taken out, so you can compare them with what things cost now.
         Amounts shown for a future year add price rises at the rate you set. Cautious, Middle and Hopeful are investment growth after price rises (2%, 4%, 6% a year).
-        Your current pension is treated as net pay; the extra is salary sacrifice, and your employer keeps the same rate.
-        Assumes money lasts to 95, full State Pension, 25% of each pension withdrawal tax-free and tax bands rising with prices
+        Your current pension is treated as net pay; the extra is salary sacrifice, and the employer contribution percentage stays the same. Any selected employer NI saving is added on top.
+        Assumes money lasts to 95, full State Pension, 25% of each pension withdrawal tax-free until total lifetime tax-free cash reaches £268,275 in nominal pounds. After that, all withdrawals are taxable. The cap does not rise with prices. Assumes no tax-free cash has already been taken and tax bands rise with prices
         (in reality they are frozen until 2031, so tax could be a little higher). Ignores fees, pay rises and future rule changes. Not financial advice.
       </div>
       <p class="fine"><a href="/blog/why-i-built-payday-to-pension">Why I built this →</a></p>
